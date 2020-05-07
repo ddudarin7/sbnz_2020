@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,10 +39,10 @@ public class Patient {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     
-    @Column(name="breed")
     private Breed breed;
     
-    @Column(name="owner")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
     
     @LazyCollection(LazyCollectionOption.FALSE)
