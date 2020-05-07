@@ -4,10 +4,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -15,6 +20,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
+@Embeddable
 @Table(name = "disease")
 public class Disease {
 
@@ -29,14 +35,18 @@ public class Disease {
     @Column(name = "disease_group")
     private DiseaseCategory diseaseCategory;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+    @ElementCollection(targetClass = Symptom.class)
+    @Column(name = "specificSymptoms", nullable = false)
+    @Enumerated(EnumType.STRING)
     private List<Symptom> specificSymptoms;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+    @ElementCollection(targetClass = Symptom.class)
+    @Column(name = "nonSpecificSymptoms", nullable = false)
+    @Enumerated(EnumType.STRING)
     private List<Symptom> nonSpecificSymptoms;
 	
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
     private List<Therapy> therapies;
 
 	public Disease() {
