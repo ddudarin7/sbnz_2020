@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.ftn.sbnz_2020.dto.MedicineDTO;
+
 @Entity
 @Table(name = "medicine")
 public class Medicine {
@@ -39,6 +41,14 @@ public class Medicine {
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
+	}
+	
+	public Medicine(MedicineDTO medicineDTO){
+		this.id = medicineDTO.getId();
+		this.name = medicineDTO.getName();
+		/*
+		 * TODO
+		 */
 	}
 
 	public Long getId() {
