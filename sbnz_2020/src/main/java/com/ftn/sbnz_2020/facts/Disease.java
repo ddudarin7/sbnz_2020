@@ -36,6 +36,7 @@ public class Disease {
     private String name;
 
     @Column(name = "disease_group")
+    @Enumerated(EnumType.STRING)
     private DiseaseCategory diseaseCategory;
 
     @ElementCollection(targetClass = Symptom.class)
