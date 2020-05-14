@@ -26,11 +26,31 @@ public class MedicineService {
 	public Page<Medicine> findAll(Pageable pageable) { return medicineRepository.findAll(pageable); }
 	
 	public List<Medicine> findByIngredient(Ingredient ingredient){
+		/*
+		 * Needs test
+		 */
 		return medicineRepository.findAllByIngredient(ingredient);
 	}
 	
 	public List<Medicine> findByIngredientId(Long ingredientId){
+		/*
+		 * Needs test
+		 */
 		return medicineRepository.findAllByIngredientId(ingredientId);
+	}
+	
+	public Page<Medicine> findByIngredient(Ingredient ingredient, Pageable pageable){
+		/*
+		 * Needs test
+		 */
+		return medicineRepository.findAllByIngredient(ingredient, pageable);
+	}
+	
+	public Page<Medicine> findByIngredientId(Long ingredientId, Pageable pageable){
+		/*
+		 * Needs test
+		 */
+		return medicineRepository.findAllByIngredientId(ingredientId, pageable);
 	}
 	
 	public Medicine add(Medicine medicine){

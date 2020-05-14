@@ -82,7 +82,7 @@ public class MedicineController {
     }
 
     @PutMapping(value = "/medicines", consumes = "application/json")
-    public ResponseEntity<MedicineDTO> edit(@RequestBody MedicineDTO medicineDTO,
+    public ResponseEntity<MedicineDTO> update(@RequestBody MedicineDTO medicineDTO,
     		HttpServletRequest request) {
 
         Medicine medicine = medicineService.findById(medicineDTO.getId());
