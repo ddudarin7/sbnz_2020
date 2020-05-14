@@ -89,8 +89,8 @@ public class IngredientController {
         if (ingredient == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Ingredient ingredientUpdate = new Ingredient(ingredientDTO);
-        ingredient = ingredientService.update(ingredientUpdate);
+        Ingredient ingredientUpdated = new Ingredient(ingredientDTO);
+        ingredient = ingredientService.update(ingredientUpdated);
         return new ResponseEntity<>(new IngredientDTO(ingredient), HttpStatus.OK);
     }
 

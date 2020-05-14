@@ -89,8 +89,8 @@ public class MedicineController {
         if (medicine == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Medicine medicineUpdate = new Medicine(medicineDTO);
-        medicine = medicineService.update(medicineUpdate);
+        Medicine medicineUpdated = new Medicine(medicineDTO);
+        medicine = medicineService.update(medicineUpdated);
         return new ResponseEntity<>(new MedicineDTO(medicine), HttpStatus.OK);
     }
 
