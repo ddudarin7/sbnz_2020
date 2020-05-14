@@ -12,6 +12,10 @@ public class MedicineDTO {
 	private String name;
 	private List<IngredientDTO> ingredientDTOs;
 	
+	public MedicineDTO(){
+		
+	}
+	
 	public MedicineDTO(Long id, String name){
 		this.id = id;
 		this.name = name;

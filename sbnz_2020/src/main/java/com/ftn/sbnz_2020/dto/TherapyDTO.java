@@ -12,6 +12,10 @@ public class TherapyDTO {
 	private List<MedicineDTO> medicineDTOs;
 	private String description;
 	
+	public TherapyDTO(){
+		
+	}
+	
 	public TherapyDTO(Long id, String description, List<MedicineDTO> medicineDTOs) {
 		this.id = id;
 		this.medicineDTOs = medicineDTOs;

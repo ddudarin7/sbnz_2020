@@ -7,6 +7,10 @@ public class IngredientDTO {
 	private Long id;
 	private String name;
 	
+	public IngredientDTO(){
+		
+	}
+	
 	public IngredientDTO(Long id, String name) {
 		super();
 		this.id = id;

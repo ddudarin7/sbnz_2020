@@ -22,6 +22,10 @@ public class DiagnoseDTO {
 	private List<TherapyDTO> therapyDTOs;
 	private Date date;
 	
+	public DiagnoseDTO(){
+		
+	}
+	
 	public DiagnoseDTO(Diagnose diagnose){
 		this.id = diagnose.getId();
 		this.diseaseDTO = new DiseaseDTO(diagnose.getDisease());

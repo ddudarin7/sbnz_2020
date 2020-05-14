@@ -16,6 +16,10 @@ public class DiseaseDTO {
 	private List<String> nonSpecificSymptoms;
 	private List<TherapyDTO> therapyDTOs;
 	
+	public DiseaseDTO(){
+		
+	}
+	
 	public DiseaseDTO(Long id, String name, String diseaseCategory, List<String> specificSymptoms,
 			List<String> nonSpecificSymptoms, List<TherapyDTO> therapyDTOs) {
 		this.id = id;
