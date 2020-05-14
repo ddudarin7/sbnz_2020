@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.facts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,9 @@ import javax.persistence.JoinColumn;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.ftn.sbnz_2020.dto.MedicineDTO;
+import com.ftn.sbnz_2020.dto.TherapyDTO;
 
 @Entity
 @Table(name = "therapy")
@@ -37,11 +41,24 @@ public class Therapy {
 		super();
 	}
 
-	public Therapy(Long id, List<Medicine> medicines, String description) {
-		super();
+	public Therapy(Long id, String description, List<Medicine> medicines) {
 		this.id = id;
 		this.medicines = medicines;
 		this.description = description;
+	}
+	
+	public Therapy(Long id, String description) {
+		this.id = id;
+		this.medicines = new ArrayList<Medicine>();
+		this.description = description;
+	}
+	
+	public Therapy(TherapyDTO therapyDTO){
+		this.id = therapyDTO.getId();
+		this.description = therapyDTO.getDescription();
+		this.medicines = new ArrayList<Medicine>();
+		for (MedicineDTO medicineDTO : therapyDTO.getMedicineDTOs())
+			this.medicines.add(new Medicine(medicineDTO));
 	}
 
 	public Long getId() {

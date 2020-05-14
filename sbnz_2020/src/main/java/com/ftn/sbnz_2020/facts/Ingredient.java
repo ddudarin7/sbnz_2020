@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.ftn.sbnz_2020.dto.IngredientDTO;
+
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
@@ -27,6 +29,10 @@ public class Ingredient {
         this.name = name;
     }
 
+    public Ingredient(IngredientDTO ingredientDTO){
+    	this.id = ingredientDTO.getId();
+    	this.name = ingredientDTO.getName();
+    }
 
     public Long getId() {
         return id;
