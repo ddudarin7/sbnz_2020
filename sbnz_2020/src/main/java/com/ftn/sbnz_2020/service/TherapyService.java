@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.repository.TherapyRepository;
 
@@ -27,34 +26,6 @@ public class TherapyService {
 	
 	public Page<Therapy> findAll(Pageable pageable) { 
 		return therapyRepository.findAll(pageable); 
-	}
-	
-	public List<Therapy> findByMedicine(Medicine medicine){
-		/*
-		 * Needs test
-		 */
-		return therapyRepository.findAllByMedicine(medicine);
-	}
-	
-	public List<Therapy> findByMedicineId(Long medicineId){
-		/*
-		 * Needs test
-		 */
-		return therapyRepository.findAllByMedicineId(medicineId);
-	}
-	
-	public Page<Therapy> findByMedicine(Medicine medicine, Pageable pageable){
-		/*
-		 * Needs test
-		 */
-		return therapyRepository.findAllByMedicine(medicine, pageable);
-	}
-	
-	public Page<Therapy> findByMedicineId(Long medicineId, Pageable pageable){
-		/*
-		 * Needs test
-		 */
-		return therapyRepository.findAllByMedicineId(medicineId, pageable);
 	}
 	
 	public Therapy add(Therapy therapy){

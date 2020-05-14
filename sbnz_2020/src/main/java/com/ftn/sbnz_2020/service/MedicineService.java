@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.repository.MedicineRepository;
 
@@ -24,34 +23,6 @@ public class MedicineService {
 	public List<Medicine> findAll() { return medicineRepository.findAll(); }
 	
 	public Page<Medicine> findAll(Pageable pageable) { return medicineRepository.findAll(pageable); }
-	
-	public List<Medicine> findByIngredient(Ingredient ingredient){
-		/*
-		 * Needs test
-		 */
-		return medicineRepository.findAllByIngredient(ingredient);
-	}
-	
-	public List<Medicine> findByIngredientId(Long ingredientId){
-		/*
-		 * Needs test
-		 */
-		return medicineRepository.findAllByIngredientId(ingredientId);
-	}
-	
-	public Page<Medicine> findByIngredient(Ingredient ingredient, Pageable pageable){
-		/*
-		 * Needs test
-		 */
-		return medicineRepository.findAllByIngredient(ingredient, pageable);
-	}
-	
-	public Page<Medicine> findByIngredientId(Long ingredientId, Pageable pageable){
-		/*
-		 * Needs test
-		 */
-		return medicineRepository.findAllByIngredientId(ingredientId, pageable);
-	}
 	
 	public Medicine add(Medicine medicine){
 		medicine.setId(null);
