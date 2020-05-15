@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +21,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
+import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.dto.TherapyDTO;
 
 
@@ -48,14 +46,14 @@ public class Diagnose {
     @JoinColumn(name = "vet_id", referencedColumnName = "id")
 	private Vet vet;
 	
-    @ElementCollection(targetClass = Symptom.class)
+    @LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade={CascadeType.MERGE})
     @Column(name = "specificSymptoms", nullable = false)
-    @Enumerated(EnumType.STRING)
 	private List<Symptom> specificSymptoms;
     
-    @ElementCollection(targetClass = Symptom.class)
+    @LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade={CascadeType.MERGE})
     @Column(name = "nonSpecificSymptoms", nullable = false)
-    @Enumerated(EnumType.STRING)
 	private List<Symptom> nonSpecificSymptoms;
     
     @Column(name = "specificSymptomsMatched")
@@ -101,11 +99,11 @@ public class Diagnose {
 		 * Add patient and vet
 		 */
 		this.specificSymptoms = new ArrayList<Symptom>();
-		for (String symptom : diagnoseDTO.getSpecificSymptoms())
-			this.specificSymptoms.add(Symptom.valueOf(symptom));
+		for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomDTOs())
+			this.specificSymptoms.add(new Symptom(symptomDTO));
 		this.nonSpecificSymptoms = new ArrayList<Symptom>();
-		for (String symptom : diagnoseDTO.getNonSpecificSymptoms())
-			this.nonSpecificSymptoms.add(Symptom.valueOf(symptom));
+		for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomDTOs())
+			this.nonSpecificSymptoms.add(new Symptom(symptomDTO));
 		this.specificSymptomsMatched = diagnoseDTO.getSpecificSymptomsMatched();
 		this.nonSpecificSymptomsMatched = diagnoseDTO.getNonSpecificSymptomsMatched();
 		this.therapies = new ArrayList<Therapy>();
