@@ -5,6 +5,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kie.api.KieBase;
+import org.kie.api.KieBaseConfiguration;
+import org.kie.api.KieServices;
+import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +28,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.service.DiagnoseService;
+import com.ftn.sbnz_2020.service.SymptomService;
 
 @RestController
 public class DiagnoseController {
 
 	@Autowired
 	DiagnoseService diagnoseService;
+	
+	@Autowired
+	SymptomService symptomService;
+	
+    @Autowired
+    private KieContainer kieContainer;
 	
 	@GetMapping(value = "/diagnoses/{id}", produces = "application/json")
     public ResponseEntity<DiagnoseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -132,4 +146,21 @@ public class DiagnoseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 	
+    @PostMapping(value="/diagnose")
+    public ResponseEntity<Void> diagnose(HttpServletRequest request){
+    	KieServices ks = KieServices.Factory.get();
+        KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
+        kbconf.setOption(EventProcessingOption.STREAM);
+        KieBase kbase = kieContainer.newKieBase(kbconf);
+        KieSession kieSession = kbase.newKieSession();
+    	
+    	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
+    	ArrayList<Symptom> s=new ArrayList<Symptom>();
+    	s.add(symptomService.findByName("LOW_APPETITE"));
+    	s.add(symptomService.findByName("DEPRESSION"));
+    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
+    	//s.add(symptomService.findByName("NODES_ON_SKIN"));
+    	diagnoseService.diagnose(kieSession, s);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

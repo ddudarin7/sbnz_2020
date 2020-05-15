@@ -1,0 +1,37 @@
+package drools.spring.rules;
+
+import com.ftn.sbnz_2020.facts.Symptom;
+import com.ftn.sbnz_2020.facts.Disease;
+
+import java.util.ArrayList;
+import java.util.List;
+
+rule "Find matching specific symptoms"
+	lock-on-active true
+	when
+		$d:Disease( $ss:specificSymptoms )
+		$resList:List() from accumulate(
+			$s:Symptom( this memberOf $ss ),
+            init(List<Symptom> list1=new ArrayList<Symptom>();),
+            action(list1.add($s);),
+            result(list1)
+		)
+	then
+		modify($d) {setSpecificSymptomsMatchedNum((long) $resList.size())};
+		modify($d) {setSpecificSymptomsMatched($resList)};
+end
+
+rule "Find matching non specific symptoms"
+	lock-on-active true
+	when
+		$d:Disease( $nss:nonSpecificSymptoms )
+		$resList:List() from accumulate(
+			$s:Symptom( this memberOf $nss ),
+            init(List<Symptom> list1=new ArrayList<Symptom>();),
+            action(list1.add($s);),
+            result(list1)
+		)
+	then
+		modify($d) {setNonSpecificSymptomsMatchedNum((long) $resList.size())};
+		modify($d) {setNonSpecificSymptomsMatched($resList)};
+end

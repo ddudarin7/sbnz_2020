@@ -1,7 +1,9 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +22,9 @@ public class SymptomService {
 	
 	public Symptom findByName(String name){ return symptomRepository.findByName(name); }
 	
-	public List<Symptom> findAll() { return symptomRepository.findAll(); }
+	public List<Symptom> findAll() { 	
+		return symptomRepository.findAll(); 
+	}
 	
 	public Page<Symptom> findAll(Pageable pageable) { return symptomRepository.findAll(pageable); }
 	

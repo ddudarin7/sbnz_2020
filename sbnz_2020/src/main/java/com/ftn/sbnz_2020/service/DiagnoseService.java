@@ -2,19 +2,27 @@ package com.ftn.sbnz_2020.service;
 
 import java.util.List;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.repository.DiagnoseRepository;
+import com.ftn.sbnz_2020.repository.DiseaseRepository;
+import com.ftn.sbnz_2020.repository.SymptomRepository;
 
 @Service
 public class DiagnoseService {
 
 	@Autowired
 	DiagnoseRepository diagnoseRepository;
+	
+	@Autowired
+	DiseaseRepository diseaseRepository;
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
@@ -59,5 +67,21 @@ public class DiagnoseService {
 	public void delete(Long id){ diagnoseRepository.deleteById(id); }
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
+	
+	public void diagnose(KieSession kieSession,List<Symptom> symptoms) {
+		for(Symptom s:symptoms) {
+			kieSession.insert(s);
+		}
+		
+		List<Disease> diseases=diseaseRepository.findAll();
+		for(Disease d:diseases){
+			kieSession.insert(d);
+		}
+		
+		kieSession.fireAllRules();
+		
+		System.out.println(diseases.get(0).getSpecificSymptomsMatchedNum());
+		
+	}
 	
 }
