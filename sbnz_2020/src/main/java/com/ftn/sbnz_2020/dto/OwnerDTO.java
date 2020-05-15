@@ -1,21 +1,10 @@
-package com.ftn.sbnz_2020.facts;
+package com.ftn.sbnz_2020.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.ftn.sbnz_2020.facts.Address;
+import com.ftn.sbnz_2020.facts.Owner;
 
-import com.ftn.sbnz_2020.dto.OwnerDTO;
-
-@Entity
-@Table(name = "owner")
-public class Owner {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class OwnerDTO {
+	
 	private Long id;
 	
 	private String firstName;
@@ -26,11 +15,11 @@ public class Owner {
 	
 	private Address address;
 
-	public Owner() {
+	public OwnerDTO() {
 		super();
 	}
 
-	public Owner(Long id, String firstName, String lastName, String phoneNum, Address address) {
+	public OwnerDTO(Long id, String firstName, String lastName, String phoneNum, Address address) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -39,14 +28,13 @@ public class Owner {
 		this.address = address;
 	}
 	
-	public Owner(OwnerDTO ownerDTO) {
-		this.id = ownerDTO.getId();
-		this.firstName = ownerDTO.getFirstName();
-		this.lastName = ownerDTO.getLastName();
-		this.phoneNum = ownerDTO.getPhoneNum();
-		this.address = ownerDTO.getAddress();
+	public OwnerDTO(Owner owner) {
+		this.id = owner.getId();
+		this.firstName = owner.getFirstName();
+		this.lastName = owner.getLastName();
+		this.phoneNum = owner.getPhoneNum();
+		this.address = owner.getAddress();
 	}
-	
 
 	public Long getId() {
 		return id;
@@ -87,5 +75,4 @@ public class Owner {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
 }
