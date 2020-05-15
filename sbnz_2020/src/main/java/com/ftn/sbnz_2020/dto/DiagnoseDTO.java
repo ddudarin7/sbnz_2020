@@ -15,8 +15,8 @@ public class DiagnoseDTO {
 	/*
 	 * Add patient and vet
 	 */
-	private List<String> specificSymptoms;
-	private List<String> nonSpecificSymptoms;
+	private List<SymptomDTO> specificSymptomDTOs;
+	private List<SymptomDTO> nonSpecificSymptomDTOs;
 	private Long specificSymptomsMatched;
 	private Long nonSpecificSymptomsMatched;
 	private List<TherapyDTO> therapyDTOs;
@@ -32,12 +32,12 @@ public class DiagnoseDTO {
 		/*
 		 * Add patient and vet
 		 */
-		this.specificSymptoms = new ArrayList<String>();
+		this.specificSymptomDTOs = new ArrayList<SymptomDTO>();
 		for (Symptom symptom : diagnose.getSpecificSymptoms())
-			this.specificSymptoms.add(symptom.toString());
-		this.nonSpecificSymptoms = new ArrayList<String>();
+			this.specificSymptomDTOs.add(new SymptomDTO(symptom));
+		this.nonSpecificSymptomDTOs = new ArrayList<SymptomDTO>();
 		for (Symptom symptom : diagnose.getNonSpecificSymptoms())
-			this.nonSpecificSymptoms.add(symptom.toString());
+			this.nonSpecificSymptomDTOs.add(new SymptomDTO(symptom));
 		this.specificSymptomsMatched = diagnose.getSpecificSymptomsMatched();
 		this.nonSpecificSymptomsMatched = diagnose.getNonSpecificSymptomsMatched();
 		this.therapyDTOs = new ArrayList<TherapyDTO>();
@@ -59,18 +59,6 @@ public class DiagnoseDTO {
 	}
 	public void setDiseaseDTO(DiseaseDTO diseaseDTO) {
 		this.diseaseDTO = diseaseDTO;
-	}
-	public List<String> getSpecificSymptoms() {
-		return specificSymptoms;
-	}
-	public void setSpecificSymptoms(List<String> specificSymptoms) {
-		this.specificSymptoms = specificSymptoms;
-	}
-	public List<String> getNonSpecificSymptoms() {
-		return nonSpecificSymptoms;
-	}
-	public void setNonSpecificSymptoms(List<String> nonSpecificSymptoms) {
-		this.nonSpecificSymptoms = nonSpecificSymptoms;
 	}
 	public Long getSpecificSymptomsMatched() {
 		return specificSymptomsMatched;
@@ -95,6 +83,22 @@ public class DiagnoseDTO {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public List<SymptomDTO> getSpecificSymptomDTOs() {
+		return specificSymptomDTOs;
+	}
+
+	public void setSpecificSymptomDTOs(List<SymptomDTO> specificSymptomDTOs) {
+		this.specificSymptomDTOs = specificSymptomDTOs;
+	}
+
+	public List<SymptomDTO> getNonSpecificSymptomDTOs() {
+		return nonSpecificSymptomDTOs;
+	}
+
+	public void setNonSpecificSymptomDTOs(List<SymptomDTO> nonSpecificSymptomDTOs) {
+		this.nonSpecificSymptomDTOs = nonSpecificSymptomDTOs;
 	}
 	
 	
