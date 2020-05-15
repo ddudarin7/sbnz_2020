@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.facts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.ftn.sbnz_2020.dto.IngredientDTO;
+import com.ftn.sbnz_2020.dto.MedicineDTO;
 
 @Entity
 @Table(name = "medicine")
@@ -35,10 +39,23 @@ public class Medicine {
 	}
 
 	public Medicine(Long id, String name, List<Ingredient> ingredients) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
+	}
+	
+	public Medicine(Long id, String name) {
+		this.id = id;
+		this.name = name;
+		this.ingredients = new ArrayList<Ingredient>();
+	}
+	
+	public Medicine(MedicineDTO medicineDTO){
+		this.id = medicineDTO.getId();
+		this.name = medicineDTO.getName();
+		this.ingredients = new ArrayList<Ingredient>();
+		for (IngredientDTO ingredientDTO : medicineDTO.getIngredientDTOs())
+			this.ingredients.add(new Ingredient(ingredientDTO));
 	}
 
 	public Long getId() {

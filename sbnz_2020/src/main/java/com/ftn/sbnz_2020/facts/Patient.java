@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.facts;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,10 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.ftn.sbnz_2020.dto.IngredientDTO;
+import com.ftn.sbnz_2020.dto.MedicineDTO;
+import com.ftn.sbnz_2020.dto.PatientDTO;
 
 @Entity
 @Table(name = "patient")
@@ -68,6 +73,25 @@ public class Patient {
 		this.owner = owner;
 		this.medicineAllergies = medicineAllergies;
 		this.ingredientAllergies = ingredientAllergies;
+	}
+	
+	public Patient(PatientDTO patientDTO) {
+		this.id = patientDTO.getId();
+        this.name = patientDTO.getName();
+        this.recordNumber = patientDTO.getRecordNumber();
+        this.dateOfBirth = patientDTO.getDateOfBirth();
+        if (patientDTO.getMedicineAllergies() != null) {
+            this.medicineAllergies = new ArrayList<>();
+            for (MedicineDTO medicine: patientDTO.getMedicineAllergies()) {
+                this.medicineAllergies.add(new Medicine(medicine));
+            }
+        }
+        if (patientDTO.getIngredientAllergies() != null) {
+            this.ingredientAllergies = new ArrayList<>();
+            for (IngredientDTO ingredient: patientDTO.getIngredientAllergies()) {
+                this.ingredientAllergies.add(new Ingredient(ingredient));
+            }
+        }
 	}
 
 	public Long getId() {

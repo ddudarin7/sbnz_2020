@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.facts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,12 +13,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.ftn.sbnz_2020.dto.DiseaseDTO;
+import com.ftn.sbnz_2020.dto.TherapyDTO;
 
 @Entity
 @Embeddable
@@ -33,6 +36,7 @@ public class Disease {
     private String name;
 
     @Column(name = "disease_group")
+    @Enumerated(EnumType.STRING)
     private DiseaseCategory diseaseCategory;
 
     @ElementCollection(targetClass = Symptom.class)
@@ -62,6 +66,21 @@ public class Disease {
 		this.specificSymptoms = specificSymptoms;
 		this.nonSpecificSymptoms = nonSpecificSymptoms;
 		this.therapies = therapies;
+	}
+	
+	public Disease(DiseaseDTO diseaseDTO){
+		this.id = diseaseDTO.getId();
+		this.name = diseaseDTO.getName();
+		this.diseaseCategory = DiseaseCategory.valueOf(diseaseDTO.getDiseaseCategory());
+		this.specificSymptoms = new ArrayList<Symptom>();
+		for (String symptom : diseaseDTO.getSpecificSymptoms())
+			this.specificSymptoms.add(Symptom.valueOf(symptom));
+		this.nonSpecificSymptoms = new ArrayList<Symptom>();
+		for (String symptom : diseaseDTO.getNonSpecificSymptoms())
+			this.nonSpecificSymptoms.add(Symptom.valueOf(symptom));
+		this.therapies = new ArrayList<Therapy>();
+		for (TherapyDTO therapyDTO : diseaseDTO.getTherapyDTOs())
+			this.therapies.add(new Therapy(therapyDTO));
 	}
 
 	public Long getId() {
