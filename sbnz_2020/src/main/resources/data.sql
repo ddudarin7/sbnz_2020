@@ -1,7 +1,9 @@
 
 DELETE FROM `sbnz_2020`.`user_table` WHERE (`id` = '1');
+DELETE FROM `sbnz_2020`.`user_table` WHERE (`id` = '2');
 
 INSERT INTO `sbnz_2020`.`user_table` (`class`, `id`, `first_name`, `last_name`, `password`, `role`, `username`) VALUES ('Admin', '1', 'admin', 'admin', 'admin', '1', 'admin');
+INSERT INTO `sbnz_2020`.`user_table` (`class`, `id`, `first_name`, `last_name`, `password`, `role`, `username`) VALUES ('Vet', '2', 'vet', 'vet', 'vet', '0', 'vet');
 
 DELETE FROM `sbnz_2020`.`medicine_ingredients`;
 DELETE FROM `sbnz_2020`.`therapy_medicine`;
