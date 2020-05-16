@@ -1,7 +1,11 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.QueryResults;
+import org.kie.api.runtime.rule.QueryResultsRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
+import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.repository.DiseaseRepository;
 
 @Service
@@ -55,5 +60,28 @@ public class DiseaseService {
 	public void delete(Long id){ diseaseRepository.deleteById(id); }
 	
 	public void deleteAll() { diseaseRepository.deleteAll(); }
+	
+	public List<Disease> findAllWithSymptom(KieSession kieSession,List<Symptom> symptoms){
+		List<Disease> matching=new ArrayList<>();
+		
+		for(Symptom s:symptoms) {
+			kieSession.insert(s);
+		}
+		
+		List<Disease> diseases=diseaseRepository.findAll();
+		for(Disease d:diseases){
+			kieSession.insert(d);
+		}
+		//set focus on agenda
+		kieSession.fireAllRules();
+		QueryResults results=kieSession.getQueryResults("Get all diseases that satisfy one or more symptoms");
+		for (QueryResultsRow row: results) {
+            System.out.println(row.get("$d"));
+            Disease disease = (Disease) row.get("$d");
+            matching.add(disease);
+        }
+		
+		return matching;
+	}
 	
 }
