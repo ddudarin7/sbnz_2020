@@ -36,6 +36,7 @@ public class Medicine {
 
 	public Medicine() {
 		super();
+		ingredients = new ArrayList<Ingredient>();
 	}
 
 	public Medicine(Long id, String name, List<Ingredient> ingredients) {
