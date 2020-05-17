@@ -3,6 +3,7 @@ package com.ftn.sbnz_2020.service;
 import java.util.List;
 
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.AgendaFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,12 +76,25 @@ public class DiagnoseService {
 		
 		List<Disease> diseases=diseaseRepository.findAll();
 		for(Disease d:diseases){
+			d.initializeSupportFields();
 			kieSession.insert(d);
 		}
 		
+		Diagnose makingDiagnose = new Diagnose();
+		
+		kieSession.insert(makingDiagnose);
+		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kieSession.fireAllRules();
 		
-		System.out.println(diseases.get(0).getSpecificSymptomsMatchedNum());
+		kieSession.getAgenda().getAgendaGroup("diagnose").setFocus();
+		kieSession.fireAllRules();
+		
+		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
+		kieSession.fireAllRules();
+		
+		if (makingDiagnose.getDisease() != null)
+			System.out.println(makingDiagnose.getDisease().getName() + " je ta bolest.");
+
 		
 	}
 	

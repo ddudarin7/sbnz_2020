@@ -157,9 +157,15 @@ public class DiagnoseController {
     	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
     	ArrayList<Symptom> s=new ArrayList<Symptom>();
     	s.add(symptomService.findByName("LOW_APPETITE"));
-    	s.add(symptomService.findByName("DEPRESSION"));
-    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
-    	//s.add(symptomService.findByName("NODES_ON_SKIN"));
+    	//s.add(symptomService.findByName("DEPRESSION"));
+    	//s.add(symptomService.findByName("RECTAL_BLEEDING"));
+    	s.add(symptomService.findByName("NODES_ON_SKIN"));
+    	s.add(symptomService.findByName("PALE_GUMS"));
+    	s.add(symptomService.findByName("PALE_TONGUE"));
+    	s.add(symptomService.findByName("FATIGUE"));
+    	s.add(symptomService.findByName("HEAVY_BREATHING"));
+    	s.add(symptomService.findByName("DARK_URINE"));
+    	s.add(symptomService.findByName("BLOODY_GUMS"));
     	diagnoseService.diagnose(kieSession, s);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
