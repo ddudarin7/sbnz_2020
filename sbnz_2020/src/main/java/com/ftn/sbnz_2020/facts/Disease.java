@@ -103,6 +103,13 @@ public class Disease {
 		this.specificSymptomsMatchedNum = 0L;
 		this.nonSpecificSymptomsMatchedNum = 0L;
 	}
+	
+	public void initializeSupportFields(){
+		this.specificSymptomsMatched = new ArrayList<Symptom>();
+		this.nonSpecificSymptomsMatched = new ArrayList<Symptom>();
+		this.specificSymptomsMatchedNum = 0L;
+		this.nonSpecificSymptomsMatchedNum = 0L;
+	}
 
 	public Long getId() {
 		return id;

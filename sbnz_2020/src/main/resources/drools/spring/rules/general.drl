@@ -1,13 +1,14 @@
 package drools.spring.rules;
 
-import com.ftn.sbnz_2020.facts.Symptom;
-import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 rule "Find matching specific symptoms"
 	lock-on-active true
+	salience 30
+	agenda-group "finding symptoms"
 	when
 		$d:Disease( $ss:specificSymptoms )
 		$resList:List() from accumulate(
@@ -23,6 +24,8 @@ end
 
 rule "Find matching non specific symptoms"
 	lock-on-active true
+	agenda-group "finding symptoms"
+	salience 30
 	when
 		$d:Disease( $nss:nonSpecificSymptoms )
 		$resList:List() from accumulate(
@@ -34,4 +37,96 @@ rule "Find matching non specific symptoms"
 	then
 		modify($d) {setNonSpecificSymptomsMatchedNum((long) $resList.size())};
 		modify($d) {setNonSpecificSymptomsMatched($resList)};
+end
+
+
+rule "Only one disease survived"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 20
+	when
+		$dio: Diagnose(disease == null)
+		accumulate (
+			$d: Disease(),
+			$dNum: count($d)
+		)
+		$disease: Disease($ssm: specificSymptomsMatched, $ssmn: specificSymptomsMatchedNum,
+		$nssm: nonSpecificSymptomsMatched, $nssmn: nonSpecificSymptomsMatchedNum, $dNum == 1)
+	then
+		modify($dio){setDisease($disease)}
+		modify($dio){setSpecificSymptoms($ssm)}
+		modify($dio){setSpecificSymptomsMatched($ssmn)}
+		modify($dio){setNonSpecificSymptoms($nssm)}
+		modify($dio){setNonSpecificSymptomsMatched($nssmn)}
+		modify($dio){setTherapies($disease.getTherapies())}
+end
+
+rule "Disease with more specific symptoms matched survives"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 10
+	when
+		$dio : Diagnose(disease == null)
+		accumulate (
+            Disease($ssmn: specificSymptomsMatchedNum),
+            $most: max($ssmn)
+        )
+       	$d : Disease($s1: specificSymptomsMatchedNum, $s1 != $most)
+	then
+		delete($d)
+end
+
+rule "Disease with more non specific symptoms matched survives"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 5
+	when
+		$dio : Diagnose(disease == null)
+		accumulate (
+            Disease($nssmn: nonSpecificSymptomsMatchedNum),
+            $most: max($nssmn)
+        )
+       	$d : Disease($s1: nonSpecificSymptomsMatchedNum, $s1 != $most)
+	then
+		delete($d)
+end
+
+
+rule "Zero or more diseases"
+	lock-on-active true
+	agenda-group "diagnose failed"
+	salience 5
+	when
+		accumulate (
+            $d: Disease(),
+            $dNum: count($d)
+        )
+        $dio: Diagnose(disease == null, $dNum != 1)
+	then
+		System.out.println("Dijagnoza nije uspjela. Pronadjeno je: " + $dNum + " bolesti.");
+end
+
+rule "Medicine allergy therapies elimating"
+	lock-on-active true
+	agenda-group "allergy checking"
+	salience 7
+	when
+		$dio: Diagnose($pat: patient, disease != null)
+		$the: Therapy() from $dio.therapies
+		$med: Medicine(this memberOf $pat.medicineAllergies) from $the.medicines
+	then
+		modify($dio){getTherapies().remove($the)}
+end
+
+rule "Ingredient allergy therapies elimating"
+	lock-on-active true
+	agenda-group "allergy checking"
+	salience 6
+	when
+		$dio: Diagnose($pat: patient, disease != null)
+		$the: Therapy() from $dio.therapies
+		$med: Medicine() from $the.medicines
+		$ing: Ingredient(this memberOf $pat.ingredientAllergies) from $med.ingredients
+	then
+		modify($dio){getTherapies().remove($the)}
 end
