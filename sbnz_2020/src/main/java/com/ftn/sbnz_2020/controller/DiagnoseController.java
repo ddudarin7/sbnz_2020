@@ -166,7 +166,6 @@ public class DiagnoseController {
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
     	
-    	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
     	ArrayList<Symptom> s=new ArrayList<Symptom>();
     	s.add(symptomService.findByName("NON_NUTRITIVE_FOOD_EATING"));
     	s.add(symptomService.findByName("JAUNDICE"));
