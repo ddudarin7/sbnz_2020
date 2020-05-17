@@ -60,6 +60,8 @@ public class Patient {
 
 	public Patient() {
 		super();
+		this.medicineAllergies = new ArrayList<Medicine>();
+		this.ingredientAllergies = new ArrayList<Ingredient>();
 	}
 
 	public Patient(Long id, String name, String recordNumber, Date dateOfBirth, Breed breed, Owner owner,

@@ -72,6 +72,7 @@ public class Diagnose {
 
 	public Diagnose() {
 		super();
+		this.therapies = new ArrayList<Therapy>();
 	}
 
 	
