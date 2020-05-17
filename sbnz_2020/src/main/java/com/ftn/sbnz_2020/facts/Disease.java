@@ -68,11 +68,6 @@ public class Disease {
     
 	public Disease() {
 		super();
-		this.specificSymptomsMatched = new ArrayList<Symptom>();
-		this.nonSpecificSymptomsMatched = new ArrayList<Symptom>();
-		this.specificSymptomsMatchedNum = 0L;
-		this.nonSpecificSymptomsMatchedNum = 0L;
-
 	}
 
 	public Disease(Long id, String name, DiseaseCategory diseaseCategory, List<Symptom> specificSymptoms,
