@@ -2,14 +2,11 @@ package drools.spring.rules;
 
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Disease;
-import com.ftn.sbnz_2020.facts.Diagnose;
 
 import java.util.ArrayList;
 import java.util.List;
 
 rule "Find matching specific symptoms"
-	salience 10
-	agenda-group "matching symptoms"
 	lock-on-active true
 	when
 		$d:Disease( $ss:specificSymptoms )
@@ -22,12 +19,9 @@ rule "Find matching specific symptoms"
 	then
 		modify($d) {setSpecificSymptomsMatchedNum((long) $resList.size())};
 		modify($d) {setSpecificSymptomsMatched($resList)};
-		System.out.println("Bolest:"+$d.getId()+ "ima ss:"+$d.getSpecificSymptomsMatchedNum());
 end
 
 rule "Find matching non specific symptoms"
-	salience 10
-	agenda-group "matching symptoms"
 	lock-on-active true
 	when
 		$d:Disease( $nss:nonSpecificSymptoms )
@@ -40,26 +34,4 @@ rule "Find matching non specific symptoms"
 	then
 		modify($d) {setNonSpecificSymptomsMatchedNum((long) $resList.size())};
 		modify($d) {setNonSpecificSymptomsMatched($resList)};
-		System.out.println("Bolest:"+$d.getId()+ "ima nss:"+$d.getNonSpecificSymptomsMatchedNum());
-end
-
-rule "Find disease with all specific and non specific symptoms"
-	salience 5
-	agenda-group "diagnose"
-	lock-on-active true
-	when
-		$diagnose:Diagnose()
-		$resList:List(size>0) from accumulate(
-			$d:Disease(specificSymptomsMatchedNum==specificSymptoms.size(),
-			nonSpecificSymptomsMatchedNum==nonSpecificSymptoms.size()),
-            init(List<Disease> list1=new ArrayList<Disease>();),
-            action(list1.add($d);),
-            result(list1)
-		)
-	then
-		modify($diagnose){setDisease((Disease)$resList.get(0))};
-		modify($diagnose){setSpecificSymptoms(((Disease)$resList.get(0)).getSpecificSymptomsMatched())}
-		modify($diagnose){setSpecificSymptomsMatched(((Disease)$resList.get(0)).getSpecificSymptomsMatchedNum())}
-		modify($diagnose){setNonSpecificSymptoms(((Disease)$resList.get(0)).getNonSpecificSymptomsMatched())}
-		modify($diagnose){setNonSpecificSymptomsMatched(((Disease)$resList.get(0)).getNonSpecificSymptomsMatchedNum())}
 end
