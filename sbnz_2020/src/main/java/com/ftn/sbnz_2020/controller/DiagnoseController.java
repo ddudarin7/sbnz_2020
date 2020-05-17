@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.service.DiagnoseService;
+import com.ftn.sbnz_2020.service.IngredientService;
+import com.ftn.sbnz_2020.service.MedicineService;
 import com.ftn.sbnz_2020.service.SymptomService;
 
 @RestController
@@ -40,6 +43,12 @@ public class DiagnoseController {
 	
 	@Autowired
 	SymptomService symptomService;
+	
+	@Autowired
+	MedicineService medicineService;
+	
+	@Autowired
+	IngredientService ingredientService;
 	
     @Autowired
     private KieContainer kieContainer;
@@ -162,7 +171,13 @@ public class DiagnoseController {
     	s.add(symptomService.findByName("DIARRHEA"));
     	s.add(symptomService.findByName("CHOKING"));
     	s.add(symptomService.findByName("LOW_APPETITE"));
-    	diagnoseService.diagnose(kieSession, s);
+    	
+    	Patient patient = new Patient();
+    	patient.setName("Dzeki");
+    	//patient.getMedicineAllergies().add(medicineService.findByName("Denamarin"));
+    	patient.getIngredientAllergies().add(ingredientService.findByName("S-adenosylmethionine"));
+    	
+    	diagnoseService.diagnose(kieSession, s, patient);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 }

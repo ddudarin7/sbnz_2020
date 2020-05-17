@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.repository.DiagnoseRepository;
 import com.ftn.sbnz_2020.repository.DiseaseRepository;
-import com.ftn.sbnz_2020.repository.SymptomRepository;
 
 @Service
 public class DiagnoseService {
@@ -68,7 +68,7 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public void diagnose(KieSession kieSession,List<Symptom> symptoms) {
+	public void diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
 		}
@@ -80,6 +80,7 @@ public class DiagnoseService {
 		}
 		
 		Diagnose makingDiagnose = new Diagnose();
+		makingDiagnose.setPatient(patient);
 		
 		kieSession.insert(makingDiagnose);
 		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
@@ -91,9 +92,13 @@ public class DiagnoseService {
 		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
 		kieSession.fireAllRules();
 		
+		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
+		kieSession.fireAllRules();
+		
 		if (makingDiagnose.getDisease() != null)
 			System.out.println(makingDiagnose.getDisease().getName() + " je dijagnostifikovana bolest.");
 
+		System.out.println("Broj prepisanih terapija: " + makingDiagnose.getTherapies().size());
 		
 	}
 	

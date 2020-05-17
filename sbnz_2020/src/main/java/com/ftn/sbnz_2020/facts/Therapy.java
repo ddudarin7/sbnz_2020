@@ -39,6 +39,7 @@ public class Therapy {
 
 	public Therapy() {
 		super();
+		this.medicines = new ArrayList<Medicine>();
 	}
 
 	public Therapy(Long id, String description, List<Medicine> medicines) {
