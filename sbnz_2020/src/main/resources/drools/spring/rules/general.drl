@@ -61,6 +61,36 @@ rule "Only one disease survived"
 		modify($dio){setTherapies($disease.getTherapies())}
 end
 
+rule "Disease with the highest percentage of specific symptoms survived"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 15
+	when
+		$dio : Diagnose(disease == null)
+		accumulate (
+            Disease($ssmp: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0))),
+            $most: max($ssmp)
+        )
+       	$d : Disease($s1: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0)), $s1 != $most)
+	then
+		delete($d)
+end
+
+rule "Disease with the highest percentage of non specific symptoms survived"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 12
+	when
+		$dio : Diagnose(disease == null)
+		accumulate (
+            Disease($nssmp: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0))),
+            $most: max($nssmp)
+        )
+       	$d : Disease($s1: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0)), $s1 != $most)
+	then
+		delete($d)
+end
+
 rule "Disease with more specific symptoms matched survives"
 	lock-on-active true
 	agenda-group "diagnose"
