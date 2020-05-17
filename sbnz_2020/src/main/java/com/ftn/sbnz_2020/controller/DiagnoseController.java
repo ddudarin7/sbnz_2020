@@ -156,12 +156,15 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose")
+
     public ResponseEntity<DiagnoseDTO> diagnose(HttpServletRequest request){
-    	KieServices ks = KieServices.Factory.get();
+    	/*KieServices ks = KieServices.Factory.get();
         KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
         kbconf.setOption(EventProcessingOption.STREAM);
         KieBase kbase = kieContainer.newKieBase(kbconf);
-        KieSession kieSession = kbase.newKieSession();
+        KieSession kieSession = kbase.newKieSession();*/
+        
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
     	
     	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
     	ArrayList<Symptom> s=new ArrayList<Symptom>();

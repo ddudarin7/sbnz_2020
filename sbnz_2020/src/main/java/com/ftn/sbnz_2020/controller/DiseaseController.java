@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,13 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.sbnz_2020.dto.DiseaseDTO;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
+import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.service.DiseaseService;
+import com.ftn.sbnz_2020.service.SymptomService;
 
 @RestController
 public class DiseaseController {
 
 	@Autowired
 	DiseaseService diseaseService;
+	
+	@Autowired
+	SymptomService symptomService;
 	
 	@GetMapping(value = "/diseases/{id}", produces = "application/json")
     public ResponseEntity<DiseaseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -141,5 +147,19 @@ public class DiseaseController {
         diseaseService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-	
+    
+    
+    @GetMapping(value = "/diseases/with-one-or-more-symptoms", produces = "application/json")
+    public ResponseEntity<List<Disease>> findAllwithSymptoms( HttpServletRequest request) {
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+        
+    	ArrayList<Symptom> s=new ArrayList<Symptom>();
+    	s.add(symptomService.findByName("LOW_APPETITE"));
+    	s.add(symptomService.findByName("DEPRESSION"));
+    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
+        
+    	List<Disease> diseases=diseaseService.findAllWithSymptom(kieSession, s);
+
+        return new ResponseEntity<>(diseases,HttpStatus.OK);
+    }
 }

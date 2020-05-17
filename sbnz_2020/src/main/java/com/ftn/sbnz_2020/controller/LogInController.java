@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.sbnz_2020.dto.CurrentUserDTO;
 import com.ftn.sbnz_2020.dto.LogInDTO;
 import com.ftn.sbnz_2020.facts.Role;
 import com.ftn.sbnz_2020.facts.User;
@@ -30,7 +31,7 @@ public class LogInController {
     private UserService userService;
     
     @PostMapping(value = "/log-in",produces = "application/json")
-    public  ResponseEntity<LogInDTO> logIn(@RequestBody LogInDTO logInDto, HttpServletRequest request){
+    public  ResponseEntity<CurrentUserDTO> logIn(@RequestBody LogInDTO logInDto, HttpServletRequest request){
     	User u=userService.findOne(logInDto.getUsername());
     	if(u!= null) {
     		if(!u.getPassword().equals(logInDto.getPassword())) {
@@ -45,7 +46,7 @@ public class LogInController {
                 request.getSession().setAttribute("kieSession", kieSession);
                 System.out.println("Sesija kreirana");
     		}
-        	return new ResponseEntity<>(HttpStatus.OK);
+        	return new ResponseEntity<>(new CurrentUserDTO(u.getUsername(), u.getPassword(), u.getRole().toString()),HttpStatus.OK);
     	}
     	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
     }
@@ -53,10 +54,12 @@ public class LogInController {
     @PostMapping(value = "/log-out",produces = "application/json")
     public  ResponseEntity<LogInDTO> logOut(@RequestBody LogInDTO logInDto, HttpServletRequest request){
     	try {
-            KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
-            kieSession.dispose();
-            kieSession.destroy();
-
+    		User u=userService.findOne(logInDto.getUsername());
+    		if(u.getRole().equals(Role.VET)) {
+    			KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+    			kieSession.dispose();
+    			kieSession.destroy();
+    		}
             request.getSession().invalidate();
             System.out.println("Sesija unistena");
         	return new ResponseEntity<>(HttpStatus.OK);
