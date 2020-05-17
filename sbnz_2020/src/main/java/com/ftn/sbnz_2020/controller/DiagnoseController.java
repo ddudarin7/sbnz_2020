@@ -147,7 +147,7 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose")
-    public ResponseEntity<Void> diagnose(HttpServletRequest request){
+    public ResponseEntity<Diagnose> diagnose(HttpServletRequest request){
     	/*KieServices ks = KieServices.Factory.get();
         KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
         kbconf.setOption(EventProcessingOption.STREAM);
@@ -156,13 +156,23 @@ public class DiagnoseController {
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
     	
-    	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
     	ArrayList<Symptom> s=new ArrayList<Symptom>();
-    	s.add(symptomService.findByName("LOW_APPETITE"));
-    	s.add(symptomService.findByName("DEPRESSION"));
-    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
+    	s.add(symptomService.findById(1L));
+    	s.add(symptomService.findById(2L));
+    	s.add(symptomService.findById(3L));
+    	s.add(symptomService.findById(12L));
+    	s.add(symptomService.findById(13L));
+    	s.add(symptomService.findById(16L));
+    	s.add(symptomService.findById(22L));
+    	s.add(symptomService.findById(23L));
+    	//s.add(symptomService.findById(45L));
+    	
+    	//s.add(symptomService.findByName("LOW_APPETITE"));
+    	//s.add(symptomService.findByName("DEPRESSION"));
+    	//s.add(symptomService.findByName("RECTAL_BLEEDING"));
     	//s.add(symptomService.findByName("NODES_ON_SKIN"));
-    	diagnoseService.diagnose(kieSession, s);
+    	Diagnose d=diagnoseService.diagnose(kieSession, s);
+    	System.out.println(d.getDisease().getName());
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 }
