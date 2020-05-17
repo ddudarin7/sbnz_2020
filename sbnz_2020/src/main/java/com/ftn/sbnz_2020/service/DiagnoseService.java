@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.api.runtime.KieSession;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
+import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.repository.DiagnoseRepository;
 import com.ftn.sbnz_2020.repository.DiseaseRepository;
-import com.ftn.sbnz_2020.repository.SymptomRepository;
+import com.ftn.sbnz_2020.repository.TherapyRepository;
 
 @Service
 public class DiagnoseService {
@@ -23,6 +26,9 @@ public class DiagnoseService {
 	
 	@Autowired
 	DiseaseRepository diseaseRepository;
+	
+	@Autowired
+	TherapyRepository therapyRepository;
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
@@ -68,20 +74,46 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public void diagnose(KieSession kieSession,List<Symptom> symptoms) {
+	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
 		}
 		
 		List<Disease> diseases=diseaseRepository.findAll();
 		for(Disease d:diseases){
+			d.initializeSupportFields();
 			kieSession.insert(d);
 		}
 		
+		Diagnose makingDiagnose = new Diagnose();
+		makingDiagnose.setPatient(patient);
+		
+		kieSession.insert(makingDiagnose);
+		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kieSession.fireAllRules();
 		
-		System.out.println(diseases.get(0).getSpecificSymptomsMatchedNum());
+		kieSession.getAgenda().getAgendaGroup("diagnose").setFocus();
+		kieSession.fireAllRules();
 		
+		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
+		kieSession.fireAllRules();
+		
+		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
+		kieSession.fireAllRules();
+
+		/*
+		if (makingDiagnose.getDisease() != null)
+			System.out.println(makingDiagnose.getDisease().getName() + " je dijagnostifikovana bolest.");
+
+		System.out.println("Broj prepisanih terapija: " + makingDiagnose.getTherapies().size());
+		*/
+		
+		List<Therapy> therapies = new ArrayList<Therapy>(makingDiagnose.getTherapies());
+		
+		
+		makingDiagnose.setTherapies(therapies);;
+		
+		return diagnoseRepository.save(makingDiagnose);
 	}
 	
 }

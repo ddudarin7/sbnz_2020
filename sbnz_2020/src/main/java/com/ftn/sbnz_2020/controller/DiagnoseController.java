@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.service.DiagnoseService;
+import com.ftn.sbnz_2020.service.IngredientService;
+import com.ftn.sbnz_2020.service.MedicineService;
 import com.ftn.sbnz_2020.service.SymptomService;
 
 @RestController
@@ -40,6 +43,12 @@ public class DiagnoseController {
 	
 	@Autowired
 	SymptomService symptomService;
+	
+	@Autowired
+	MedicineService medicineService;
+	
+	@Autowired
+	IngredientService ingredientService;
 	
     @Autowired
     private KieContainer kieContainer;
@@ -147,7 +156,7 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose")
-    public ResponseEntity<Void> diagnose(HttpServletRequest request){
+    public ResponseEntity<DiagnoseDTO> diagnose(HttpServletRequest request){
     	KieServices ks = KieServices.Factory.get();
         KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
         kbconf.setOption(EventProcessingOption.STREAM);
@@ -156,11 +165,19 @@ public class DiagnoseController {
     	
     	/*KieSession kieSession=(KieSession) request.getSession().getAttribute("kieSession");*/
     	ArrayList<Symptom> s=new ArrayList<Symptom>();
+    	s.add(symptomService.findByName("NON_NUTRITIVE_FOOD_EATING"));
+    	s.add(symptomService.findByName("JAUNDICE"));
+    	s.add(symptomService.findByName("VOMITING"));
+    	s.add(symptomService.findByName("DIARRHEA"));
+    	s.add(symptomService.findByName("CHOKING"));
     	s.add(symptomService.findByName("LOW_APPETITE"));
-    	s.add(symptomService.findByName("DEPRESSION"));
-    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
-    	//s.add(symptomService.findByName("NODES_ON_SKIN"));
-    	diagnoseService.diagnose(kieSession, s);
-    	return new ResponseEntity<>(HttpStatus.OK);
+    	
+    	Patient patient = new Patient();
+    	patient.setName("Dzeki");
+    	//patient.getMedicineAllergies().add(medicineService.findByName("Denamarin"));
+    	patient.getIngredientAllergies().add(ingredientService.findByName("S-adenosylmethionine"));
+    	
+    	Diagnose diagnose = diagnoseService.diagnose(kieSession, s, patient);
+    	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
     }
 }

@@ -3,12 +3,18 @@ DELETE FROM `sbnz_2020`.`user_table` WHERE (`id` = '1');
 
 INSERT INTO `sbnz_2020`.`user_table` (`class`, `id`, `first_name`, `last_name`, `password`, `role`, `username`) VALUES ('Admin', '1', 'admin', 'admin', 'admin', '1', 'admin');
 
+
+DELETE FROM `sbnz_2020`.`diagnose_therapies`;
+DELETE FROM `sbnz_2020`.`diagnose_specific_symptoms`;
+DELETE FROM `sbnz_2020`.`diagnose_non_specific_symptoms`;
+DELETE FROM `sbnz_2020`.`patient_ingredient_allergies`;
+DELETE FROM `sbnz_2020`.`patient_medicine_allergies`;
 DELETE FROM `sbnz_2020`.`medicine_ingredients`;
 DELETE FROM `sbnz_2020`.`therapy_medicine`;
 DELETE FROM `sbnz_2020`.`disease_therapies`;
 DELETE FROM `sbnz_2020`.`disease_specific_symptoms`;
 DELETE FROM `sbnz_2020`.`disease_non_specific_symptoms`;
-
+DELETE FROM `sbnz_2020`.`diagnose`;
 
 DELETE FROM `sbnz_2020`.`symptom`;
 INSERT INTO `sbnz_2020`.`symptom` (`id`, `name`)
@@ -243,3 +249,4 @@ VALUES
 	('10', '4'),
 	('10', '16'),
 	('10', '62');
+	
