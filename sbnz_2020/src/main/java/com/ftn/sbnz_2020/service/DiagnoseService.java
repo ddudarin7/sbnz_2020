@@ -3,7 +3,6 @@ package com.ftn.sbnz_2020.service;
 import java.util.List;
 
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.AgendaFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -93,7 +92,7 @@ public class DiagnoseService {
 		kieSession.fireAllRules();
 		
 		if (makingDiagnose.getDisease() != null)
-			System.out.println(makingDiagnose.getDisease().getName() + " je ta bolest.");
+			System.out.println(makingDiagnose.getDisease().getName() + " je dijagnostifikovana bolest.");
 
 		
 	}
