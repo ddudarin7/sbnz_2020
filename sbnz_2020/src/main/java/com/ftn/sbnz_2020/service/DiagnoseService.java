@@ -68,7 +68,10 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public void diagnose(KieSession kieSession,List<Symptom> symptoms) {
+	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms) {
+		Diagnose diagnose=new Diagnose();
+		kieSession.insert(diagnose);
+		
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
 		}
@@ -78,10 +81,22 @@ public class DiagnoseService {
 			kieSession.insert(d);
 		}
 		
+        kieSession.getAgenda().getAgendaGroup("matching symptoms").setFocus();
+        kieSession.fireAllRules();
+		
+        kieSession.getAgenda().getAgendaGroup("diagnose").setFocus();
 		kieSession.fireAllRules();
 		
-		System.out.println(diseases.get(0).getSpecificSymptomsMatchedNum());
-		
+		this.releaseObjectsFromSession(kieSession);
+		return diagnose;
 	}
+	
+    private void releaseObjectsFromSession(KieSession kieSession){
+        kieSession.getObjects();
+
+        for( Object object: kieSession.getObjects() ){
+            kieSession.delete( kieSession.getFactHandle( object ) );
+        }
+    }
 	
 }
