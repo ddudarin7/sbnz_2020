@@ -64,6 +64,7 @@ public class Diagnose {
     
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+	@Column(name = "therapies", nullable = false)
 	private List<Therapy> therapies;
 	
     @Column(name = "date")
@@ -94,23 +95,29 @@ public class Diagnose {
 	}
 
 	public Diagnose(DiagnoseDTO diagnoseDTO){
-		this.id = diagnoseDTO.getId();
-		this.disease = new Disease(diagnoseDTO.getDiseaseDTO());
-		/*
-		 * Add patient and vet
-		 */
+		if (diagnoseDTO.getId() != null)
+			this.id = diagnoseDTO.getId();
+		if (diagnoseDTO.getDiseaseDTO() != null)
+			this.disease = new Disease(diagnoseDTO.getDiseaseDTO());
+		if (diagnoseDTO.getPatientDTO() != null)
+			this.patient = new Patient(diagnoseDTO.getPatientDTO());
+		if (diagnoseDTO.getVetDTO() != null)
+			this.vet = new Vet(diagnoseDTO.getVetDTO());
 		this.specificSymptoms = new ArrayList<Symptom>();
 		for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomDTOs())
 			this.specificSymptoms.add(new Symptom(symptomDTO));
 		this.nonSpecificSymptoms = new ArrayList<Symptom>();
 		for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomDTOs())
 			this.nonSpecificSymptoms.add(new Symptom(symptomDTO));
-		this.specificSymptomsMatched = diagnoseDTO.getSpecificSymptomsMatched();
-		this.nonSpecificSymptomsMatched = diagnoseDTO.getNonSpecificSymptomsMatched();
+		if (diagnoseDTO.getSpecificSymptomsMatched() != null)
+			this.specificSymptomsMatched = diagnoseDTO.getSpecificSymptomsMatched();
+		if (diagnoseDTO.getNonSpecificSymptomsMatched() != null)
+			this.nonSpecificSymptomsMatched = diagnoseDTO.getNonSpecificSymptomsMatched();
 		this.therapies = new ArrayList<Therapy>();
 		for (TherapyDTO therapyDTO : diagnoseDTO.getTherapyDTOs())
 			this.therapies.add(new Therapy(therapyDTO));
-		this.date = diagnoseDTO.getDate();
+		if (diagnoseDTO.getDate() != null)
+			this.date = diagnoseDTO.getDate();
 	}
 
 	public Long getId() {

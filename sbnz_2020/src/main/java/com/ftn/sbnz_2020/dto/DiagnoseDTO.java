@@ -12,9 +12,8 @@ public class DiagnoseDTO {
 	
 	private Long id;
 	private DiseaseDTO diseaseDTO;
-	/*
-	 * Add patient and vet
-	 */
+	private PatientDTO patientDTO;
+	private VetDTO vetDTO;
 	private List<SymptomDTO> specificSymptomDTOs;
 	private List<SymptomDTO> nonSpecificSymptomDTOs;
 	private Long specificSymptomsMatched;
@@ -27,23 +26,29 @@ public class DiagnoseDTO {
 	}
 	
 	public DiagnoseDTO(Diagnose diagnose){
-		this.id = diagnose.getId();
-		this.diseaseDTO = new DiseaseDTO(diagnose.getDisease());
-		/*
-		 * Add patient and vet
-		 */
+		if (diagnose.getId() != null)
+			this.id = diagnose.getId();
+		if (diagnose.getDisease() != null)
+			this.diseaseDTO = new DiseaseDTO(diagnose.getDisease());
+		if (diagnose.getPatient() != null)
+			this.patientDTO = new PatientDTO(diagnose.getPatient());
+		if (diagnose.getVet() != null)
+			this.vetDTO = new VetDTO(diagnose.getVet());
 		this.specificSymptomDTOs = new ArrayList<SymptomDTO>();
 		for (Symptom symptom : diagnose.getSpecificSymptoms())
 			this.specificSymptomDTOs.add(new SymptomDTO(symptom));
 		this.nonSpecificSymptomDTOs = new ArrayList<SymptomDTO>();
 		for (Symptom symptom : diagnose.getNonSpecificSymptoms())
 			this.nonSpecificSymptomDTOs.add(new SymptomDTO(symptom));
-		this.specificSymptomsMatched = diagnose.getSpecificSymptomsMatched();
+		if (diagnose.getSpecificSymptomsMatched() != null)
+			this.specificSymptomsMatched = diagnose.getSpecificSymptomsMatched();
+		if (diagnose.getNonSpecificSymptomsMatched() != null)
 		this.nonSpecificSymptomsMatched = diagnose.getNonSpecificSymptomsMatched();
 		this.therapyDTOs = new ArrayList<TherapyDTO>();
 		for (Therapy therapy : diagnose.getTherapies())
 			this.therapyDTOs.add(new TherapyDTO(therapy));
-		this.date = diagnose.getDate();
+		if (diagnose.getDate() != null)
+			this.date = diagnose.getDate();
 	}
 	
 	
@@ -99,6 +104,22 @@ public class DiagnoseDTO {
 
 	public void setNonSpecificSymptomDTOs(List<SymptomDTO> nonSpecificSymptomDTOs) {
 		this.nonSpecificSymptomDTOs = nonSpecificSymptomDTOs;
+	}
+
+	public PatientDTO getPatientDTO() {
+		return patientDTO;
+	}
+
+	public void setPatientDTO(PatientDTO patientDTO) {
+		this.patientDTO = patientDTO;
+	}
+
+	public VetDTO getVetDTO() {
+		return vetDTO;
+	}
+
+	public void setVetDTO(VetDTO vetDTO) {
+		this.vetDTO = vetDTO;
 	}
 	
 	

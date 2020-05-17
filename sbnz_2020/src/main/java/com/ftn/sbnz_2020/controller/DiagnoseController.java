@@ -156,7 +156,7 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose")
-    public ResponseEntity<Void> diagnose(HttpServletRequest request){
+    public ResponseEntity<DiagnoseDTO> diagnose(HttpServletRequest request){
     	KieServices ks = KieServices.Factory.get();
         KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
         kbconf.setOption(EventProcessingOption.STREAM);
@@ -177,7 +177,7 @@ public class DiagnoseController {
     	//patient.getMedicineAllergies().add(medicineService.findByName("Denamarin"));
     	patient.getIngredientAllergies().add(ingredientService.findByName("S-adenosylmethionine"));
     	
-    	diagnoseService.diagnose(kieSession, s, patient);
-    	return new ResponseEntity<>(HttpStatus.OK);
+    	Diagnose diagnose = diagnoseService.diagnose(kieSession, s, patient);
+    	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
     }
 }
