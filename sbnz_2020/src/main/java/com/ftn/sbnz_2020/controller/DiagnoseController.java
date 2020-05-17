@@ -5,11 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
-import org.kie.api.KieServices;
-import org.kie.api.conf.EventProcessingOption;
-import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
+import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
@@ -49,9 +45,6 @@ public class DiagnoseController {
 	
 	@Autowired
 	IngredientService ingredientService;
-	
-    @Autowired
-    private KieContainer kieContainer;
 	
 	@GetMapping(value = "/diagnoses/{id}", produces = "application/json")
     public ResponseEntity<DiagnoseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -156,30 +149,20 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose")
-
-    public ResponseEntity<DiagnoseDTO> diagnose(HttpServletRequest request){
-    	/*KieServices ks = KieServices.Factory.get();
-        KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
-        kbconf.setOption(EventProcessingOption.STREAM);
-        KieBase kbase = kieContainer.newKieBase(kbconf);
-        KieSession kieSession = kbase.newKieSession();*/
+    public ResponseEntity<DiagnoseDTO> diagnose(@RequestBody List<SymptomDTO> symptomDTOs,
+    		HttpServletRequest request){
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
     	
-    	ArrayList<Symptom> s=new ArrayList<Symptom>();
-    	s.add(symptomService.findByName("NON_NUTRITIVE_FOOD_EATING"));
-    	s.add(symptomService.findByName("JAUNDICE"));
-    	s.add(symptomService.findByName("VOMITING"));
-    	s.add(symptomService.findByName("DIARRHEA"));
-    	s.add(symptomService.findByName("CHOKING"));
-    	s.add(symptomService.findByName("LOW_APPETITE"));
-    	
+        List<Symptom> symptoms = new ArrayList<Symptom>();
+        for (SymptomDTO s : symptomDTOs)
+        	symptoms.add(symptomService.findByName(s.getName()));;
+        
     	Patient patient = new Patient();
     	patient.setName("Dzeki");
-    	//patient.getMedicineAllergies().add(medicineService.findByName("Denamarin"));
     	patient.getIngredientAllergies().add(ingredientService.findByName("S-adenosylmethionine"));
     	
-    	Diagnose diagnose = diagnoseService.diagnose(kieSession, s, patient);
+    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient);
     	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
     }
 }

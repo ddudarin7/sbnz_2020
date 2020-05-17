@@ -94,14 +94,15 @@ VALUES
 	('4', 'Polysorbate 80'),
 	('5', 'Propylene glycol'),
 	('6', 'Sodium acetate anhydrous'),
-	('7', 'Glacial acetic acid');
-
-
+	('7', 'Glacial acetic acid'),
+	('8', 'Silymarin');
+	
 DELETE FROM `sbnz_2020`.`medicine`;
 INSERT INTO `sbnz_2020`.`medicine` (`id`, `name`)
 VALUES 
 	('1', 'Denamarin'),
-	('2', 'Vitamin K shot');
+	('2', 'Vitamin K shot'),
+	('3', 'Milk thistle');
 	
 
 INSERT INTO `sbnz_2020`.`medicine_ingredients` (`medicine_id`, `ingredients_id`)
@@ -127,12 +128,14 @@ VALUES
 	('8', 'Supportive therapy'),
 	('9', 'Polishing tooth under anesthesia'),
 	('10', 'Tooth extraction'),
-	('11', 'Psychotherapy');
+	('11', 'Psychotherapy'),
+	('12', 'Milk thistle diet');
 	
 INSERT INTO `sbnz_2020`.`therapy_medicine` (`therapy_id`, `medicine_id`)
 VALUES 
 	('1', '1'),
-	('2', '2');
+	('2', '2'),
+	('12', '3');
 	
 DELETE FROM `sbnz_2020`.`disease`;
 INSERT INTO `sbnz_2020`.`disease` (`id`, `name`, `disease_group`)
@@ -161,7 +164,8 @@ VALUES
 	('7', '10'),
 	('8', '11'),
 	('9', '1'),
-	('10', '7');
+	('10', '7'),
+	('9', '12');
 	
 
 INSERT INTO `sbnz_2020`.`disease_specific_symptoms` (`disease_id`, `specific_symptoms_id`)

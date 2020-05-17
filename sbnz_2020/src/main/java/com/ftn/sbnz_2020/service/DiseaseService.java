@@ -73,6 +73,7 @@ public class DiseaseService {
 			kieSession.insert(d);
 		}
 		//set focus on agenda
+		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kieSession.fireAllRules();
 		QueryResults results=kieSession.getQueryResults("Get all diseases that satisfy one or more symptoms");
 		for (QueryResultsRow row: results) {
@@ -81,7 +82,17 @@ public class DiseaseService {
             matching.add(disease);
         }
 		
+		releaseObjectsFromSession(kieSession);
+		
 		return matching;
 	}
+	
+	 private void releaseObjectsFromSession(KieSession kieSession){
+	        kieSession.getObjects();
+
+	        for( Object object: kieSession.getObjects() ){
+	            kieSession.delete( kieSession.getFactHandle( object ) );
+	        }
+	 }
 	
 }

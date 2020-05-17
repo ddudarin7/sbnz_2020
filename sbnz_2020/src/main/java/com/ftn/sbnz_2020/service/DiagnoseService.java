@@ -100,16 +100,8 @@ public class DiagnoseService {
 		
 		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
 		kieSession.fireAllRules();
-
-		/*
-		if (makingDiagnose.getDisease() != null)
-			System.out.println(makingDiagnose.getDisease().getName() + " je dijagnostifikovana bolest.");
-
-		System.out.println("Broj prepisanih terapija: " + makingDiagnose.getTherapies().size());
-		*/
 		
-		List<Therapy> therapies = new ArrayList<Therapy>(makingDiagnose.getTherapies());
-		
+		List<Therapy> therapies = new ArrayList<Therapy>(makingDiagnose.getTherapies());	
 		
 		makingDiagnose.setTherapies(therapies);
 		
