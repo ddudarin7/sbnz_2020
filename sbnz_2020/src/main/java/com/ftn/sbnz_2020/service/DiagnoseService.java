@@ -111,9 +111,19 @@ public class DiagnoseService {
 		List<Therapy> therapies = new ArrayList<Therapy>(makingDiagnose.getTherapies());
 		
 		
-		makingDiagnose.setTherapies(therapies);;
+		makingDiagnose.setTherapies(therapies);
+		
+		this.releaseObjectsFromSession(kieSession);
 		
 		return diagnoseRepository.save(makingDiagnose);
 	}
+	
+    private void releaseObjectsFromSession(KieSession kieSession){
+        kieSession.getObjects();
+
+        for( Object object: kieSession.getObjects() ){
+            kieSession.delete( kieSession.getFactHandle( object ) );
+        }
+    }
 	
 }
