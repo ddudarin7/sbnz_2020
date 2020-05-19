@@ -33,6 +33,7 @@ public class LogInController {
     @PostMapping(value = "/log-in",produces = "application/json")
     public  ResponseEntity<CurrentUserDTO> logIn(@RequestBody LogInDTO logInDto, HttpServletRequest request){
     	User u=userService.findOne(logInDto.getUsername());
+    	System.out.println("log-in");
     	if(u!= null) {
     		if(!u.getPassword().equals(logInDto.getPassword())) {
     			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

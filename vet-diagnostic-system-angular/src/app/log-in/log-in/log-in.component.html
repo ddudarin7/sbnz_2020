@@ -1,0 +1,15 @@
+<form>
+	<div class="form">
+		<input type="text" name="username" id="username" [(ngModel)]="username" placeholder="Username" />
+		<br> 
+		<input type="password" name="password" id="password" [(ngModel)]="password" placeholder="Password" />
+		<br> 
+		<br> 
+		<a (click)="login()" type="button" id="button" class="button">Log in</a> 
+		<br>
+		<div *ngIf="error" class="error">{{error}}</div>
+		<br>
+	</div>
+	<br>
+
+</form>
