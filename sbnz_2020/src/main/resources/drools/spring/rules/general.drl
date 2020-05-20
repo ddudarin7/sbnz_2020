@@ -58,6 +58,7 @@ rule "Find disease with all specific and non specific symptoms"
 		modify($diagnose){setSpecificSymptomsMatched(((Disease)$resList.get(0)).getSpecificSymptomsMatchedNum())}
 		modify($diagnose){setNonSpecificSymptoms(((Disease)$resList.get(0)).getNonSpecificSymptomsMatched())}
 		modify($diagnose){setNonSpecificSymptomsMatched(((Disease)$resList.get(0)).getNonSpecificSymptomsMatchedNum())}
+		modify($diagnose){setTherapies(((Disease)$resList.get(0)).getTherapies())}
 end 
 
 
