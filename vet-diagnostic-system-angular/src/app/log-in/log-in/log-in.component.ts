@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LogInService} from './../../core/services/log-in.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { from } from 'rxjs';
 
 @Component({
@@ -13,7 +14,8 @@ export class LogInComponent implements OnInit {
   username: string;
   error: string;
 
-  constructor( private logInService: LogInService) { }
+  constructor( private route: ActivatedRoute,
+    private router: Router,private logInService: LogInService) { }
 
   ngOnInit(): void {
   }
@@ -22,6 +24,7 @@ export class LogInComponent implements OnInit {
     this.logInService.logIn(this.username,this.password).subscribe(
       data=>{
         console.log("successful");
+        this.router.navigate(['/vet/home']);
       },
       error=>{
         this.error="Wrong password or username";
