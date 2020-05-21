@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LogInModule } from './log-in/log-in.module';
 import { CoreModule } from './core/core.module';
+import { VetModule } from './vet/vet.module';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { CoreModule } from './core/core.module';
   imports: [
     BrowserModule,
     LogInModule,
+    VetModule,
     FormsModule,
     CoreModule,
     AppRoutingModule
