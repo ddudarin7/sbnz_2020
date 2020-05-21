@@ -157,7 +157,11 @@ public class Diagnose {
 	}
 
 	public void setTherapies(List<Therapy> therapies) {
-		this.therapies = therapies;
+		this.therapies = new ArrayList<Therapy>();
+		if (therapies == null)
+			return;
+		for (Therapy therapy : therapies)
+			this.therapies.add(therapy);
 	}
 
 	public Date getDate() {
