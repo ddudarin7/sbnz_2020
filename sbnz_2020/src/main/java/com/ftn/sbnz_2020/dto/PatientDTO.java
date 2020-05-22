@@ -10,6 +10,7 @@ import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
+import com.ftn.sbnz_2020.facts.Vaccination;
 
 public class PatientDTO {
 	private Long id;
@@ -19,6 +20,7 @@ public class PatientDTO {
     private Date dateOfBirth;
     private List<MedicineDTO> medicineAllergies;
     private List<IngredientDTO> ingredientAllergies;
+    private List<VaccinationDTO> vaccinations;
     
 	public PatientDTO() {
 		super();
@@ -38,10 +40,14 @@ public class PatientDTO {
         for (Ingredient ingredient: patient.getIngredientAllergies()) {
             this.ingredientAllergies.add(new IngredientDTO(ingredient));
         }
+        this.vaccinations = new ArrayList<>();
+        for (Vaccination vaccination: patient.getVaccinations()) {
+            this.vaccinations.add(new VaccinationDTO(vaccination));
+        }
 	}
 
 	public PatientDTO(Long id, String name, String recordNumber, Breed breed, Date dateOfBirth,
-			List<MedicineDTO> medicineAllergies, List<IngredientDTO> ingredientAllergies) {
+			List<MedicineDTO> medicineAllergies, List<IngredientDTO> ingredientAllergies, List<VaccinationDTO> vaccinations) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -50,6 +56,7 @@ public class PatientDTO {
 		this.dateOfBirth = dateOfBirth;
 		this.medicineAllergies = medicineAllergies;
 		this.ingredientAllergies = ingredientAllergies;
+		this.vaccinations = vaccinations;
 	}
 
 
@@ -108,6 +115,14 @@ public class PatientDTO {
 
 	public void setIngredientAllergies(List<IngredientDTO> ingredientAllergies) {
 		this.ingredientAllergies = ingredientAllergies;
+	}
+
+	public List<VaccinationDTO> getVaccinations() {
+		return vaccinations;
+	}
+
+	public void setVaccinations(List<VaccinationDTO> vaccinations) {
+		this.vaccinations = vaccinations;
 	}
     
     
