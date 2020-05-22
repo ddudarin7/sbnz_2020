@@ -53,9 +53,10 @@ public class LogInController {
     }
     
     @PostMapping(value = "/log-out",produces = "application/json")
-    public  ResponseEntity<LogInDTO> logOut(@RequestBody LogInDTO logInDto, HttpServletRequest request){
+    public  ResponseEntity<LogInDTO> logOut(@RequestBody String username, HttpServletRequest request){
     	try {
-    		User u=userService.findOne(logInDto.getUsername());
+    		System.out.println(username);
+    		User u=userService.findOne(username);
     		if(u.getRole().equals(Role.VET)) {
     			KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
     			kieSession.dispose();
@@ -67,8 +68,6 @@ public class LogInController {
     	}catch (Exception e) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
-
     }
 	
 }
