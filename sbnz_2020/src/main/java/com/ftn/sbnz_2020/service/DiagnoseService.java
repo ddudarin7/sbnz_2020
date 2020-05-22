@@ -1,6 +1,6 @@
 package com.ftn.sbnz_2020.service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.kie.api.runtime.KieSession;
@@ -13,10 +13,8 @@ import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
-import com.ftn.sbnz_2020.facts.Therapy;
+import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.repository.DiagnoseRepository;
-import com.ftn.sbnz_2020.repository.DiseaseRepository;
-import com.ftn.sbnz_2020.repository.TherapyRepository;
 
 @Service
 public class DiagnoseService {
@@ -25,10 +23,7 @@ public class DiagnoseService {
 	DiagnoseRepository diagnoseRepository;
 	
 	@Autowired
-	DiseaseRepository diseaseRepository;
-	
-	@Autowired
-	TherapyRepository therapyRepository;
+	DiseaseService diseaseService;
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
@@ -61,10 +56,10 @@ public class DiagnoseService {
 		diagnose.setPatient(updatedDiagnose.getPatient());
 		diagnose.setVet(updatedDiagnose.getVet());
 		diagnose.setDate(updatedDiagnose.getDate());
-		diagnose.setSpecificSymptoms(updatedDiagnose.getSpecificSymptoms());
-		diagnose.setNonSpecificSymptoms(updatedDiagnose.getNonSpecificSymptoms());
 		diagnose.setSpecificSymptomsMatched(updatedDiagnose.getSpecificSymptomsMatched());
 		diagnose.setNonSpecificSymptomsMatched(updatedDiagnose.getNonSpecificSymptomsMatched());
+		diagnose.setSpecificSymptomsMatchedNum(updatedDiagnose.getSpecificSymptomsMatchedNum());
+		diagnose.setNonSpecificSymptomsMatchedNum(updatedDiagnose.getNonSpecificSymptomsMatchedNum());
 		diagnose.setTherapies(updatedDiagnose.getTherapies());
 		
 		return diagnoseRepository.save(diagnose);
@@ -74,21 +69,33 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
+	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient, Vet vet) {
+		
+		// inserting symptoms
+		
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
 		}
 		
-		List<Disease> diseases=diseaseRepository.findAll();
+		// inserting all diseases
+		
+		List<Disease> diseases = diseaseService.findAll();
 		for(Disease d:diseases){
 			d.initializeSupportFields();
 			kieSession.insert(d);
 		}
 		
+		// inserting diagnose
+		
 		Diagnose makingDiagnose = new Diagnose();
 		makingDiagnose.setPatient(patient);
+		makingDiagnose.setVet(vet);
+		makingDiagnose.setDate(new Date());
 		
 		kieSession.insert(makingDiagnose);
+		
+		// firing rules
+		
 		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kieSession.fireAllRules();
 		
@@ -100,10 +107,6 @@ public class DiagnoseService {
 		
 		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
 		kieSession.fireAllRules();
-		
-		List<Therapy> therapies = new ArrayList<Therapy>(makingDiagnose.getTherapies());	
-		
-		makingDiagnose.setTherapies(therapies);
 		
 		this.releaseObjectsFromSession(kieSession);
 		

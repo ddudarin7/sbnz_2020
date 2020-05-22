@@ -18,8 +18,10 @@ public class IngredientDTO {
 	}
 	
 	public IngredientDTO(Ingredient ingredient){
-		this.id = ingredient.getId();
-		this.name = ingredient.getName();
+		if (ingredient.getId() != null)
+			this.id = ingredient.getId();
+		if (ingredient.getName() != null)
+			this.name = ingredient.getName();
 	}
 
 	public Long getId() {

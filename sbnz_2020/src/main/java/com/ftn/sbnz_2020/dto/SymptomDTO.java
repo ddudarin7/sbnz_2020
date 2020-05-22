@@ -16,8 +16,10 @@ public class SymptomDTO {
 	}
 	
 	public SymptomDTO(Symptom symptom){
-		this.id = symptom.getId();
-		this.name = symptom.getName();
+		if (symptom.getId() != null)
+			this.id = symptom.getId();
+		if (symptom.getName() != null)
+			this.name = symptom.getName();
 	}
 	
 	public Long getId() {

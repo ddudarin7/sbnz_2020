@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
-import com.ftn.sbnz_2020.facts.Therapy;
+import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.repository.PatientRepository;
 
 @Service
@@ -29,6 +29,9 @@ public class PatientService {
 
 	@Autowired
 	DiseaseService diseaseService;
+	
+	@Autowired
+	VaccinationService vaccinationService;
 
 	public Patient findById(Long id) {
 		return patientRepository.findById(id).get();
@@ -68,6 +71,17 @@ public class PatientService {
 				patient.getIngredientAllergies().set(i, ingr);
 			}
 		}
+		for (int i = 0; i < patient.getVaccinations().size(); i++) {
+			Vaccination vaccination = patient.getVaccinations().get(i);
+			Vaccination vacc = vaccinationService.findByName(vaccination.getName());
+			if (vacc == null) {
+				//patient.getIngredientAllergies().set(i, ingredientService.save(new Ingredient(ingredient.getName())));
+			} else {
+				patient.getVaccinations().set(i, vacc);
+			}
+		}
+		patient = patientRepository.save(patient);
+		patient.setRecordNumber("REC" + patient.getId());
 		return patientRepository.save(patient);
 	}
 
@@ -103,6 +117,18 @@ public class PatientService {
 			}
 		}
 		patient.setIngredientAllergies(patientUpdate.getIngredientAllergies());
+
+		for (int i = 0; i < patientUpdate.getVaccinations().size(); i++) {
+			Vaccination vaccination = patientUpdate.getVaccinations().get(i);
+			Vaccination vacc = vaccinationService.findByName(vaccination.getName());
+			if (vacc == null) {
+				//patientUpdate.getIngredientAllergies().set(i,
+				//		ingredientService.save(new Ingredient(ingredient.getName())));
+			} else {
+				patientUpdate.getVaccinations().set(i, vacc);
+			}
+		}
+		patient.setVaccinations(patientUpdate.getVaccinations());
 
 		return patientRepository.save(patient);
 	}

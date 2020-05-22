@@ -26,10 +26,13 @@ import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
+import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.service.DiagnoseService;
 import com.ftn.sbnz_2020.service.IngredientService;
 import com.ftn.sbnz_2020.service.MedicineService;
+import com.ftn.sbnz_2020.service.PatientService;
 import com.ftn.sbnz_2020.service.SymptomService;
+import com.ftn.sbnz_2020.service.VetService;
 
 @RestController
 public class DiagnoseController {
@@ -45,6 +48,12 @@ public class DiagnoseController {
 	
 	@Autowired
 	IngredientService ingredientService;
+	
+	@Autowired
+	VetService vetService;
+	
+	@Autowired
+	PatientService patientService;
 	
 	@GetMapping(value = "/diagnoses/{id}", produces = "application/json")
     public ResponseEntity<DiagnoseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -148,21 +157,33 @@ public class DiagnoseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 	
-    @PostMapping(value="/diagnose")
+    @PostMapping(value="/diagnose/{patientRecordNumber}")
     public ResponseEntity<DiagnoseDTO> diagnose(@RequestBody List<SymptomDTO> symptomDTOs,
-    		HttpServletRequest request){
+    		@PathVariable String patientRecordNumber, HttpServletRequest request){
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
-    	
+        String vetUsername = "vet"; // needs to be given by token
+        
+        
+        // collecting symptoms
+        
         List<Symptom> symptoms = new ArrayList<Symptom>();
         for (SymptomDTO s : symptomDTOs)
         	symptoms.add(symptomService.findByName(s.getName()));;
         
-    	Patient patient = new Patient();
-    	patient.setName("Dzeki");
-    	patient.getIngredientAllergies().add(ingredientService.findByName("S-adenosylmethionine"));
+        // collecting patient
+            
+    	Patient patient = patientService.findByRecordNumber(patientRecordNumber);
+    	if (patient == null)
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
-    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient);
+    	// collecting vet
+    	
+    	Vet vet = vetService.findByUsername(vetUsername);
+    	
+    	// diagnose
+    	
+    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient, vet);
     	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
     }
 }
