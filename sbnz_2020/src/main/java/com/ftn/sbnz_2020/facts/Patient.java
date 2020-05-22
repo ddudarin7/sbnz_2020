@@ -23,6 +23,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.ftn.sbnz_2020.dto.IngredientDTO;
 import com.ftn.sbnz_2020.dto.MedicineDTO;
 import com.ftn.sbnz_2020.dto.PatientDTO;
+import com.ftn.sbnz_2020.dto.VaccinationDTO;
 
 @Entity
 @Table(name = "patient")
@@ -57,15 +58,20 @@ public class Patient {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
     private List<Ingredient> ingredientAllergies;
+    
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+    private List<Vaccination> vaccinations;
 
 	public Patient() {
 		super();
 		this.medicineAllergies = new ArrayList<Medicine>();
 		this.ingredientAllergies = new ArrayList<Ingredient>();
+		this.vaccinations = new ArrayList<Vaccination>();
 	}
 
 	public Patient(Long id, String name, String recordNumber, Date dateOfBirth, Breed breed, Owner owner,
-			List<Medicine> medicineAllergies, List<Ingredient> ingredientAllergies) {
+			List<Medicine> medicineAllergies, List<Ingredient> ingredientAllergies, List<Vaccination> vaccinations) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -75,6 +81,7 @@ public class Patient {
 		this.owner = owner;
 		this.medicineAllergies = medicineAllergies;
 		this.ingredientAllergies = ingredientAllergies;
+		this.vaccinations = vaccinations;
 	}
 	
 	public Patient(PatientDTO patientDTO) {
@@ -92,6 +99,12 @@ public class Patient {
             this.ingredientAllergies = new ArrayList<>();
             for (IngredientDTO ingredient: patientDTO.getIngredientAllergies()) {
                 this.ingredientAllergies.add(new Ingredient(ingredient));
+            }
+        }
+        if (patientDTO.getVaccinations() != null) {
+            this.vaccinations = new ArrayList<>();
+            for (VaccinationDTO vaccination: patientDTO.getVaccinations()) {
+                this.vaccinations.add(new Vaccination(vaccination));
             }
         }
 	}
@@ -158,6 +171,14 @@ public class Patient {
 
 	public void setIngredientAllergies(List<Ingredient> ingredientAllergies) {
 		this.ingredientAllergies = ingredientAllergies;
+	}
+
+	public List<Vaccination> getVaccinations() {
+		return vaccinations;
+	}
+
+	public void setVaccinations(List<Vaccination> vaccinations) {
+		this.vaccinations = vaccinations;
 	}
     
 }
