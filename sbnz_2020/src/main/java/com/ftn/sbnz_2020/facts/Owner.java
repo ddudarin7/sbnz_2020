@@ -40,11 +40,16 @@ public class Owner {
 	}
 	
 	public Owner(OwnerDTO ownerDTO) {
-		this.id = ownerDTO.getId();
-		this.firstName = ownerDTO.getFirstName();
-		this.lastName = ownerDTO.getLastName();
-		this.phoneNum = ownerDTO.getPhoneNum();
-		this.address = ownerDTO.getAddress();
+		if (ownerDTO.getId() != null)
+			this.id = ownerDTO.getId();
+		if (ownerDTO.getFirstName() != null)
+			this.firstName = ownerDTO.getFirstName();
+		if (ownerDTO.getLastName() != null)
+			this.lastName = ownerDTO.getLastName();
+		if (ownerDTO.getPhoneNum() != null)
+			this.phoneNum = ownerDTO.getPhoneNum();
+		if (ownerDTO.getAddress() != null)
+			this.address = ownerDTO.getAddress();
 	}
 	
 

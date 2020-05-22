@@ -48,19 +48,19 @@ public class Diagnose {
 	
     @LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade={CascadeType.MERGE})
-    @Column(name = "specificSymptoms", nullable = false)
-	private List<Symptom> specificSymptoms;
+    @Column(name = "specific_symptoms_matched", nullable = false)
+	private List<Symptom> specificSymptomsMatched;
     
     @LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade={CascadeType.MERGE})
-    @Column(name = "nonSpecificSymptoms", nullable = false)
-	private List<Symptom> nonSpecificSymptoms;
+    @Column(name = "non_specific_symptoms_matched", nullable = false)
+	private List<Symptom> nonSpecificSymptomsMatched;
     
-    @Column(name = "specificSymptomsMatched")
-    private Long specificSymptomsMatched;
+    @Column(name = "specific_symptoms_matched_num")
+    private Long specificSymptomsMatchedNum;
     
-    @Column(name = "nonSpecificSymptomsMatched")
-    private Long nonSpecificSymptomsMatched;
+    @Column(name = "non_specific_symptoms_matched_num")
+    private Long nonSpecificSymptomsMatchedNum;
     
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
@@ -78,18 +78,18 @@ public class Diagnose {
 
 	
 
-	public Diagnose(Long id, Disease disease, Patient patient, Vet vet, List<Symptom> specificSymptoms,
-			List<Symptom> nonSpecificSymptoms, Long specificSymptomsMatched, Long nonSpecificSymptomsMatched,
+	public Diagnose(Long id, Disease disease, Patient patient, Vet vet, List<Symptom> specificSymptomsMatched,
+			List<Symptom> nonSpecificSymptomsMatched, Long specificSymptomsMatchedNum, Long nonSpecificSymptomsMatchedNum,
 			List<Therapy> therapies, Date date) {
 		super();
 		this.id = id;
 		this.disease = disease;
 		this.patient = patient;
 		this.vet = vet;
-		this.specificSymptoms = specificSymptoms;
-		this.nonSpecificSymptoms = nonSpecificSymptoms;
 		this.specificSymptomsMatched = specificSymptomsMatched;
 		this.nonSpecificSymptomsMatched = nonSpecificSymptomsMatched;
+		this.specificSymptomsMatchedNum = specificSymptomsMatchedNum;
+		this.nonSpecificSymptomsMatchedNum = nonSpecificSymptomsMatchedNum;
 		this.therapies = therapies;
 		this.date = date;
 	}
@@ -97,24 +97,24 @@ public class Diagnose {
 	public Diagnose(DiagnoseDTO diagnoseDTO){
 		if (diagnoseDTO.getId() != null)
 			this.id = diagnoseDTO.getId();
-		if (diagnoseDTO.getDiseaseDTO() != null)
-			this.disease = new Disease(diagnoseDTO.getDiseaseDTO());
-		if (diagnoseDTO.getPatientDTO() != null)
-			this.patient = new Patient(diagnoseDTO.getPatientDTO());
-		if (diagnoseDTO.getVetDTO() != null)
-			this.vet = new Vet(diagnoseDTO.getVetDTO());
-		this.specificSymptoms = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomDTOs())
-			this.specificSymptoms.add(new Symptom(symptomDTO));
-		this.nonSpecificSymptoms = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomDTOs())
-			this.nonSpecificSymptoms.add(new Symptom(symptomDTO));
+		if (diagnoseDTO.getDisease() != null)
+			this.disease = new Disease(diagnoseDTO.getDisease());
+		if (diagnoseDTO.getPatient() != null)
+			this.patient = new Patient(diagnoseDTO.getPatient());
+		if (diagnoseDTO.getVet() != null)
+			this.vet = new Vet(diagnoseDTO.getVet());
+		this.specificSymptomsMatched = new ArrayList<Symptom>();
+		for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomsMatched())
+			this.specificSymptomsMatched.add(new Symptom(symptomDTO));
+		this.nonSpecificSymptomsMatched = new ArrayList<Symptom>();
+		for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomsMatched())
+			this.nonSpecificSymptomsMatched.add(new Symptom(symptomDTO));
 		if (diagnoseDTO.getSpecificSymptomsMatched() != null)
-			this.specificSymptomsMatched = diagnoseDTO.getSpecificSymptomsMatched();
+			this.specificSymptomsMatchedNum = diagnoseDTO.getSpecificSymptomsMatchedNum();
 		if (diagnoseDTO.getNonSpecificSymptomsMatched() != null)
-			this.nonSpecificSymptomsMatched = diagnoseDTO.getNonSpecificSymptomsMatched();
+			this.nonSpecificSymptomsMatchedNum = diagnoseDTO.getNonSpecificSymptomsMatchedNum();
 		this.therapies = new ArrayList<Therapy>();
-		for (TherapyDTO therapyDTO : diagnoseDTO.getTherapyDTOs())
+		for (TherapyDTO therapyDTO : diagnoseDTO.getTherapies())
 			this.therapies.add(new Therapy(therapyDTO));
 		if (diagnoseDTO.getDate() != null)
 			this.date = diagnoseDTO.getDate();
@@ -157,7 +157,11 @@ public class Diagnose {
 	}
 
 	public void setTherapies(List<Therapy> therapies) {
-		this.therapies = therapies;
+		this.therapies = new ArrayList<Therapy>();
+		if (therapies == null)
+			return;
+		for (Therapy therapy : therapies)
+			this.therapies.add(therapy);
 	}
 
 	public Date getDate() {
@@ -170,52 +174,51 @@ public class Diagnose {
 
 
 
-	public List<Symptom> getSpecificSymptoms() {
-		return specificSymptoms;
-	}
-
-
-
-	public void setSpecificSymptoms(List<Symptom> specificSymptoms) {
-		this.specificSymptoms = specificSymptoms;
-	}
-
-
-
-	public List<Symptom> getNonSpecificSymptoms() {
-		return nonSpecificSymptoms;
-	}
-
-
-
-	public void setNonSpecificSymptoms(List<Symptom> nonSpecificSymptoms) {
-		this.nonSpecificSymptoms = nonSpecificSymptoms;
-	}
-
-
-
-	public Long getSpecificSymptomsMatched() {
+	public List<Symptom> getSpecificSymptomsMatched() {
 		return specificSymptomsMatched;
 	}
 
 
 
-	public void setSpecificSymptomsMatched(Long specificSymptomsMatched) {
+	public void setSpecificSymptomsMatched(List<Symptom> specificSymptomsMatched) {
 		this.specificSymptomsMatched = specificSymptomsMatched;
 	}
 
 
 
-	public Long getNonSpecificSymptomsMatched() {
+	public List<Symptom> getNonSpecificSymptomsMatched() {
 		return nonSpecificSymptomsMatched;
 	}
 
 
 
-	public void setNonSpecificSymptomsMatched(Long nonSpecificSymptomsMatched) {
+	public void setNonSpecificSymptomsMatched(List<Symptom> nonSpecificSymptomsMatched) {
 		this.nonSpecificSymptomsMatched = nonSpecificSymptomsMatched;
 	}
-	
+
+
+
+	public Long getSpecificSymptomsMatchedNum() {
+		return specificSymptomsMatchedNum;
+	}
+
+
+
+	public void setSpecificSymptomsMatchedNum(Long specificSymptomsMatchedNum) {
+		this.specificSymptomsMatchedNum = specificSymptomsMatchedNum;
+	}
+
+
+
+	public Long getNonSpecificSymptomsMatchedNum() {
+		return nonSpecificSymptomsMatchedNum;
+	}
+
+
+
+	public void setNonSpecificSymptomsMatchedNum(Long nonSpecificSymptomsMatchedNum) {
+		this.nonSpecificSymptomsMatchedNum = nonSpecificSymptomsMatchedNum;
+	}
 	
 	
 }

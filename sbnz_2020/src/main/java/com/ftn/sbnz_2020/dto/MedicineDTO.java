@@ -10,7 +10,7 @@ public class MedicineDTO {
 	
 	private Long id;
 	private String name;
-	private List<IngredientDTO> ingredientDTOs;
+	private List<IngredientDTO> ingredients;
 	
 	public MedicineDTO(){
 		
@@ -19,15 +19,18 @@ public class MedicineDTO {
 	public MedicineDTO(Long id, String name){
 		this.id = id;
 		this.name = name;
-		this.ingredientDTOs = new ArrayList<IngredientDTO>();
+		this.ingredients = new ArrayList<IngredientDTO>();
 	}
 	
 	public MedicineDTO(Medicine medicine){
-		this.id = medicine.getId();
-		this.name = medicine.getName();
-		this.ingredientDTOs = new ArrayList<IngredientDTO>();
-		for (Ingredient ingredient : medicine.getIngredients())
-			this.ingredientDTOs.add(new IngredientDTO(ingredient));
+		if (medicine.getId() != null)
+			this.id = medicine.getId();
+		if (medicine.getName() != null)
+			this.name = medicine.getName();
+		this.ingredients = new ArrayList<IngredientDTO>();
+		if (medicine.getIngredients() != null)
+			for (Ingredient ingredient : medicine.getIngredients())
+				this.ingredients.add(new IngredientDTO(ingredient));
 	}
 
 	public Long getId() {
@@ -46,14 +49,12 @@ public class MedicineDTO {
 		this.name = name;
 	}
 
-	public List<IngredientDTO> getIngredientDTOs() {
-		return ingredientDTOs;
+	public List<IngredientDTO> getIngredients() {
+		return ingredients;
 	}
 
-	public void setIngredientDTOs(List<IngredientDTO> ingredientDTOs) {
-		this.ingredientDTOs = ingredientDTOs;
+	public void setIngredients(List<IngredientDTO> ingredients) {
+		this.ingredients = ingredients;
 	}
-	
-	
-	
+
 }

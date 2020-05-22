@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
-import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.repository.PatientRepository;
 
@@ -81,6 +80,8 @@ public class PatientService {
 				patient.getVaccinations().set(i, vacc);
 			}
 		}
+		patient = patientRepository.save(patient);
+		patient.setRecordNumber("REC" + patient.getId());
 		return patientRepository.save(patient);
 	}
 

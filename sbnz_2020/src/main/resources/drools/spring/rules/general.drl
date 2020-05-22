@@ -54,10 +54,10 @@ rule "Find disease with all specific and non specific symptoms"
 		)
 	then
 		modify($diagnose){setDisease((Disease)$resList.get(0))};
-		modify($diagnose){setSpecificSymptoms(((Disease)$resList.get(0)).getSpecificSymptomsMatched())}
-		modify($diagnose){setSpecificSymptomsMatched(((Disease)$resList.get(0)).getSpecificSymptomsMatchedNum())}
-		modify($diagnose){setNonSpecificSymptoms(((Disease)$resList.get(0)).getNonSpecificSymptomsMatched())}
-		modify($diagnose){setNonSpecificSymptomsMatched(((Disease)$resList.get(0)).getNonSpecificSymptomsMatchedNum())}
+		modify($diagnose){setSpecificSymptomsMatched(((Disease)$resList.get(0)).getSpecificSymptomsMatched())}
+		modify($diagnose){setSpecificSymptomsMatchedNum(((Disease)$resList.get(0)).getSpecificSymptomsMatchedNum())}
+		modify($diagnose){setNonSpecificSymptomsMatched(((Disease)$resList.get(0)).getNonSpecificSymptomsMatched())}
+		modify($diagnose){setNonSpecificSymptomsMatchedNum(((Disease)$resList.get(0)).getNonSpecificSymptomsMatchedNum())}
 		modify($diagnose){setTherapies(((Disease)$resList.get(0)).getTherapies())}
 end 
 
@@ -76,10 +76,10 @@ rule "Only one disease survived"
 		$nssm: nonSpecificSymptomsMatched, $nssmn: nonSpecificSymptomsMatchedNum, $dNum == 1)
 	then
 		modify($dio){setDisease($disease)}
-		modify($dio){setSpecificSymptoms($ssm)}
-		modify($dio){setSpecificSymptomsMatched($ssmn)}
-		modify($dio){setNonSpecificSymptoms($nssm)}
-		modify($dio){setNonSpecificSymptomsMatched($nssmn)}
+		modify($dio){setSpecificSymptomsMatched($ssm)}
+		modify($dio){setSpecificSymptomsMatchedNum($ssmn)}
+		modify($dio){setNonSpecificSymptomsMatched($nssm)}
+		modify($dio){setNonSpecificSymptomsMatchedNum($nssmn)}
 		modify($dio){setTherapies($disease.getTherapies())}
 end
 

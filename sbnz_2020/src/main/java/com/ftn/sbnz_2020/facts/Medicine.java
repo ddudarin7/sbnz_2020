@@ -55,7 +55,7 @@ public class Medicine {
 		this.id = medicineDTO.getId();
 		this.name = medicineDTO.getName();
 		this.ingredients = new ArrayList<Ingredient>();
-		for (IngredientDTO ingredientDTO : medicineDTO.getIngredientDTOs())
+		for (IngredientDTO ingredientDTO : medicineDTO.getIngredients())
 			this.ingredients.add(new Ingredient(ingredientDTO));
 	}
 

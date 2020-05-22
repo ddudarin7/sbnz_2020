@@ -9,31 +9,34 @@ import com.ftn.sbnz_2020.facts.Therapy;
 public class TherapyDTO {
 	
 	private Long id;
-	private List<MedicineDTO> medicineDTOs;
+	private List<MedicineDTO> medicines;
 	private String description;
 	
 	public TherapyDTO(){
 		
 	}
 	
-	public TherapyDTO(Long id, String description, List<MedicineDTO> medicineDTOs) {
+	public TherapyDTO(Long id, String description, List<MedicineDTO> medicines) {
 		this.id = id;
-		this.medicineDTOs = medicineDTOs;
+		this.medicines = medicines;
 		this.description = description;
 	}
 	
 	public TherapyDTO(Long id, String description) {
 		this.id = id;
-		this.medicineDTOs = new ArrayList<MedicineDTO>();
+		this.medicines = new ArrayList<MedicineDTO>();
 		this.description = description;
 	}
 	
 	public TherapyDTO(Therapy therapy){
-		this.id = therapy.getId();
-		this.description = therapy.getDescription();
-		this.medicineDTOs = new ArrayList<MedicineDTO>();
-		for (Medicine medicine : therapy.getMedicines())
-			this.medicineDTOs.add(new MedicineDTO(medicine));
+		if (therapy.getId() != null)
+			this.id = therapy.getId();
+		if (therapy.getDescription() != null)
+			this.description = therapy.getDescription();
+		this.medicines = new ArrayList<MedicineDTO>();
+		if (therapy.getMedicines() != null)
+			for (Medicine medicine : therapy.getMedicines())
+				this.medicines.add(new MedicineDTO(medicine));
 	}
 
 	public Long getId() {
@@ -44,14 +47,6 @@ public class TherapyDTO {
 		this.id = id;
 	}
 
-	public List<MedicineDTO> getMedicineDTOs() {
-		return medicineDTOs;
-	}
-
-	public void setMedicineDTOs(List<MedicineDTO> medicineDTOs) {
-		this.medicineDTOs = medicineDTOs;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -59,7 +54,13 @@ public class TherapyDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
 
+	public List<MedicineDTO> getMedicines() {
+		return medicines;
+	}
+
+	public void setMedicines(List<MedicineDTO> medicines) {
+		this.medicines = medicines;
+	}
+	
 }
