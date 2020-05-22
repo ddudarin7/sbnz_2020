@@ -5,7 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import {FormsModule} from '@angular/forms';
 
 const routes: Routes = [
-  {path:'',component: LogInComponent}];
+  {path:'',children:[
+    {path:'',component:LogInComponent},
+    {path:'log-in',component:LogInComponent}
+  ]}];
 
 @NgModule({
   declarations: [LogInComponent],
