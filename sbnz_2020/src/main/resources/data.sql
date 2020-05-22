@@ -1,6 +1,6 @@
 DELETE FROM `sbnz_2020`.`diagnose_therapies`;
-DELETE FROM `sbnz_2020`.`diagnose_specific_symptoms`;
-DELETE FROM `sbnz_2020`.`diagnose_non_specific_symptoms`;
+DELETE FROM `sbnz_2020`.`diagnose_specific_symptoms_matched`;
+DELETE FROM `sbnz_2020`.`diagnose_non_specific_symptoms_matched`;
 DELETE FROM `sbnz_2020`.`diagnose`;
 
 DELETE FROM `sbnz_2020`.`user_table` WHERE (`id` = '1');
@@ -258,10 +258,18 @@ VALUES
 	('10', '62');
 	
 DELETE FROM `sbnz_2020`.`patient`;
-INSERT INTO `sbnz_2020`.`patient` (`id`, `name`,`record_number`)
+
+DELETE FROM `sbnz_2020`.`owner`;
+INSERT INTO `sbnz_2020`.`owner` (`id`, `first_name`,`last_name`, `city`, `street`, `number`, `phone_num`)
 VALUES 
-	('1', 'Dzeki', 'REC1');
+	('1', 'Vasilije', 'Mihajlovic', 'Brcko', 'Vukosavacka', '312', '0038765723743');
+
+
+INSERT INTO `sbnz_2020`.`patient` (`id`, `name`,`record_number`, `breed`, `date_of_birth`, `owner_id`)
+VALUES 
+	('1', 'Dzeki', 'REC1', 'MIXEDBREED', '2018-04-07', '1');
 	
 INSERT INTO `sbnz_2020`.`patient_ingredient_allergies` (`patient_id`, `ingredient_allergies_id`)
 VALUES 
 	('1', '1');
+	

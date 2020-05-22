@@ -58,7 +58,7 @@ public class Therapy {
 		this.id = therapyDTO.getId();
 		this.description = therapyDTO.getDescription();
 		this.medicines = new ArrayList<Medicine>();
-		for (MedicineDTO medicineDTO : therapyDTO.getMedicineDTOs())
+		for (MedicineDTO medicineDTO : therapyDTO.getMedicines())
 			this.medicines.add(new Medicine(medicineDTO));
 	}
 

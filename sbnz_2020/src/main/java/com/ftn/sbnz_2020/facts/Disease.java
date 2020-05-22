@@ -94,13 +94,13 @@ public class Disease {
 		this.name = diseaseDTO.getName();
 		this.diseaseCategory = DiseaseCategory.valueOf(diseaseDTO.getDiseaseCategory());
 		this.specificSymptoms = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diseaseDTO.getSpecificSymptomDTOs())
+		for (SymptomDTO symptomDTO : diseaseDTO.getSpecificSymptoms())
 			this.specificSymptoms.add(new Symptom(symptomDTO));
 		this.nonSpecificSymptoms = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diseaseDTO.getNonSpecificSymptomDTOs())
+		for (SymptomDTO symptomDTO : diseaseDTO.getNonSpecificSymptoms())
 			this.nonSpecificSymptoms.add(new Symptom(symptomDTO));
 		this.therapies = new ArrayList<Therapy>();
-		for (TherapyDTO therapyDTO : diseaseDTO.getTherapyDTOs())
+		for (TherapyDTO therapyDTO : diseaseDTO.getTherapies())
 			this.therapies.add(new Therapy(therapyDTO));
 		this.specificSymptomsMatched = new ArrayList<Symptom>();
 		this.nonSpecificSymptomsMatched = new ArrayList<Symptom>();

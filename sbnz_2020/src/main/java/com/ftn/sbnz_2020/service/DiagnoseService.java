@@ -56,10 +56,10 @@ public class DiagnoseService {
 		diagnose.setPatient(updatedDiagnose.getPatient());
 		diagnose.setVet(updatedDiagnose.getVet());
 		diagnose.setDate(updatedDiagnose.getDate());
-		diagnose.setSpecificSymptoms(updatedDiagnose.getSpecificSymptoms());
-		diagnose.setNonSpecificSymptoms(updatedDiagnose.getNonSpecificSymptoms());
 		diagnose.setSpecificSymptomsMatched(updatedDiagnose.getSpecificSymptomsMatched());
 		diagnose.setNonSpecificSymptomsMatched(updatedDiagnose.getNonSpecificSymptomsMatched());
+		diagnose.setSpecificSymptomsMatchedNum(updatedDiagnose.getSpecificSymptomsMatchedNum());
+		diagnose.setNonSpecificSymptomsMatchedNum(updatedDiagnose.getNonSpecificSymptomsMatchedNum());
 		diagnose.setTherapies(updatedDiagnose.getTherapies());
 		
 		return diagnoseRepository.save(diagnose);

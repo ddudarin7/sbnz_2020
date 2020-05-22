@@ -27,10 +27,14 @@ public class VaccinationDTO {
 	
 	public VaccinationDTO(Vaccination vaccination) {
 		super();
-		this.id = vaccination.getId();
-		this.name = vaccination.getName();
-		this.description = vaccination.getDescription();
-		this.date = vaccination.getDate();
+		if (vaccination.getId() != null)
+			this.id = vaccination.getId();
+		if (vaccination.getName() != null)
+			this.name = vaccination.getName();
+		if (vaccination.getDescription() != null)
+			this.description = vaccination.getDescription();
+		if (vaccination.getDate() != null)
+			this.date = vaccination.getDate();
 	}
 
 	public Long getId() {
