@@ -42,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 		// bez logovanja dostupan samo link za logovanje
 		.antMatchers("/login").permitAll()
-		.antMatchers("/diagnose/**")
+		.antMatchers("/diagnose","/diseases/with-one-or-more-symptoms")
 		.hasAuthority("VET");
 	
 	}

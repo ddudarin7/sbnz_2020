@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient,HttpHeaders} from '@angular/common/http';
 import {LogInDTO} from './../../shared/model/log-in-dto';
+import {CurrentUserDTO} from './../../shared/model/current-user-dto';
+import{UserService} from './user.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +11,22 @@ import {LogInDTO} from './../../shared/model/log-in-dto';
 
 export class LogInService {
 
-  public currentUser:LogInDTO;
-  readonly URL: string="http://localhost:8081/log-in";
 
-  constructor(private http: HttpClient) { }
+  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+  readonly logInURL: string="http://localhost:8081/log-in";
+  readonly logOutURL: string="http://localhost:8081/log-out";
+  private username:string;
 
-  logIn(password: string, username:string){
-    this.currentUser=new LogInDTO(username,password);
-    return this.http.post(this.URL,this.currentUser);
+
+  constructor(private http: HttpClient,private userService: UserService) { }
+
+  logIn(password: string, username:string):Promise<CurrentUserDTO>{
+    return this.http.post(this.logInURL,new LogInDTO(username,password),{headers:this.headers,withCredentials: true}).toPromise().then(res=>res as CurrentUserDTO);
+  }
+
+  logOut(): Promise<any>{
+    this.username=this.userService.getUsername();
+    return this.http.post(this.logOutURL,this.username,{headers:this.headers,withCredentials: true}).toPromise();
   }
 }

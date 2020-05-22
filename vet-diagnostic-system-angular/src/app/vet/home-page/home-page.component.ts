@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import {LogInService} from './../../core/services/log-in.service';
 
 @Component({
   selector: 'app-home-page',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute,
+    private router: Router,private logInService: LogInService) { }
 
   ngOnInit(): void {
+  }
+
+  logout(){
+    this.logInService.logOut().then(
+      data=>{
+        localStorage.removeItem('currentUser');
+        this.router.navigateByUrl('');
+      },
+      error=>{
+        console.log("Log out error");
+      }
+    );
   }
 
 }

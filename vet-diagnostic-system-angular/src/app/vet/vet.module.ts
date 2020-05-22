@@ -19,7 +19,8 @@ const routes: Routes = [
   declarations: [
     HomePageComponent, 
     AddPatientFormComponent, 
-    ShowAllPatientsComponent, SearchComponent],
+    ShowAllPatientsComponent, 
+    SearchComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
