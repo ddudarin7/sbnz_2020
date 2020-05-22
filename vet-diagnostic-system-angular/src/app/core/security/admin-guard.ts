@@ -10,7 +10,10 @@ export class AdminGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (this.userService.getRole() === 'ADMIN') {
       return true;
-    } else {
+    } else if(this.userService.getRole() === 'VET'){
+      this.router.navigate(['/vet/home']);
+      return false;
+    }else{
       this.router.navigate(['']);
       return false;
     }

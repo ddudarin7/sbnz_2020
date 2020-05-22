@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LogInModule } from './log-in/log-in.module';
 import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
+import { AdminModule } from './admin/admin.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { VetModule } from './vet/vet.module';
     BrowserModule,
     LogInModule,
     VetModule,
+    AdminModule,
     FormsModule,
     CoreModule,
     AppRoutingModule
