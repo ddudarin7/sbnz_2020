@@ -8,12 +8,13 @@ import { SearchComponent } from './search/search.component';
 import { PatientInfoComponent } from './patient-info/patient-info.component';
 import {FormsModule} from '@angular/forms';
 import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import { SearchModule } from './search/search.module';
 
 const routes: Routes = [
   {path:'home',component: HomePageComponent,children:[
     {path:'',component:ShowAllPatientsComponent},
     {path:'add-patient',component:AddPatientFormComponent},
-    {path:'search',component:SearchComponent}, {path: 'patient-info/:recordNumber', component: PatientInfoComponent}]
+    {path:'search',loadChildren:'./search/search.module#SearchModule'}, {path: 'patient-info/:recordNumber', component: PatientInfoComponent}]
   }
   ];
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    SearchModule,
     RouterModule.forChild(routes),
     NgMultiSelectDropDownModule.forRoot()
   ],
