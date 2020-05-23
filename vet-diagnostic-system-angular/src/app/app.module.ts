@@ -9,6 +9,9 @@ import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
 import { AdminModule } from './admin/admin.module';
 import {PatientService} from './core/services/patient.service';
+import {MedicineService} from './core/services/medicine.service';
+import {IngredientService} from './core/services/ingredient.service';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -22,10 +25,13 @@ import {PatientService} from './core/services/patient.service';
     AdminModule,
     FormsModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
-    PatientService
+    PatientService,
+    MedicineService,
+    IngredientService
   ],
   bootstrap: [AppComponent]
 })

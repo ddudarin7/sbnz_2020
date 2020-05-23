@@ -5,14 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddPatientFormComponent } from './add-patient-form/add-patient-form.component';
 import { ShowAllPatientsComponent } from './show-all-patients/show-all-patients.component';
 import { SearchComponent } from './search/search.component';
-
+import { PatientInfoComponent } from './patient-info/patient-info.component';
+import {FormsModule} from '@angular/forms';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 
 const routes: Routes = [
   {path:'home',component: HomePageComponent,children:[
     {path:'',component:ShowAllPatientsComponent},
     {path:'add-patient',component:AddPatientFormComponent},
-    {path:'search',component:SearchComponent}
-  ]}];
+    {path:'search',component:SearchComponent}, {path: 'patient-info/:recordNumber', component: PatientInfoComponent}]
+  }
+  ];
 
 
 @NgModule({
@@ -20,10 +23,12 @@ const routes: Routes = [
     HomePageComponent, 
     AddPatientFormComponent, 
     ShowAllPatientsComponent, 
-    SearchComponent],
+    SearchComponent, PatientInfoComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    FormsModule,
+    RouterModule.forChild(routes),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [RouterModule]
 })

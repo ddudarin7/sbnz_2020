@@ -1,0 +1,126 @@
+<div class="patient-info">
+  <h5>Patient Info</h5>
+  <form name="patientForm" (ngSubmit)="submitChanges()" #patientForm="ngForm">
+
+    <div class="form-group">
+      <label for="recordNumber">Record Number</label>
+      <input type="text" class="form-control"  id="recordNumber"
+             required
+             [(ngModel)]="patient.recordNumber" name="recordNumber"
+             #recordNumber="ngModel"
+             disabled = true;
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text"  class="form-control" id="name"
+             required
+             [(ngModel)]="patient.name" name="name"
+             #name="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="breed">Breed</label>
+      <input type="text" class="form-control"  id="breed"
+             required
+             [(ngModel)]="patient.breed" name="breed"
+             #breed="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="medicineAllergies">Medicine Allergies</label>
+      <ng-multiselect-dropdown id="medicineAllergies" name="medicineAllergies"
+                               [placeholder]="'Select medicines'"
+                               [data]="allMedicines"
+                               [(ngModel)]="selectedMedicines"
+                               [settings]="dropdownSettings"
+                               #medicineAllergies="ngModel"
+                               ngDefaultControl
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <div>
+      <label for="ingredientAllergies">Ingredient Allergies</label>
+      <ng-multiselect-dropdown id="ingredientAllergies" name="ingredientAllergies"
+                               [placeholder]="'Select ingredients'"
+                               [data]="allIngredients"
+                               [(ngModel)]="selectedIngredients"
+                               [settings]="dropdownSettings"
+                               #ingredientAllergies="ngModel"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <br/><br/><br/>
+
+
+
+    <h6>Owner info</h6>
+
+    <div class="form-group">
+      <label for="firstName">First name</label>
+      <input type="text" class="form-control"  id="firstName"
+             required
+             [(ngModel)]="patient.owner.firstName" name="firstName"
+             #firstName="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last name</label>
+      <input type="text"  class="form-control" id="lastName"
+             required
+             [(ngModel)]="patient.owner.lastName" name="lastName"
+             #lastName="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="city">City</label>
+      <input type="text" class="form-control"  id="city"
+             required
+             [(ngModel)]="patient.owner.address.city" name="city"
+             #city="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="street">City</label>
+      <input type="text" class="form-control"  id="street"
+             required
+             [(ngModel)]="patient.owner.address.street" name="street"
+             #street="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="number">Number</label>
+      <input type="text" class="form-control"  id="number"
+             required
+             [(ngModel)]="patient.owner.address.number" name="number"
+             #number="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNum">Phone number</label>
+      <input type="text" class="form-control"  id="phoneNum"
+             required
+             [(ngModel)]="patient.owner.phoneNum" name="phoneNum"
+             #phoneNum="ngModel"
+      />
+    </div>
+
+    <br/><br/>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Submit Changes</button>
+    </div>
+  </form>
+</div>
+
+<br/>
