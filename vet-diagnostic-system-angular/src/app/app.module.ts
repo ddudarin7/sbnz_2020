@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { LogInModule } from './log-in/log-in.module';
 import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
+import { PatientModule} from './patient/patient.module';
+import { PatientService } from './core/services/patient.service';
 
 
 @NgModule({
@@ -19,9 +21,12 @@ import { VetModule } from './vet/vet.module';
     VetModule,
     FormsModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    PatientModule
   ],
-  providers: [],
+  providers: [
+    PatientService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
