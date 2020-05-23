@@ -28,7 +28,7 @@ import { SharedModule } from './shared/shared.module';
     FormsModule,
     CoreModule,
     AppRoutingModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
     BrowserAnimationsModule,
     SharedModule,
     AppRoutingModule
