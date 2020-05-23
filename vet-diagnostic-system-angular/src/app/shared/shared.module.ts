@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SymptomPipe } from './pipes/symptom.pipe';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [SymptomPipe],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+  ],
+  exports:[SymptomPipe]
 })
 export class SharedModule { }
