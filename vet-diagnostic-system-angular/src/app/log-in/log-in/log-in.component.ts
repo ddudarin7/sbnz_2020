@@ -28,7 +28,13 @@ export class LogInComponent implements OnInit {
           role:data.role
         }));
         console.log("successful ");
-        this.router.navigate(['/vet/home']);
+        if(data.role==='VET'){
+          this.router.navigate(['/vet/home']);
+        }
+        else if(data.role==='ADMIN'){
+          this.router.navigate(['/admin/home']);
+        }
+        
       },
       error=>{
         this.error="Wrong password or username";
