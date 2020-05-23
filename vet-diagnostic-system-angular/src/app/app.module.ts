@@ -9,6 +9,9 @@ import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
 import { AdminModule } from './admin/admin.module';
 import {PatientService} from './core/services/patient.service';
+import {MedicineService} from './core/services/medicine.service';
+import {IngredientService} from './core/services/ingredient.service';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 
@@ -24,12 +27,16 @@ import { SharedModule } from './shared/shared.module';
     AdminModule,
     FormsModule,
     CoreModule,
+    AppRoutingModule,
+    NgMultiSelectDropDownModule.forRoot()
     BrowserAnimationsModule,
     SharedModule,
     AppRoutingModule
   ],
   providers: [
-    PatientService
+    PatientService,
+    MedicineService,
+    IngredientService
   ],
   bootstrap: [AppComponent]
 })
