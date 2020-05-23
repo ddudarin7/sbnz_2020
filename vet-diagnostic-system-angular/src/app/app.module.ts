@@ -9,6 +9,8 @@ import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
 import { AdminModule } from './admin/admin.module';
 import {PatientService} from './core/services/patient.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -22,6 +24,8 @@ import {PatientService} from './core/services/patient.service';
     AdminModule,
     FormsModule,
     CoreModule,
+    BrowserAnimationsModule,
+    SharedModule,
     AppRoutingModule
   ],
   providers: [
