@@ -1,1 +1,20 @@
-<p>show-all-patients works!</p>
+<div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Record Number</th>
+      <th>Name</th>
+      <th>Breed</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let patient of patients">
+      <td>{{patient.recordNumber}}</td>
+      <td>{{patient.name}}</td>
+      <td>{{patient.breed}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
