@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {PatientService} from '../../core/services/patient.service';
+import {Patient} from '../../shared/model/patient';
 
 @Component({
   selector: 'app-show-all-patients',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShowAllPatientsComponent implements OnInit {
 
-  constructor() { }
+  patients: Patient[];
+
+  constructor(private patientService: PatientService) { }
 
   ngOnInit(): void {
+    this.loadPatients();
+  }
+
+  loadPatients(): void {
+    this.patientService.getPatients().then(
+      res => {
+        this.patients = JSON.parse(JSON.stringify(res))._embedded.patients;
+      }
+    );
   }
 
 }

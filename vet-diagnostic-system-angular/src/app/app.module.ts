@@ -8,6 +8,7 @@ import { LogInModule } from './log-in/log-in.module';
 import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
 import { AdminModule } from './admin/admin.module';
+import {PatientService} from './core/services/patient.service';
 
 
 @NgModule({
@@ -23,7 +24,9 @@ import { AdminModule } from './admin/admin.module';
     CoreModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    PatientService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
