@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiseaseDTO;
+import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Symptom;
@@ -149,16 +150,17 @@ public class DiseaseController {
     }
     
     
-    @GetMapping(value = "/diseases/with-one-or-more-symptoms", produces = "application/json")
-    public ResponseEntity<List<Disease>> findAllwithSymptoms( HttpServletRequest request) {
+    @PostMapping(value = "/diseases/with-one-or-more-symptoms", produces = "application/json")
+    public ResponseEntity<List<Disease>> findAllwithSymptoms(@RequestBody List<SymptomDTO> symptomDTOs, HttpServletRequest request) {
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
         
-    	ArrayList<Symptom> s=new ArrayList<Symptom>();
-    	s.add(symptomService.findByName("LOW_APPETITE"));
-    	s.add(symptomService.findByName("DEPRESSION"));
-    	s.add(symptomService.findByName("RECTAL_BLEEDING"));
-        
-    	List<Disease> diseases=diseaseService.findAllWithSymptom(kieSession, s);
+    	ArrayList<Symptom> symptoms=new ArrayList<Symptom>();
+    	for(SymptomDTO s: symptomDTOs) {
+    		Symptom symptom=symptomService.findByName(s.getName());
+    		symptoms.add(symptom);
+    	}
+    	
+    	List<Disease> diseases=diseaseService.findAllWithSymptom(kieSession, symptoms);
 
         return new ResponseEntity<>(diseases,HttpStatus.OK);
     }
