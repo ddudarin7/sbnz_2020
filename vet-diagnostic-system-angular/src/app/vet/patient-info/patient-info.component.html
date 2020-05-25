@@ -1,19 +1,21 @@
-<div class="patient-info">
+
+
+<div id="patient-info-form">
   <h5>Patient Info</h5>
   <form name="patientForm" (ngSubmit)="submitChanges()" #patientForm="ngForm">
 
     <div class="form-group">
-      <label for="recordNumber">Record Number</label>
+      <label for="recordNumber"><b>Record Number</b></label>
       <input type="text" class="form-control"  id="recordNumber"
              required
              [(ngModel)]="patient.recordNumber" name="recordNumber"
              #recordNumber="ngModel"
-             disabled = true;
+             disabled = true
       />
     </div>
 
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name"><b>Name</b></label>
       <input type="text"  class="form-control" id="name"
              required
              [(ngModel)]="patient.name" name="name"
@@ -22,16 +24,36 @@
     </div>
 
     <div class="form-group">
-      <label for="breed">Breed</label>
-      <input type="text" class="form-control"  id="breed"
-             required
-             [(ngModel)]="patient.breed" name="breed"
-             #breed="ngModel"
-      />
+      <label for="breed"><b>Breed</b></label>
+      <ng-multiselect-dropdown id="breed" name="breed"
+                               [placeholder]="'Select breed'"
+                               [data]="allBreeds"
+                               [(ngModel)]="selectedBreed"
+                               [settings]="breedSettings"
+                               #breed="ngModel"
+      >
+      </ng-multiselect-dropdown>
     </div>
 
+
     <div class="form-group">
-      <label for="medicineAllergies">Medicine Allergies</label>
+      <label for="dateOfBirth"><b>Date of birth</b></label>
+      <input id="dateOfBirth"
+             name="dateOfBirth"
+             class="form-control"
+             [owlDateTimeTrigger]="dateOfBirthPicker"
+             [owlDateTime]="dateOfBirthPicker"
+             [(ngModel)]="patient.dateOfBirth"
+             #dateOfBirth = "ngModel"
+             ngDefaultControl
+             readonly
+      />
+      <owl-date-time [pickerType]="'calendar'" #dateOfBirthPicker></owl-date-time>
+    </div>
+
+
+    <div class="form-group">
+      <label for="medicineAllergies"><b>Medicine Allergies</b></label>
       <ng-multiselect-dropdown id="medicineAllergies" name="medicineAllergies"
                                [placeholder]="'Select medicines'"
                                [data]="allMedicines"
@@ -44,7 +66,7 @@
     </div>
 
     <div>
-      <label for="ingredientAllergies">Ingredient Allergies</label>
+      <label for="ingredientAllergies"><b>Ingredient Allergies</b></label>
       <ng-multiselect-dropdown id="ingredientAllergies" name="ingredientAllergies"
                                [placeholder]="'Select ingredients'"
                                [data]="allIngredients"
@@ -62,7 +84,7 @@
     <h6>Owner info</h6>
 
     <div class="form-group">
-      <label for="firstName">First name</label>
+      <label for="firstName"><b>First name</b></label>
       <input type="text" class="form-control"  id="firstName"
              required
              [(ngModel)]="patient.owner.firstName" name="firstName"
@@ -71,7 +93,7 @@
     </div>
 
     <div class="form-group">
-      <label for="lastName">Last name</label>
+      <label for="lastName"><b>Last name</b></label>
       <input type="text"  class="form-control" id="lastName"
              required
              [(ngModel)]="patient.owner.lastName" name="lastName"
@@ -80,7 +102,7 @@
     </div>
 
     <div class="form-group">
-      <label for="city">City</label>
+      <label for="city"><b>City</b></label>
       <input type="text" class="form-control"  id="city"
              required
              [(ngModel)]="patient.owner.address.city" name="city"
@@ -89,7 +111,7 @@
     </div>
 
     <div class="form-group">
-      <label for="street">City</label>
+      <label for="street"><b>Street</b></label>
       <input type="text" class="form-control"  id="street"
              required
              [(ngModel)]="patient.owner.address.street" name="street"
@@ -98,7 +120,7 @@
     </div>
 
     <div class="form-group">
-      <label for="number">Number</label>
+      <label for="number"><b>Number</b></label>
       <input type="text" class="form-control"  id="number"
              required
              [(ngModel)]="patient.owner.address.number" name="number"
@@ -107,7 +129,7 @@
     </div>
 
     <div class="form-group">
-      <label for="phoneNum">Phone number</label>
+      <label for="phoneNum"><b>Phone number</b></label>
       <input type="text" class="form-control"  id="phoneNum"
              required
              [(ngModel)]="patient.owner.phoneNum" name="phoneNum"
@@ -122,5 +144,7 @@
     </div>
   </form>
 </div>
+
+<button class="btn btn-success" (click)="delete()">Delete patient</button>
 
 <br/>

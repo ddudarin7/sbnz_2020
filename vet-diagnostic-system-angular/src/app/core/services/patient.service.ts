@@ -26,4 +26,14 @@ export class PatientService{
       res => res as Patient);
   }
 
+  public delete(patientId: number): Promise<void> {
+    return this.http.delete<void>(`${this.url}/${patientId}`).toPromise<void>();
+  }
+
+  public add(patient: Patient): Promise<Patient> {
+    const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
+    return this.http.post<Patient>(this.url, patient, {headers: h}).toPromise().then(
+      res => res as Patient);
+  }
+
 }
