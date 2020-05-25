@@ -8,6 +8,8 @@ import { PatientInfoComponent } from './patient-info/patient-info.component';
 import {FormsModule} from '@angular/forms';
 import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import { SearchModule } from './search/search.module';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import {ToastrModule} from 'ngx-toastr';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
@@ -30,7 +32,10 @@ const routes: Routes = [
     FormsModule,
     SearchModule,
     RouterModule.forChild(routes),
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    ToastrModule.forRoot()
   ],
   exports: [RouterModule]
 })
