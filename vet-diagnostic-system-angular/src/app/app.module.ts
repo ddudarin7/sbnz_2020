@@ -33,11 +33,7 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AppRoutingModule
   ],
-  providers: [
-    PatientService,
-    MedicineService,
-    IngredientService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
