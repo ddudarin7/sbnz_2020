@@ -13,6 +13,7 @@
       <td>{{patient.recordNumber}}</td>
       <td>{{patient.name}}</td>
       <td>{{patient.breed}}</td>
+      <td><button (click)="patientInfoClicked(patient.recordNumber)">Info</button></td>
     </tr>
     </tbody>
   </table>

@@ -96,6 +96,9 @@ public class Patient {
 			this.recordNumber = patientDTO.getRecordNumber();
 		if (patientDTO.getDateOfBirth() != null)
 			this.dateOfBirth = patientDTO.getDateOfBirth();
+		if( patientDTO.getBreed() != null) {
+			this.breed = patientDTO.getBreed();
+		}
 		this.medicineAllergies = new ArrayList<Medicine>();
 		if (patientDTO.getMedicineAllergies() != null)
 	        for (MedicineDTO medicine: patientDTO.getMedicineAllergies())
