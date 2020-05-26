@@ -22,7 +22,6 @@ public class DiagnoseDTO {
 	private Date date;
 	
 	public DiagnoseDTO(){
-		
 	}
 	
 	public DiagnoseDTO(Diagnose diagnose){
@@ -133,7 +132,4 @@ public class DiagnoseDTO {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	
-	
 }

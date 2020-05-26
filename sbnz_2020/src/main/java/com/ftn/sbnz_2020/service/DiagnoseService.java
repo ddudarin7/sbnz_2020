@@ -1,7 +1,5 @@
 package com.ftn.sbnz_2020.service;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.util.Date;
 import java.util.List;
 
@@ -29,9 +27,18 @@ public class DiagnoseService {
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
-	/*
-	 * Add find by patient and vet
-	 */
+	public List<Diagnose> findByPatientId(Long patientId){
+		return diagnoseRepository.findByPatientId(patientId);
+	}
+	
+	public List<Diagnose> findByDiseaseId(Long diseaseId){
+		return diagnoseRepository.findByDiseaseId(diseaseId);
+	}
+	
+	public List<Diagnose> findByVetId(Long vetId){
+		return diagnoseRepository.findByVetId(vetId);
+	}
+	
 
 	public List<Diagnose> findAllByDiseaseId(Long diseaseId) { 
 		return diagnoseRepository.findAllByDiseaseId(diseaseId); }

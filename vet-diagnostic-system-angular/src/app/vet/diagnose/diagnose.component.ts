@@ -5,6 +5,7 @@ import {DiagnoseService} from '../../core/services/diagnose.service';
 import {Diagnose} from '../../shared/model/diagnose';
 import {ToastrService} from 'ngx-toastr';
 import {Disease} from '../../shared/model/disease';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-diagnose',
@@ -29,7 +30,7 @@ export class DiagnoseComponent implements OnInit {
     null, null, [], null);
 
   constructor(private symptomService: SymptomService, private diagnoseService: DiagnoseService,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
     this.diagnoseService.patientInFocus.subscribe(rec => this.patientRecordNumber = rec);
@@ -67,10 +68,12 @@ export class DiagnoseComponent implements OnInit {
   }
 
   confirmDiagnose(): void{
+    console.log(this.diagnose);
     this.diagnoseService.confirmDiagnose(this.diagnose).then(
       res => {
         this.diagnose = res;
         this.toastr.success('Diagnose confirmed.');
+        this.router.navigate(['vet/home/diagnoses/' + this.diagnose.id]);
       }
     ).catch(
       err => {

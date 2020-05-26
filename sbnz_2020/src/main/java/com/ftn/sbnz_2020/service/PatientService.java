@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
@@ -32,6 +33,9 @@ public class PatientService {
 	
 	@Autowired
 	VaccinationService vaccinationService;
+	
+	@Autowired
+	DiagnoseService diagnoseService;
 
 	public Patient findById(Long id) {
 		return patientRepository.findById(id).get();
@@ -134,12 +138,13 @@ public class PatientService {
 	}
 
 	public void delete(Long id) {
+		for (Diagnose diagnose : this.diagnoseService.findByPatientId(id))
+			this.diagnoseService.delete(diagnose.getId());
 		patientRepository.delete(this.findById(id));
 	}
 
 	public void deleteAll() {
-		therapyService.deleteAll();
-
-		patientRepository.deleteAllInBatch();
+		this.diagnoseService.deleteAll();
+		patientRepository.deleteAll();
 	}
 }

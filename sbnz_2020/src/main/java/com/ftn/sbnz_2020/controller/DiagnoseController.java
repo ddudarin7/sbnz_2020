@@ -179,32 +179,20 @@ public class DiagnoseController {
     	// diagnose
     	
     	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient);
-    	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
+    	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), HttpStatus.OK);
     }
     
     @PostMapping(value = "/diagnoses", consumes = "application/json")
     public ResponseEntity<DiagnoseDTO> add(@RequestBody DiagnoseDTO diagnoseDTO, 
     		HttpServletRequest request) {
 
-    	Diagnose diagnose = new Diagnose(diagnoseDTO);
-    	
-    	Disease disease = diseaseService.findById(diagnose.getDisease().getId());
-    	if (disease == null)
-    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    	diagnose.setDisease(disease);
-    	
-    	Patient patient = patientService.findById(diagnose.getPatient().getId());
-    	if (patient == null)
-    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    	diagnose.setPatient(patient);
-    	
     	// collecting vet
     	String vetUsername = "vet"; // needs to be given by token
     	Vet vet = vetService.findByUsername(vetUsername);
     	if (vet == null)
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
-        diagnose = diagnoseService.confirmDiagnose(diagnose, vet);
+        Diagnose diagnose = diagnoseService.confirmDiagnose(new Diagnose(diagnoseDTO), vet);
         return new ResponseEntity<>(new DiagnoseDTO(diagnose), HttpStatus.CREATED);
     }
    
