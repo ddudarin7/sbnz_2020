@@ -11,7 +11,7 @@ export class IngredientService {
   private headers = new HttpHeaders({ Accept: 'application/json' });
 
   public getIngredients(): Promise<Ingredient[]> {
-    return this.http.get<Ingredient[]>(this.url, {headers: this.headers}).toPromise().then(
-      res => res as Ingredient[]);
+    return this.http.get<Ingredient[]>(this.url, {headers: this.headers, withCredentials: true}).toPromise()
+      .then(res => res as Ingredient[]);
   }
 }

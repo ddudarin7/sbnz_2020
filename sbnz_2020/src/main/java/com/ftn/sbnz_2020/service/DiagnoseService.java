@@ -1,5 +1,7 @@
 package com.ftn.sbnz_2020.service;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.Date;
 import java.util.List;
 
@@ -42,11 +44,6 @@ public class DiagnoseService {
 	
 	public Page<Diagnose> findAll(Pageable pageable) { return diagnoseRepository.findAll(pageable); }
 	
-	public Diagnose add(Diagnose diagnose){
-		diagnose.setId(null);
-		return diagnoseRepository.save(diagnose); 
-	}
-	
 	public Diagnose update(Diagnose updatedDiagnose){
 		Diagnose diagnose = diagnoseRepository.getOne(updatedDiagnose.getId());
 		if (diagnose == null)
@@ -69,7 +66,7 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient, Vet vet) {
+	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
 		
 		// inserting symptoms
 		
@@ -89,8 +86,6 @@ public class DiagnoseService {
 		
 		Diagnose makingDiagnose = new Diagnose();
 		makingDiagnose.setPatient(patient);
-		makingDiagnose.setVet(vet);
-		makingDiagnose.setDate(new Date());
 		
 		kieSession.insert(makingDiagnose);
 		
@@ -110,7 +105,7 @@ public class DiagnoseService {
 		
 		this.releaseObjectsFromSession(kieSession);
 		
-		return diagnoseRepository.save(makingDiagnose);
+		return makingDiagnose;
 	}
 	
     private void releaseObjectsFromSession(KieSession kieSession){
@@ -119,6 +114,14 @@ public class DiagnoseService {
         for( Object object: kieSession.getObjects() ){
             kieSession.delete( kieSession.getFactHandle( object ) );
         }
+    }
+    
+    public Diagnose confirmDiagnose(Diagnose diagnose, Vet vet){
+    	diagnose.setId(null);
+    	diagnose.setDate(new Date());
+    	diagnose.setVet(vet);
+    	
+    	return this.diagnoseRepository.save(diagnose);
     }
 	
 }

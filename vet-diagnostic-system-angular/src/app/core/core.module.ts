@@ -11,6 +11,7 @@ import { MedicineService } from './services/medicine.service';
 import { IngredientService } from './services/ingredient.service';
 import { PatientService } from './services/patient.service';
 import { DiseaseService } from './services/disease.service';
+import {DiagnoseService} from './services/diagnose.service';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { DiseaseService } from './services/disease.service';
     DiseaseService,
     AuthGuard,
     AdminGuard,
-    VetGuard
+    VetGuard,
+    DiagnoseService
   ]
 })
 export class CoreModule { }
