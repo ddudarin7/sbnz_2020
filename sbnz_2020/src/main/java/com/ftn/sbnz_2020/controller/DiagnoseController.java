@@ -24,14 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
+import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.service.DiagnoseService;
+import com.ftn.sbnz_2020.service.DiseaseService;
 import com.ftn.sbnz_2020.service.IngredientService;
 import com.ftn.sbnz_2020.service.MedicineService;
 import com.ftn.sbnz_2020.service.PatientService;
 import com.ftn.sbnz_2020.service.SymptomService;
+import com.ftn.sbnz_2020.service.TherapyService;
 import com.ftn.sbnz_2020.service.VetService;
 
 @RestController
@@ -54,6 +58,12 @@ public class DiagnoseController {
 	
 	@Autowired
 	PatientService patientService;
+	
+	@Autowired
+	DiseaseService diseaseService;
+	
+	@Autowired
+	TherapyService therapyService;
 	
 	@GetMapping(value = "/diagnoses/{id}", produces = "application/json")
     public ResponseEntity<DiagnoseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -116,15 +126,6 @@ public class DiagnoseController {
         headers.add("X-Total-Count", String.valueOf(diagnoseDTOs.size()));
         return new ResponseEntity<>(diagnoseDTOs, headers, HttpStatus.OK);
     }
-    
-    @PostMapping(value = "/diagnoses", consumes = "application/json")
-    public ResponseEntity<DiagnoseDTO> add(@RequestBody DiagnoseDTO diagnoseDTO, 
-    		HttpServletRequest request) {
-
-        Diagnose diagnose = new Diagnose(diagnoseDTO);
-        diagnose = diagnoseService.add(diagnose);
-        return new ResponseEntity<>(new DiagnoseDTO(diagnose), HttpStatus.CREATED);
-    }
 
     @PutMapping(value = "/diagnoses", consumes = "application/json")
     public ResponseEntity<DiagnoseDTO> update(@RequestBody DiagnoseDTO diagnoseDTO,
@@ -162,8 +163,6 @@ public class DiagnoseController {
     		@PathVariable String patientRecordNumber, HttpServletRequest request){
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
-        String vetUsername = "vet"; // needs to be given by token
-        
         
         // collecting symptoms
         
@@ -176,14 +175,37 @@ public class DiagnoseController {
     	Patient patient = patientService.findByRecordNumber(patientRecordNumber);
     	if (patient == null)
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    	
-    	// collecting vet
-    	
-    	Vet vet = vetService.findByUsername(vetUsername);
-    	
+    		
     	// diagnose
     	
-    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient, vet);
+    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient);
     	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), (HttpStatus.OK));
     }
+    
+    @PostMapping(value = "/diagnoses", consumes = "application/json")
+    public ResponseEntity<DiagnoseDTO> add(@RequestBody DiagnoseDTO diagnoseDTO, 
+    		HttpServletRequest request) {
+
+    	Diagnose diagnose = new Diagnose(diagnoseDTO);
+    	
+    	Disease disease = diseaseService.findById(diagnose.getDisease().getId());
+    	if (disease == null)
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    	diagnose.setDisease(disease);
+    	
+    	Patient patient = patientService.findById(diagnose.getPatient().getId());
+    	if (patient == null)
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    	diagnose.setPatient(patient);
+    	
+    	// collecting vet
+    	String vetUsername = "vet"; // needs to be given by token
+    	Vet vet = vetService.findByUsername(vetUsername);
+    	if (vet == null)
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    	
+        diagnose = diagnoseService.confirmDiagnose(diagnose, vet);
+        return new ResponseEntity<>(new DiagnoseDTO(diagnose), HttpStatus.CREATED);
+    }
+   
 }

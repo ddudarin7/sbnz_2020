@@ -1,7 +1,8 @@
 
 
-<div id="patient-info-form">
-  <h5>Patient Info</h5>
+<div id="patient-info-form" class="container">
+  <h5 style="color: lightsteelblue">Patient info</h5>
+  <br/>
   <form name="patientForm" (ngSubmit)="submitChanges()" #patientForm="ngForm">
 
     <div class="form-group">
@@ -77,11 +78,11 @@
       </ng-multiselect-dropdown>
     </div>
 
-    <br/><br/><br/>
+    <br/><br/>
 
+    <h5 style="color: lightsteelblue">Owner info</h5>
 
-
-    <h6>Owner info</h6>
+    <br/>
 
     <div class="form-group">
       <label for="firstName"><b>First name</b></label>
@@ -137,14 +138,14 @@
       />
     </div>
 
-    <br/><br/>
-
     <div class="form-group">
       <button type="submit" class="btn btn-success">Submit Changes</button>
     </div>
   </form>
+  <button class="btn btn-success" (click)="diagnose()">Diagnose</button>
+  <br/><br/>
+  <button class="btn btn-danger" (click)="delete()">Delete patient</button>
 </div>
 
-<button class="btn btn-success" (click)="delete()">Delete patient</button>
 
 <br/>

@@ -11,7 +11,7 @@ export class MedicineService {
   private headers = new HttpHeaders({ Accept: 'application/json' });
 
   public getMedicines(): Promise<Medicine[]> {
-    return this.http.get<Medicine[]>(this.url, {headers: this.headers}).toPromise().then(
+    return this.http.get<Medicine[]>(this.url, {headers: this.headers, withCredentials: true}).toPromise().then(
       res => res as Medicine[]);
   }
 

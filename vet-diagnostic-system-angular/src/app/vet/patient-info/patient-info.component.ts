@@ -7,6 +7,7 @@ import {Medicine} from '../../shared/model/medicine';
 import {IngredientService} from '../../core/services/ingredient.service';
 import {Ingredient} from '../../shared/model/ingredient';
 import {ToastrService} from 'ngx-toastr';
+import {DiagnoseService} from '../../core/services/diagnose.service';
 
 @Component({
   selector: 'app-patient-info',
@@ -32,7 +33,7 @@ export class PatientInfoComponent implements OnInit {
 
   constructor(private patientService: PatientService, private activatedRoute: ActivatedRoute,
               private medicineService: MedicineService, private ingredientService: IngredientService,
-              private router: Router, private toastr: ToastrService) {
+              private router: Router, private toastr: ToastrService, private  diagnoseService: DiagnoseService) {
   }
 
   ngOnInit(): void {
@@ -130,6 +131,11 @@ export class PatientInfoComponent implements OnInit {
         this.toastr.error('Patient not deleted.');
       }
     );
+  }
+
+  diagnose(): void {
+    this.diagnoseService.setPatientInFocus(this.patient.recordNumber);
+    this.router.navigate(['vet/home/diagnose']);
   }
 
 }
