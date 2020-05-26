@@ -11,6 +11,7 @@ import { SearchModule } from './search/search.module';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import {ToastrModule} from 'ngx-toastr';
 import { DiagnoseComponent } from './diagnose/diagnose.component';
+import { DiagnoseInfoComponent } from './diagnose-info/diagnose-info.component';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
@@ -18,7 +19,8 @@ const routes: Routes = [
     {path: 'add-patient', component: AddPatientFormComponent},
     {path: 'search', loadChildren: './search/search.module#SearchModule'},
       {path: 'patient-info/:recordNumber', component: PatientInfoComponent},
-      {path: 'diagnose', component: DiagnoseComponent}]
+      {path: 'diagnose', component: DiagnoseComponent},
+      {path: 'diagnoses/:id', component: DiagnoseInfoComponent}]
   }
   ];
 
@@ -29,7 +31,8 @@ const routes: Routes = [
     AddPatientFormComponent,
     ShowAllPatientsComponent,
     PatientInfoComponent,
-    DiagnoseComponent],
+    DiagnoseComponent,
+    DiagnoseInfoComponent],
   imports: [
     CommonModule,
     FormsModule,
