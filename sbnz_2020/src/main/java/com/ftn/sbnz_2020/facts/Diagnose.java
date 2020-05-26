@@ -19,6 +19,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.dto.SymptomDTO;
@@ -34,15 +36,15 @@ public class Diagnose {
     @Column(name = "id")
 	private Long id;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "disease_id", referencedColumnName = "id")
 	private Disease disease;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
 	private Patient patient;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "vet_id", referencedColumnName = "id")
 	private Vet vet;
 	
@@ -63,7 +65,7 @@ public class Diagnose {
     private Long nonSpecificSymptomsMatchedNum;
     
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+	@ManyToMany//(cascade={CascadeType.MERGE}) // unidirectional
 	@Column(name = "therapies", nullable = false)
 	private List<Therapy> therapies;
 	
@@ -157,11 +159,7 @@ public class Diagnose {
 	}
 
 	public void setTherapies(List<Therapy> therapies) {
-		this.therapies = new ArrayList<Therapy>();
-		if (therapies == null)
-			return;
-		for (Therapy therapy : therapies)
-			this.therapies.add(therapy);
+		this.therapies = therapies;
 	}
 
 	public Date getDate() {

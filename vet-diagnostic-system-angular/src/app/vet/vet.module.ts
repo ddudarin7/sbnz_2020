@@ -10,13 +10,17 @@ import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import { SearchModule } from './search/search.module';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import {ToastrModule} from 'ngx-toastr';
+import { DiagnoseComponent } from './diagnose/diagnose.component';
+import { DiagnoseInfoComponent } from './diagnose-info/diagnose-info.component';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
     {path: '', component: ShowAllPatientsComponent},
     {path: 'add-patient', component: AddPatientFormComponent},
     {path: 'search', loadChildren: './search/search.module#SearchModule'},
-      {path: 'patient-info/:recordNumber', component: PatientInfoComponent}]
+      {path: 'patient-info/:recordNumber', component: PatientInfoComponent},
+      {path: 'diagnose', component: DiagnoseComponent},
+      {path: 'diagnoses/:id', component: DiagnoseInfoComponent}]
   }
   ];
 
@@ -26,7 +30,9 @@ const routes: Routes = [
     HomePageComponent,
     AddPatientFormComponent,
     ShowAllPatientsComponent,
-    PatientInfoComponent],
+    PatientInfoComponent,
+    DiagnoseComponent,
+    DiagnoseInfoComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -11,4 +11,7 @@ import com.ftn.sbnz_2020.facts.Diagnose;
 public interface DiagnoseRepository extends JpaRepository<Diagnose, Long>{
 	List<Diagnose> findAllByDiseaseId(Long diseaseId);
 	Page<Diagnose> findAllByDiseaseId(Long diseaseId, Pageable pageable);
+	List<Diagnose> findByPatientId(Long patientId);
+	List<Diagnose> findByDiseaseId(Long diseaseId);
+	List<Diagnose> findByVetId(Long vetId);
 }
