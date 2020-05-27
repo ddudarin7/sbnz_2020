@@ -17,14 +17,17 @@ export class SearchHomeComponent implements OnInit {
   selectSymptoms:SelectItem[];
   symptoms:Symptom[];
   selectedSymptoms:Symptom[];
+  diseaseName:string;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private symptomService:SymptomService,
     private diseaseService:DiseaseService,
-    private messageService: MessageService) { 
+    private messageService: MessageService) 
+  { 
     this.selectSymptoms=[];
     this.selectedSymptoms=[];
+    this.diseaseName="";
   }
 
   ngOnInit(): void {
@@ -54,6 +57,26 @@ export class SearchHomeComponent implements OnInit {
         this.router.navigate(['/vet/home/search/show/diseases']);
       },
       error=>{
+        this.messageService.add({severity:'error', summary:'Error!', detail:'An unexpected error occurred.',life:5000});
+      }
+    );
+  }
+
+  searchByName(){
+    if(this.diseaseName.length===0){
+      this.messageService.add({severity:'error', summary:'Error!', detail:'You need to enter disease name.',life:5000});
+      return;
+    }
+    this.diseaseService.getDiseaseByName(this.diseaseName).then(
+      res=>{
+        this.router.navigate(['/vet/home/search/show/disease/'+this.diseaseName]);
+        console.log(res);
+      },
+      error=>{
+        if(error.status===404){
+          this.messageService.add({severity:'error', summary:'Error!', detail:'Disease not found.',life:5000});
+          return;
+        }
         this.messageService.add({severity:'error', summary:'Error!', detail:'An unexpected error occurred.',life:5000});
       }
     );

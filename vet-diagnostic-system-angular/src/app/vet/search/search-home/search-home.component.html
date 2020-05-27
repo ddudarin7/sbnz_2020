@@ -1,5 +1,6 @@
-<p-toast position="top-right"></p-toast>
+
 <div class="container">
+    
     <p-accordion>
         <p-accordionTab header="Search disease by symptoms">
             Find all diseases with one or more selected symptoms
@@ -15,16 +16,24 @@
             </div>
             <div id="bottom">
                 <p style="display:inline;">Selected symptoms: {{selectedSymptoms|symptomPipe}}</p>
-                <!--<p style="display:inline;" *ngFor="let s of selectedSymptoms">
-                    {{s|symptomPipe}}
-                </p>-->
             </div>
         </p-accordionTab>
         <p-accordionTab header="Search disease by name">
             Find disease with specific name
-            <div>
-                
+            <div id="container">
+                <form>
+                    <div id="left">
+                        <input class="form-control" type="text" name="diseaseName" id="username" [(ngModel)]="diseaseName" placeholder="Disease name" />    
+                    </div>
+                    <div id="right">
+                        <button class="btn btn-primary" type="submit" id="sendMessageButton" (click)="searchByName()">Search</button> 
+                    </div>
+                </form>
+            </div>
+            <div id="bottom">
+                <p style="display:inline;">Selected symptoms: {{selectedSymptoms|symptomPipe}}</p>
             </div>
         </p-accordionTab>
-</p-accordion>
+    </p-accordion>
+<p-toast position="bottom-right"></p-toast>
 </div>

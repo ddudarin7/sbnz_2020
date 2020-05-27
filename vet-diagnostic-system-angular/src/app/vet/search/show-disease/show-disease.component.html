@@ -1,0 +1,26 @@
+<div class="container">
+    <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{disease.name}}</span>
+            </div>
+        </p-header>
+            <h5>Disease category</h5>
+            <p>{{disease.diseaseCategory|lowerCase}}</p>
+            <hr>
+            <h5>Specific symptoms</h5>
+            <p>{{disease.specificSymptoms|symptomPipe}}</p>
+            <hr>
+            <h5>Nonspecific symptoms</h5>
+            <p>{{disease.nonSpecificSymptoms|symptomPipe}}</p>
+            <hr>
+            <h5>Therapy</h5>
+            <div *ngFor="let t of disease.therapies">
+                <p>{{t.description}}</p>
+                <p *ngFor="let m of t.medicines">{{m.name}}</p>
+            </div>
+        <p-footer>
+            
+        </p-footer>
+    </p-panel>
+</div>

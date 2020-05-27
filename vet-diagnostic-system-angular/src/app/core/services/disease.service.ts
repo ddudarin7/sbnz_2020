@@ -33,7 +33,7 @@ export class DiseaseService {
   }
 
   getDiseaseByName(name: string): Promise<Disease> {
-    return this.http.get<Disease>(`${this.diseaseUrl}/${name}`, {headers: this.headers}).toPromise().then(
+    return this.http.get<Disease>(`${this.diseaseUrl}/name/${name}`, {headers: this.headers}).toPromise().then(
       res => res as Disease);
   }
 
