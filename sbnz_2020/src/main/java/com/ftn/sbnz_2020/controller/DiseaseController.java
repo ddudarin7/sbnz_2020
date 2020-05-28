@@ -49,7 +49,8 @@ public class DiseaseController {
 
     @GetMapping(value = "/diseases/name/{name}", produces = "application/json")
     public ResponseEntity<DiseaseDTO> findByName(@PathVariable String name, HttpServletRequest request) {
-
+    	name.toLowerCase();
+    	name=name.substring(0,1).toUpperCase()+name.substring(1);
         Disease disease = diseaseService.findByName(name);
         if (disease == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
