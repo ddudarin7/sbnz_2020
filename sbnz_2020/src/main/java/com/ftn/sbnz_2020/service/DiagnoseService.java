@@ -27,9 +27,18 @@ public class DiagnoseService {
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
-	/*
-	 * Add find by patient and vet
-	 */
+	public List<Diagnose> findByPatientId(Long patientId){
+		return diagnoseRepository.findByPatientId(patientId);
+	}
+	
+	public List<Diagnose> findByDiseaseId(Long diseaseId){
+		return diagnoseRepository.findByDiseaseId(diseaseId);
+	}
+	
+	public List<Diagnose> findByVetId(Long vetId){
+		return diagnoseRepository.findByVetId(vetId);
+	}
+	
 
 	public List<Diagnose> findAllByDiseaseId(Long diseaseId) { 
 		return diagnoseRepository.findAllByDiseaseId(diseaseId); }
@@ -41,11 +50,6 @@ public class DiagnoseService {
 	public List<Diagnose> findAll() { return diagnoseRepository.findAll(); }
 	
 	public Page<Diagnose> findAll(Pageable pageable) { return diagnoseRepository.findAll(pageable); }
-	
-	public Diagnose add(Diagnose diagnose){
-		diagnose.setId(null);
-		return diagnoseRepository.save(diagnose); 
-	}
 	
 	public Diagnose update(Diagnose updatedDiagnose){
 		Diagnose diagnose = diagnoseRepository.getOne(updatedDiagnose.getId());
@@ -69,7 +73,7 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient, Vet vet) {
+	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
 		
 		// inserting symptoms
 		
@@ -89,8 +93,6 @@ public class DiagnoseService {
 		
 		Diagnose makingDiagnose = new Diagnose();
 		makingDiagnose.setPatient(patient);
-		makingDiagnose.setVet(vet);
-		makingDiagnose.setDate(new Date());
 		
 		kieSession.insert(makingDiagnose);
 		
@@ -110,7 +112,7 @@ public class DiagnoseService {
 		
 		this.releaseObjectsFromSession(kieSession);
 		
-		return diagnoseRepository.save(makingDiagnose);
+		return makingDiagnose;
 	}
 	
     private void releaseObjectsFromSession(KieSession kieSession){
@@ -119,6 +121,14 @@ public class DiagnoseService {
         for( Object object: kieSession.getObjects() ){
             kieSession.delete( kieSession.getFactHandle( object ) );
         }
+    }
+    
+    public Diagnose confirmDiagnose(Diagnose diagnose, Vet vet){
+    	diagnose.setId(null);
+    	diagnose.setDate(new Date());
+    	diagnose.setVet(vet);
+    	
+    	return this.diagnoseRepository.save(diagnose);
     }
 	
 }

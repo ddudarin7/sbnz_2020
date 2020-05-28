@@ -1,3 +1,4 @@
+<p-toast position="top-right"></p-toast>
 <div class="container">
 	<div class="row">
 		<div class="col-lg-8 mx-auto">
@@ -6,8 +7,7 @@
 				<div class="control-group">
 					<div class="form-group floating-label-form-group controls mb-0 pb-2">
 						<label>Username</label>
-						<input class="form-control" type="text" name="username" id="username" [(ngModel)]="username" placeholder="Username" />
-						
+						<input class="form-control" type="text" name="username" id="username" [(ngModel)]="username" placeholder="Username" />						
 						<p class="help-block text-danger"></p>
 					</div>
 				</div>
@@ -23,9 +23,6 @@
 						<button class="btn btn-primary btn-xl" (click)="login()" type="submit" id="sendMessageButton">Log in</button> 
 					</div>
 				</div>
-				<br>
-				<div *ngIf="error" class="error">{{error}}</div>
-				<br>
 			</form>
 		</div>
 	</div>

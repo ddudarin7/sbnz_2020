@@ -1,0 +1,125 @@
+<div class="container">
+
+  <div class="container">
+    <h5 style="color: lightsteelblue">Patient info</h5>
+
+    <table class="table table-light">
+      <thead>
+        <th></th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Record number</b></td>
+          <td><a href="vet/home/patient-info/{{diagnose.patient.recordNumber}}">{{diagnose.patient.recordNumber}}</a></td>
+        </tr>
+        <tr>
+          <td><b>Breed</b></td>
+          <td>{{diagnose.patient.breed}}</td>
+        </tr>
+        <tr>
+          <td><b>Date of birth</b></td>
+          <td>{{diagnose.patient.dateOfBirth}}</td>
+        </tr>
+        <tr>
+          <td><b>Medicine allergies</b></td>
+          <td *ngFor="let med of diagnose.patient.medicineAllergies">{{med.name}}</td>
+        </tr>
+        <tr>
+          <td><b>Ingredient allergies</b></td>
+          <td *ngFor="let ing of diagnose.patient.ingredientAllergies">{{ing.name}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="container">
+    <h5 style="color: lightsteelblue">Disease info</h5>
+
+    <table class="table table-light">
+      <thead>
+      <th></th>
+      <th></th>
+      </thead>
+      <tbody>
+      <tr>
+        <td><b>Name</b></td>
+        <td style="color: red; font-size: x-large"><strong>{{diagnose.disease.name}}</strong></td>
+      </tr>
+      <tr>
+        <td><b>Category</b></td>
+        <td>{{diagnose.disease.diseaseCategory}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="container">
+    <h5 style="color: lightsteelblue">Symptoms matched</h5>
+
+    <table class="table table-light">
+      <thead>
+      <th></th>
+      <th></th>
+      </thead>
+      <tbody>
+      <tr>
+        <td><b>Specific symptoms matched ({{diagnose.specificSymptomsMatchedNum}})</b></td>
+        <td *ngFor="let sym of diagnose.specificSymptomsMatched">{{sym.name}}</td>
+      </tr>
+      <tr>
+        <td><b>Non specific symptoms matched ({{diagnose.nonSpecificSymptomsMatchedNum}})</b></td>
+        <td *ngFor="let sym of diagnose.nonSpecificSymptomsMatched">{{sym.name}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="container">
+    <h5 style="color: lightsteelblue">Prescribed therapies</h5>
+
+    <table class="table table-light">
+      <thead>
+      <th><b>Description</b></th>
+      <th><b>Medicines</b></th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let the of diagnose.therapies">
+        <td>{{the.description}}</td>
+        <td *ngFor="let med of the.medicines">{{med.name}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="container">
+    <h5 style="color: lightsteelblue">Vet info</h5>
+
+    <table class="table table-light">
+      <thead>
+      <th></th>
+      <th></th>
+      </thead>
+      <tbody>
+      <tr>
+        <td><b>Username</b></td>
+        <td>{{diagnose.vet.username}}</td>
+      </tr>
+      <tr>
+        <td><b>Vet</b></td>
+        <td>{{diagnose.vet.firstName}} {{diagnose.vet.lastName}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div>
+    <button class="btn btn-danger" (click)="delete()">Delete</button>
+  </div>
+
+</div>

@@ -8,7 +8,9 @@ import { LogInModule } from './log-in/log-in.module';
 import { CoreModule } from './core/core.module';
 import { VetModule } from './vet/vet.module';
 import { AdminModule } from './admin/admin.module';
-import {PatientService} from './core/services/patient.service';
+import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -22,11 +24,13 @@ import {PatientService} from './core/services/patient.service';
     AdminModule,
     FormsModule,
     CoreModule,
+    AppRoutingModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    BrowserAnimationsModule,
+    SharedModule,
     AppRoutingModule
   ],
-  providers: [
-    PatientService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

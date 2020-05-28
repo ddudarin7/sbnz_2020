@@ -1,0 +1,83 @@
+
+
+<div id="diagnose-form" class="container">
+
+  <form name="diagnoseForm" (ngSubmit)="makeDiagnose()" #diagnoseForm="ngForm">
+
+    <div class="form-group">
+      <label for="recordNumber"><b>Record Number</b></label>
+      <input type="text" class="form-control"  id="recordNumber"
+             required
+             [(ngModel)]="patientRecordNumber" name="recordNumber"
+             #recordNumber="ngModel"
+      />
+    </div>
+
+    <div>
+      <label for="symptoms"><b>Symptoms</b></label>
+      <ng-multiselect-dropdown id="symptoms" name="symptoms"
+                               [placeholder]="'Select symptoms'"
+                               [data]="allSymptoms"
+                               [(ngModel)]="selectedSymptoms"
+                               [settings]="dropdownSettings"
+                               #symptoms="ngModel"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <br/>
+    <br/>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Diagnose</button>
+    </div>
+  </form>
+
+</div>
+
+<div class="container" id="diagnoseResultDiv" [hidden]="diagnoseNotMade">
+  <h1>Diagnosed disease:  <span style="color: red">{{diagnose.disease.name}}</span></h1>
+  <table class="table table-hover">
+    <thead>
+      <th></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Specific symptoms matched</td>
+        <td *ngFor="let symptom of diagnose.specificSymptomsMatched">
+          {{symptom.name}}
+        </td>
+      </tr>
+      <tr>
+        <td>Non specific symptoms matched</td>
+        <td *ngFor="let symptom of diagnose.nonSpecificSymptomsMatched">
+          {{symptom.name}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Therapies</p>
+
+  <table class="table table-hover">
+    <thead>
+      <th>Description</th>
+      <th>Medicines</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let therapy of diagnose.therapies">
+        <td>{{therapy.description}}</td>
+        <td *ngFor="let medicine of therapy.medicines">{{medicine.name}}</td>
+        <td><button class="btn btn-danger" (click)="removeTherapy(therapy.id)">Remove</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn btn-success" (click)="confirmDiagnose()">Confirm diagnose</button>
+</div>
+
+
+<br/>
+

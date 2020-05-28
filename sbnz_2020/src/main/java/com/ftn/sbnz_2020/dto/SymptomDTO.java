@@ -6,6 +6,7 @@ public class SymptomDTO {
 
 	private Long id;
 	private String name;
+	
 	public SymptomDTO(Long id, String name) {
 		super();
 		this.id = id;

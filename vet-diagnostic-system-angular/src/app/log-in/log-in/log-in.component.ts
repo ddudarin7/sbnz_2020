@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import {LogInService} from './../../core/services/log-in.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { from } from 'rxjs';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-log-in',
   templateUrl: './log-in.component.html',
-  styleUrls: ['./log-in.component.css']
+  styleUrls: ['./log-in.component.css'],
+  providers: [MessageService]
 })
 export class LogInComponent implements OnInit {
 
   password: string;
   username: string;
-  error: string;
 
   constructor( private route: ActivatedRoute,
-    private router: Router,private logInService: LogInService) { }
+    private router: Router,private logInService: LogInService,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
   }
@@ -37,7 +38,7 @@ export class LogInComponent implements OnInit {
         
       },
       error=>{
-        this.error="Wrong password or username";
+        this.messageService.add({severity:'error', summary:'Error!', detail:'Wrong username or password.',life:5000});
       }
     );
   }

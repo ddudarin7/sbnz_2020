@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Symptom;
@@ -21,6 +22,9 @@ public class DiseaseService {
 
 	@Autowired
 	DiseaseRepository diseaseRepository;
+	
+	@Autowired
+	DiagnoseService diagnoseService;
 	
 	public Disease findById(Long id){ return diseaseRepository.getOne(id); }
 	
@@ -57,9 +61,16 @@ public class DiseaseService {
 		return diseaseRepository.save(disease);
 	}
 	
-	public void delete(Long id){ diseaseRepository.deleteById(id); }
+	public void delete(Long id){ 
+		for (Diagnose diagnose : this.diagnoseService.findByDiseaseId(id))
+			this.diagnoseService.delete(diagnose.getId());
+		diseaseRepository.deleteById(id); 
+	}
 	
-	public void deleteAll() { diseaseRepository.deleteAll(); }
+	public void deleteAll() { 
+		this.diagnoseService.deleteAll();
+		diseaseRepository.deleteAll(); 
+	}
 	
 	public List<Disease> findAllWithSymptom(KieSession kieSession,List<Symptom> symptoms){
 		List<Disease> matching=new ArrayList<>();
