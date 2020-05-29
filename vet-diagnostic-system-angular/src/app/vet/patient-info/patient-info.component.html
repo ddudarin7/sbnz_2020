@@ -78,6 +78,36 @@
       </ng-multiselect-dropdown>
     </div>
 
+    <br/>
+
+    <div [hidden]="noVaccinations">
+      <label for="patientVaccinations"><b>Previous vaccinations</b></label>
+      <table class="table" id="patientVaccinations">
+        <tbody>
+        <tr *ngFor="let vac of patient.vaccinations">
+          <td>{{vac.date}}</td>
+          <td>{{vac.vaccine.name}}</td>
+          <td><button type="button" class="btn btn-danger" (click)="removeVaccination(vac.id)">Remove</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br/>
+
+    <div [hidden]="noDiagnoses">
+      <label for="patientDiagnoses"><b>Previous diagnoses</b></label>
+      <table class="table" id="patientDiagnoses">
+        <tbody>
+          <tr *ngFor="let dia of patientDiagnoses">
+            <td>{{dia.date}}</td>
+            <td>{{dia.disease.name}}</td>
+            <td><button class="btn btn-info" (click)="navigateToDiagnose(dia.id)">More details</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <br/><br/>
 
     <h5 style="color: lightsteelblue">Owner info</h5>
@@ -143,6 +173,8 @@
     </div>
   </form>
   <button class="btn btn-success" (click)="diagnose()">Diagnose</button>
+  <br/><br/>
+  <button class="btn btn-success" (click)="addVaccination()">Add vaccination</button>
   <br/><br/>
   <button class="btn btn-danger" (click)="delete()">Delete patient</button>
 </div>

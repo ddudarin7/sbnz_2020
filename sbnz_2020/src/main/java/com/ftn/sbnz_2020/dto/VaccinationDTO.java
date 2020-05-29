@@ -5,23 +5,19 @@ import java.util.Date;
 import com.ftn.sbnz_2020.facts.Vaccination;
 
 public class VaccinationDTO {
+	
 	private Long id;
-	
-	private String name;
-	
-	private String description;
-	
+	private VaccineDTO vaccine;
 	private Date date;
 
 	public VaccinationDTO() {
 		super();
 	}
 
-	public VaccinationDTO(Long id, String name, String description, Date date) {
+	public VaccinationDTO(Long id, VaccineDTO vaccine, Date date) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.description = description;
+		this.vaccine = vaccine;
 		this.date = date;
 	}
 	
@@ -29,10 +25,8 @@ public class VaccinationDTO {
 		super();
 		if (vaccination.getId() != null)
 			this.id = vaccination.getId();
-		if (vaccination.getName() != null)
-			this.name = vaccination.getName();
-		if (vaccination.getDescription() != null)
-			this.description = vaccination.getDescription();
+		if (vaccination.getVaccine() != null)
+			this.vaccine = new VaccineDTO(vaccination.getVaccine());
 		if (vaccination.getDate() != null)
 			this.date = vaccination.getDate();
 	}
@@ -45,22 +39,6 @@ public class VaccinationDTO {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -68,6 +46,13 @@ public class VaccinationDTO {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
+
+	public VaccineDTO getVaccine() {
+		return vaccine;
+	}
+
+	public void setVaccine(VaccineDTO vaccine) {
+		this.vaccine = vaccine;
+	}
 	
 }

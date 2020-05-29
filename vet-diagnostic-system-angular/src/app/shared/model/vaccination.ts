@@ -1,15 +1,15 @@
+import {Vaccine} from './vaccine';
+
 export class Vaccination{
 
   id: number;
-  name: string;
-  description: string;
+  vaccine: Vaccine;
   date: Date;
 
 
-  constructor(id: number, name: string, description: string, date: Date) {
+  constructor(id: number, vaccine: Vaccine, date: Date) {
     this.id = id;
-    this.name = name;
-    this.description = description;
+    this.vaccine = vaccine;
     this.date = date;
   }
 }

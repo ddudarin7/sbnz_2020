@@ -126,6 +126,20 @@ public class DiagnoseController {
         headers.add("X-Total-Count", String.valueOf(diagnoseDTOs.size()));
         return new ResponseEntity<>(diagnoseDTOs, headers, HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/diagnoses/patient/{patientId}", produces = "application/json")
+    public ResponseEntity<List<DiagnoseDTO>> findByPatientId(
+    		@PathVariable Long patientId, HttpServletRequest request) {
+
+        List<DiagnoseDTO> diagnoseDTOs = new ArrayList<>();
+        List<Diagnose> diagnoses = diagnoseService.findByPatientId(patientId);
+        for (Diagnose diagnose: diagnoses) {
+            diagnoseDTOs.add(new DiagnoseDTO(diagnose));
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(diagnoseDTOs.size()));
+        return new ResponseEntity<>(diagnoseDTOs, headers, HttpStatus.OK);
+    }
 
     @PutMapping(value = "/diagnoses", consumes = "application/json")
     public ResponseEntity<DiagnoseDTO> update(@RequestBody DiagnoseDTO diagnoseDTO,

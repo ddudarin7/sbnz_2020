@@ -10,6 +10,8 @@ INSERT INTO `sbnz_2020`.`user_table` (`class`, `id`, `first_name`, `last_name`, 
 INSERT INTO `sbnz_2020`.`user_table` (`class`, `id`, `first_name`, `last_name`, `password`, `role`, `username`) VALUES ('Vet', '2', 'vet', 'vet', 'vet', '0', 'vet');
 
 
+DELETE FROM `sbnz_2020`.`patient_vaccinations`;
+DELETE FROM `sbnz_2020`.`vaccination`;
 DELETE FROM `sbnz_2020`.`patient_ingredient_allergies`;
 DELETE FROM `sbnz_2020`.`patient_medicine_allergies`;
 DELETE FROM `sbnz_2020`.`medicine_ingredients`;
@@ -84,6 +86,18 @@ VALUES
     ('60', 'CHOKING'),
     ('61', 'SNEEZING'),
     ('62', 'TIGHTED_PUPILS');
+
+DELETE FROM `sbnz_2020`.`vaccine`;
+INSERT INTO `sbnz_2020`.`vaccine` (`id`, `name`, `description`)
+VALUES 
+	('1', 'Rabies vaccine', 'Required vaccine for 12-24 weeks old dog against rabies'),
+	('2', 'DHPP', 'Important vaccine for 10-12 weeks old dog. Protects against Hepatitis, Parvovirus and Parainfluence');
+
+
+INSERT INTO `sbnz_2020`.`vaccination` (`id`, `vaccine_id`, `date`)
+VALUES 
+	('1', '1', '2018-08-15'),
+	('2', '2', '2018-07-25');
 
 
 DELETE FROM `sbnz_2020`.`ingredient`;
@@ -272,4 +286,9 @@ VALUES
 INSERT INTO `sbnz_2020`.`patient_ingredient_allergies` (`patient_id`, `ingredient_allergies_id`)
 VALUES 
 	('1', '1');
+	
+INSERT INTO `sbnz_2020`.`patient_vaccinations` (`patient_id`, `vaccinations_id`)
+VALUES 
+	('1', '1'),
+	('1', '2');
 	
