@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,9 +23,9 @@ public class Vaccination {
     @Column(name = "id")
 	private Long id;
 	
-	private String name;
-	
-	private String description;
+	@ManyToOne
+	@JoinColumn(name = "vaccine_id", referencedColumnName = "id")
+	private Vaccine vaccine;
 	
 	@Column(name = "date")
     @Temporal(TemporalType.DATE)
@@ -33,20 +35,19 @@ public class Vaccination {
 		super();
 	}
 	
-	public Vaccination(Long id, String name, String description, Date date) {
-		super();
+	public Vaccination(Long id, Vaccine vaccine, Date date) {
 		this.id = id;
-		this.name = name;
-		this.description = description;
+		this.vaccine = vaccine;
 		this.date = date;
 	}
 	
 	public Vaccination(VaccinationDTO vaccination) {
-		super();
-		this.id = vaccination.getId();
-		this.name = vaccination.getName();
-		this.description = vaccination.getDescription();
-		this.date = vaccination.getDate();
+		if (vaccination.getId() != null)
+			this.id = vaccination.getId();
+		if (vaccination.getVaccine() != null)
+			this.vaccine = new Vaccine(vaccination.getVaccine());
+		if (vaccination.getDate() != null)
+			this.date = vaccination.getDate();
 	}
 	
 	public Long getId() {
@@ -55,24 +56,20 @@ public class Vaccination {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+
 	public Date getDate() {
 		return date;
 	}
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
+
+	public Vaccine getVaccine() {
+		return vaccine;
+	}
+
+	public void setVaccine(Vaccine vaccine) {
+		this.vaccine = vaccine;
+	}
 	
 }

@@ -1,0 +1,94 @@
+
+<div id="vaccination-add-form" class="container">
+  <h5>Patient Info</h5>
+  <form name="patientForm" (ngSubmit)="confirmVaccination()" #patientForm="ngForm">
+
+    <div>
+      <label for="recordNumber"><b>Record Number</b></label>
+      <input (dblclick)="loadPatient()" type="text" class="form-control"  id="recordNumber"
+             required
+             [(ngModel)]="patientRecordNumber" name="recordNumber"
+             #recordNumber="ngModel"
+      />
+      <small class="form-text text-muted">Double click on input to show patient info</small>
+    </div>
+
+    <div *ngIf="patientLoaded">
+      <table class="table table-light">
+        <thead>
+        <th></th>
+        <th></th>
+        </thead>
+        <tbody>
+        <tr>
+          <td><b>Breed</b></td>
+          <td>{{patient.breed}}</td>
+        </tr>
+        <tr>
+          <td><b>Date of birth</b></td>
+          <td>{{patient.dateOfBirth}}</td>
+        </tr>
+        <tr>
+          <td><b>Medicine allergies</b></td>
+          <td *ngFor="let med of patient.medicineAllergies">{{med.name}}</td>
+        </tr>
+        <tr>
+          <td><b>Ingredient allergies</b></td>
+          <td *ngFor="let ing of patient.ingredientAllergies">{{ing.name}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="container">
+        <label for="patientVaccinations"><b>Previous vaccinations</b></label>
+        <table class="table" id="patientVaccinations">
+          <tbody>
+          <tr *ngFor="let vac of patient.vaccinations">
+            <td>{{vac.date}}</td>
+            <td>{{vac.vaccine.name}}</td>
+            <td><button type="button" class="btn btn-danger" (click)="delete(vac.id)">Remove</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div class="form-group">
+      <label for="vaccineSelection"><b>Vaccine</b></label>
+      <ng-multiselect-dropdown id="vaccineSelection" name="vaccineSelection"
+                               [placeholder]="'Select vaccine'"
+                               [data]="allVaccines"
+                               [(ngModel)]="selectedVaccine"
+                               [settings]="dropDownSettings"
+                               #vaccineSelection="ngModel"
+      >
+      </ng-multiselect-dropdown>
+      <small id="vaccineDescription" class="form-text text-muted" *ngIf="selectedVaccine.length !== 0">{{selectedVaccine[0].description}}</small>
+    </div>
+
+    <div class="form-group">
+      <label for="date"><b>Date</b></label>
+      <input id="date"
+             name="date"
+             class="form-control"
+             [owlDateTimeTrigger]="dateOfBirthPicker"
+             [owlDateTime]="dateOfBirthPicker"
+             [(ngModel)]="vaccination.date"
+             #date = "ngModel"
+             ngDefaultControl
+             readonly
+      />
+      <owl-date-time [pickerType]="'calendar'" #dateOfBirthPicker></owl-date-time>
+    </div>
+
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Confirm</button>
+    </div>
+  </form>
+</div>
+
+<br/>
+
