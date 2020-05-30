@@ -161,8 +161,8 @@ VALUES
 	('21', 'Infusion'),
 	('22', 'Doxycycline therapy'),
 	('23', 'Collar against fleas'),
-	('24', 'Shampoo against fleas');
-	('25', 'Fipronil therapy. Repeat it 2 or 3 times during one month period.')
+	('24', 'Shampoo against fleas'),
+	('25', 'Fipronil therapy. Repeat it 2 or 3 times during one month period.');
 	
 INSERT INTO `sbnz_2020`.`therapy_medicine` (`therapy_id`, `medicine_id`)
 VALUES 
