@@ -41,15 +41,6 @@ public class VaccinationController {
         return new ResponseEntity<>(new VaccinationDTO(vaccination), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/vaccinations/name/{name}", produces = "application/json")
-    public ResponseEntity<VaccinationDTO> findByName(@PathVariable String name, HttpServletRequest request) {
-
-        Vaccination vaccination = vaccinationService.findByName(name);
-        if (vaccination == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new VaccinationDTO(vaccination), HttpStatus.OK);
-    }
-
     @GetMapping(value = "/vaccinations", produces = "application/json")
     public ResponseEntity<List<VaccinationDTO>> findAll(@RequestParam(required = false) Integer pageNum,
                                                     @RequestParam(required = false) Integer pageSize,

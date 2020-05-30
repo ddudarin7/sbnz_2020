@@ -79,7 +79,7 @@ public class PatientService {
 		}
 		for (int i = 0; i < patient.getVaccinations().size(); i++) {
 			Vaccination vaccination = patient.getVaccinations().get(i);
-			Vaccination vacc = vaccinationService.findByName(vaccination.getName());
+			Vaccination vacc = vaccinationService.findById(vaccination.getId());
 			if (vacc == null) {
 				//patient.getIngredientAllergies().set(i, ingredientService.save(new Ingredient(ingredient.getName())));
 			} else {
@@ -126,7 +126,7 @@ public class PatientService {
 
 		for (int i = 0; i < patientUpdate.getVaccinations().size(); i++) {
 			Vaccination vaccination = patientUpdate.getVaccinations().get(i);
-			Vaccination vacc = vaccinationService.findByName(vaccination.getName());
+			Vaccination vacc = vaccinationService.findById(vaccination.getId());
 			if (vacc == null) {
 				//patientUpdate.getIngredientAllergies().set(i,
 				//		ingredientService.save(new Ingredient(ingredient.getName())));
@@ -134,9 +134,29 @@ public class PatientService {
 				patientUpdate.getVaccinations().set(i, vacc);
 			}
 		}
+		
+		// remove removed vaccinations
+		
+		
+		List<Vaccination> oldVaccinations = patient.getVaccinations();
+		
 		patient.setVaccinations(patientUpdate.getVaccinations());
-
-		return patientRepository.save(patient);
+		patient = patientRepository.save(patient);
+		
+		boolean vaccinationFound;
+		for (Vaccination oldVaccination : oldVaccinations){
+			vaccinationFound = false;
+			for (Vaccination newVaccination : patientUpdate.getVaccinations()){
+				if (oldVaccination.getId() == newVaccination.getId()){
+					vaccinationFound = true;
+					break;
+				}
+			}
+			if (!vaccinationFound)
+				vaccinationService.delete(oldVaccination.getId());			
+		}
+		
+		return patient;
 	}
 
 	public void delete(Long id) {

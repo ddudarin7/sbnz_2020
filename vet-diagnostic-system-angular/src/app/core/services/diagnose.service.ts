@@ -41,4 +41,11 @@ export class DiagnoseService {
   public delete(diagnoseId: number): Promise<void> {
     return this.http.delete<void>(`${this.url}/${diagnoseId}`, {withCredentials: true}).toPromise<void>();
   }
+
+  public getByPatientId(patientId: number): Promise<Diagnose[]> {
+    const h = new HttpHeaders({Accept: 'application/json'});
+    return this.http.get<Diagnose[]>(`${this.url}/patient/${patientId}`, {headers: h, withCredentials: true})
+      .toPromise().then(res => res as Diagnose[]);
+  }
+
 }

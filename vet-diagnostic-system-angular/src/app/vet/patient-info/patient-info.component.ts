@@ -8,6 +8,9 @@ import {IngredientService} from '../../core/services/ingredient.service';
 import {Ingredient} from '../../shared/model/ingredient';
 import {ToastrService} from 'ngx-toastr';
 import {DiagnoseService} from '../../core/services/diagnose.service';
+import {Diagnose} from '../../shared/model/diagnose';
+import {VaccinationService} from '../../core/services/vaccination.service';
+import {Vaccination} from "../../shared/model/vaccination";
 
 @Component({
   selector: 'app-patient-info',
@@ -31,9 +34,14 @@ export class PatientInfoComponent implements OnInit {
   dropdownSettings = {};
   breedSettings = {};
 
+  patientDiagnoses: Diagnose[];
+  noDiagnoses = true;
+  noVaccinations = true;
+
   constructor(private patientService: PatientService, private activatedRoute: ActivatedRoute,
               private medicineService: MedicineService, private ingredientService: IngredientService,
-              private router: Router, private toastr: ToastrService, private  diagnoseService: DiagnoseService) {
+              private router: Router, private toastr: ToastrService, private  diagnoseService: DiagnoseService,
+              private vaccinationService: VaccinationService) {
   }
 
   ngOnInit(): void {
@@ -66,6 +74,10 @@ export class PatientInfoComponent implements OnInit {
           this.selectedIngredients.push(ing);
         }
         this.selectedBreed = Array.of(this.patient.breed);
+        if (this.patient.vaccinations.length > 0){
+          this.noVaccinations = false;
+        }
+        this.loadDiagnoses();
       }
     );
   }
@@ -82,6 +94,17 @@ export class PatientInfoComponent implements OnInit {
     this.ingredientService.getIngredients().then(
       res => {
         this.allIngredients = res;
+      }
+    );
+  }
+
+  loadDiagnoses(): void {
+    this.diagnoseService.getByPatientId(this.patient.id).then(
+      res => {
+        this.patientDiagnoses = res;
+        if (this.patientDiagnoses.length > 0){
+          this.noDiagnoses = false;
+        }
       }
     );
   }
@@ -136,6 +159,31 @@ export class PatientInfoComponent implements OnInit {
   diagnose(): void {
     this.diagnoseService.setPatientInFocus(this.patient.recordNumber);
     this.router.navigate(['vet/home/diagnose']);
+  }
+
+  navigateToDiagnose(diagnoseId: number){
+    this.router.navigate(['vet/home/diagnoses/' + diagnoseId]);
+  }
+
+  addVaccination(): void {
+    this.vaccinationService.setPatientInFocus(this.patient.recordNumber);
+    this.router.navigate(['vet/home/add-vaccination']);
+  }
+
+  removeVaccination(vaccinationId): void {
+    if (!confirm('Are you sure you want to delete vaccination?')){
+      return;
+    }
+
+    const pv: Vaccination[] = [];
+
+
+    for (const v of this.patient.vaccinations){
+      if (v.id !== vaccinationId){
+        pv.push(v);
+      }
+    }
+    this.patient.vaccinations = pv;
   }
 
 }

@@ -36,14 +36,10 @@ public class VaccinationService {
     	vaccination.setId(null);
 		return vaccinationRepository.save(vaccination); 
 	}
-
-	public Vaccination findByName(String name){ return vaccinationRepository.findByName(name); }
-
     
     public Vaccination update(Vaccination vaccinationUpdate) {
     	Vaccination vaccination = this.findById(vaccinationUpdate.getId());
-    	vaccination.setName(vaccinationUpdate.getName());
-    	vaccination.setDescription(vaccinationUpdate.getDescription());
+    	vaccination.setVaccine(vaccinationUpdate.getVaccine());
     	vaccination.setDate(vaccinationUpdate.getDate());
         return vaccinationRepository.save(vaccination);
     }
