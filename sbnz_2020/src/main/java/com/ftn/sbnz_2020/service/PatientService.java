@@ -1,7 +1,9 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -146,5 +148,21 @@ public class PatientService {
 	public void deleteAll() {
 		this.diagnoseService.deleteAll();
 		patientRepository.deleteAll();
+	}
+	
+	public List<Patient> chronicDiseaseReport(KieSession kieSession){
+		List<Patient> result=new ArrayList<>();
+		for(Patient p:patientRepository.findAll()) {
+			kieSession.insert(p);
+		}
+		
+		for(Diagnose d:diagnoseService.findAll()) {
+			System.out.println(d);
+			kieSession.insert(d);
+		}
+		
+		kieSession.getAgenda().getAgendaGroup("chronic diseases").setFocus();
+		kieSession.fireAllRules();
+		return result;
 	}
 }
