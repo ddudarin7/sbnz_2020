@@ -1,10 +1,12 @@
 package com.ftn.sbnz_2020.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.PatientDTO;
+import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.service.PatientService;
 
@@ -116,6 +119,19 @@ public class PatientController {
 
         patientService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+    @GetMapping(value = "/patients/report/chronic-diseases", produces = "application/json")
+    public ResponseEntity<HashMap<String, Disease>> findAll(HttpServletRequest request) {
+        logger.debug("Accessing GET /patients");
+
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+        
+        HashMap<String, Disease> result=patientService.chronicDiseaseReport(kieSession);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(patientService.findAll().size()));
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
 }

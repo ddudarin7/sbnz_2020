@@ -1,0 +1,38 @@
+//created on: May 28, 2020
+package drools.spring.rules;
+
+import com.ftn.sbnz_2020.facts.*;
+
+import java.util.Date;
+import java.util.Calendar;
+import java.util.HashMap;
+
+rule "Patients with potential chronic diseases"
+	lock-on-active true
+	agenda-group "chronic diseases"
+    when
+    	$result:HashMap()
+        $diagnose:Diagnose($disease:disease && $patient:patient)
+
+        Number(intValue>=4) from accumulate(
+        	$d1:Diagnose(
+        		this!=$diagnose,
+        		disease==$disease,
+        		patient==$patient,
+        		date>(monthsAgo(-24))
+        	),
+        	count($d1)
+        )
+		
+    then
+    	modify ($result){ put($patient.getRecordNumber(),$disease)};
+
+end
+
+
+function Date monthsAgo(Integer months){
+	Calendar newCal = Calendar.getInstance();
+	newCal.setTime(new Date());
+	newCal.add(Calendar.MONTH, months);
+	return newCal.getTime();
+}

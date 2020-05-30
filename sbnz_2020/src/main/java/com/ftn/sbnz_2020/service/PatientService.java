@@ -1,13 +1,19 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import org.drools.core.ClassObjectFilter;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
@@ -167,4 +173,33 @@ public class PatientService {
 		this.diagnoseService.deleteAll();
 		patientRepository.deleteAll();
 	}
+	
+	public HashMap<String, Disease> chronicDiseaseReport(KieSession kieSession){
+		for(Patient p:patientRepository.findAll()) {
+			kieSession.insert(p);
+		}
+		
+		for(Diagnose d:diagnoseService.findAll()) {
+			System.out.println(d);
+			kieSession.insert(d);
+		}
+		
+		HashMap<String, Disease> result=new HashMap<>();
+		kieSession.insert(result);
+		
+		kieSession.getAgenda().getAgendaGroup("chronic diseases").setFocus();
+		kieSession.fireAllRules();
+		
+		releaseObjectsFromSession(kieSession);
+		
+		return result;
+	}
+	
+	 private void releaseObjectsFromSession(KieSession kieSession){
+	        kieSession.getObjects();
+
+	        for( Object object: kieSession.getObjects() ){
+	            kieSession.delete( kieSession.getFactHandle( object ) );
+	        }
+	 }
 }
