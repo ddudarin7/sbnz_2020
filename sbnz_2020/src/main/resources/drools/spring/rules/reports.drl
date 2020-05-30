@@ -5,10 +5,13 @@ import com.ftn.sbnz_2020.facts.*;
 
 import java.util.Date;
 import java.util.Calendar;
+import java.util.HashMap;
 
 rule "Patients with potential chronic diseases"
+	lock-on-active true
 	agenda-group "chronic diseases"
     when
+    	$result:HashMap()
         $diagnose:Diagnose($disease:disease && $patient:patient)
 
         Number(intValue>=4) from accumulate(
@@ -22,7 +25,7 @@ rule "Patients with potential chronic diseases"
         )
 		
     then
-        System.out.println("Prosao");
+    	modify ($result){ put($patient.getRecordNumber(),$disease)};
 
 end
 

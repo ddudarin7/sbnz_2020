@@ -1,6 +1,7 @@
 package com.ftn.sbnz_2020.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.PatientDTO;
+import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.service.PatientService;
 
@@ -120,17 +122,16 @@ public class PatientController {
     }
     
     @GetMapping(value = "/patients/report/chronic-diseases", produces = "application/json")
-    public ResponseEntity<List<Patient>> findAll(HttpServletRequest request) {
+    public ResponseEntity<HashMap<String, Disease>> findAll(HttpServletRequest request) {
         logger.debug("Accessing GET /patients");
 
-        List<Patient> patient;
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
         
-        patient=patientService.chronicDiseaseReport(kieSession);
-        
+        HashMap<String, Disease> result=patientService.chronicDiseaseReport(kieSession);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(patientService.findAll().size()));
-        return new ResponseEntity<>(patient, headers, HttpStatus.OK);
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
 }
