@@ -110,14 +110,18 @@ VALUES
 	('5', 'Propylene glycol'),
 	('6', 'Sodium acetate anhydrous'),
 	('7', 'Glacial acetic acid'),
-	('8', 'Silymarin');
+	('8', 'Silymarin'),
+	('9', 'Fipronil');
 	
 DELETE FROM `sbnz_2020`.`medicine`;
 INSERT INTO `sbnz_2020`.`medicine` (`id`, `name`)
 VALUES 
 	('1', 'Denamarin'),
 	('2', 'Vitamin K shot'),
-	('3', 'Milk thistle');
+	('3', 'Milk thistle'),
+	('4', 'Fipronil spray'),
+	('5', 'Doxycycline'),
+	('6', 'Dehinel');
 	
 
 INSERT INTO `sbnz_2020`.`medicine_ingredients` (`medicine_id`, `ingredients_id`)
@@ -128,7 +132,8 @@ VALUES
 	('2', '4'),
 	('2', '5'),
 	('2', '6'),
-	('2', '7');
+	('2', '7'),
+	('4', '9');
 	
 DELETE FROM `sbnz_2020`.`therapy`;
 INSERT INTO `sbnz_2020`.`therapy` (`id`, `description`)
@@ -144,13 +149,29 @@ VALUES
 	('9', 'Polishing tooth under anesthesia'),
 	('10', 'Tooth extraction'),
 	('11', 'Psychotherapy'),
-	('12', 'Milk thistle diet');
+	('12', 'Milk thistle diet'),
+	('13', 'Well balanced diet'),
+	('14', 'Calcium'),
+	('15', 'Vitamin D'),
+	('16', 'Immiticide therapy'),
+	('17', 'Dehinel tablet'),
+	('18', 'Vitamin A'),
+	('19', 'Vitamin B'),
+	('20', 'Vitamin C'),
+	('21', 'Infusion'),
+	('22', 'Doxycycline therapy'),
+	('23', 'Collar against fleas'),
+	('24', 'Shampoo against fleas');
+	('25', 'Fipronil therapy. Repeat it 2 or 3 times during one month period.')
 	
 INSERT INTO `sbnz_2020`.`therapy_medicine` (`therapy_id`, `medicine_id`)
 VALUES 
 	('1', '1'),
 	('2', '2'),
-	('12', '3');
+	('12', '3'),
+	('22', '5'),
+	('25','4'),
+	('17','6');
 	
 DELETE FROM `sbnz_2020`.`disease`;
 INSERT INTO `sbnz_2020`.`disease` (`id`, `name`, `disease_group`)
@@ -164,7 +185,16 @@ VALUES
 	('7', 'Tooth pathology', 'OTHER'),
 	('8', 'Pica', 'BEHAVIORAL'),
 	('9', 'Liver failure', 'OTHER'),
-	('10', 'Insecticide poisoning', 'POISONING');
+	('10', 'Insecticide poisoning', 'POISONING'),
+	('11', 'Heartworm', 'PARASITES'),
+	('12','Rickets','SKELETAL_AND_MUSCULAR_DISORDER'),
+	('13','Dog roundworm','PARASITES'),
+	('14','Canine distemper','INFECTIOUS'),
+	('15','Leptospirosis','BACTERIAL'),
+	('16','Lice','PARASITES'),
+	('17','Scabies','PARASITES'),
+	('18','Lyme disease','BACTERIAL'),
+	('19','Flea','PARASITES');
 	
 INSERT INTO `sbnz_2020`.`disease_therapies` (`disease_id`, `therapies_id`)
 VALUES 
@@ -180,8 +210,23 @@ VALUES
 	('8', '11'),
 	('9', '1'),
 	('10', '7'),
-	('9', '12');
-	
+	('9', '12'),
+	('12','13'),
+	('12','14'),
+	('12','15'),
+	('11','16'),
+	('13','17'),
+	('14','13'),
+	('14','15'),
+	('14','18'),
+	('14','19'),
+	('14','20'),
+	('15','21'),
+	('18','22'),
+	('19','24'),
+	('19','23'),
+	('16','25'),
+	('17','25');
 
 INSERT INTO `sbnz_2020`.`disease_specific_symptoms` (`disease_id`, `specific_symptoms_id`)
 VALUES 
@@ -211,7 +256,39 @@ VALUES
 	('10', '2'),
 	('10', '12'),
 	('10', '24'),
-	('10', '47');
+	('10', '47'),
+	('11', '14'),
+	('11', '16'),
+	('11', '32'),
+	('11', '22'),
+	('12', '34'),
+	('12', '33'),
+	('13', '23'),
+	('13', '13'),
+	('13', '31'),
+	('14', '12'),
+	('14', '13'),
+	('14', '5'),
+	('14', '16'),
+	('15', '12'),
+	('15', '9'),
+	('15', '27'),
+	('15', '16'),
+	('15', '6'),
+	('15', '1'),
+	('15', '13'),
+	('16', '7'),
+	('16', '25'),
+	('16', '26'),
+	('17', '7'),
+	('17', '20'),
+	('17', '18'),
+	('18', '12'),
+	('18', '9'),
+	('18', '14'),
+	('18', '17'),
+	('19', '7'),
+	('19', '8');
 	
 	
 INSERT INTO `sbnz_2020`.`disease_non_specific_symptoms` (`disease_id`, `non_specific_symptoms_id`)
@@ -269,7 +346,26 @@ VALUES
 	('10', '55'),
 	('10', '4'),
 	('10', '16'),
-	('10', '62');
+	('10', '62'),
+	('11', '11'),
+	('12', '14'),
+	('12', '5'),
+	('12', '13'),
+	('12', '15'),
+	('13', '2'),
+	('13', '24'),
+	('14', '11'),
+	('14', '30'),
+	('15', '28'),
+	('15', '29'),
+	('16', '21'),
+	('16', '10'),
+	('17', '19'),
+	('18', '7'),
+	('18', '5'),
+	('18', '15'),
+	('18', '10'),
+	('19', '5'); 
 	
 DELETE FROM `sbnz_2020`.`patient`;
 
