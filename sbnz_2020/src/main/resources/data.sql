@@ -99,7 +99,8 @@ INSERT INTO `sbnz_2020`.`vaccination` (`id`, `vaccine_id`, `date`)
 VALUES 
 	('1', '1', '2018-08-15'),
 	('2', '2', '2018-07-25'),
-	('3', '3', '2018-06-07');
+	('3', '3', '2018-06-07'),
+	('4', '3', '2019-07-07');
 
 
 DELETE FROM `sbnz_2020`.`ingredient`;
@@ -391,5 +392,6 @@ INSERT INTO `sbnz_2020`.`patient_vaccinations` (`patient_id`, `vaccinations_id`)
 VALUES 
 	('1', '1'),
 	('1', '2'),
-	('1', '3');
+	('1', '3'),
+	('1', '4');
 	
