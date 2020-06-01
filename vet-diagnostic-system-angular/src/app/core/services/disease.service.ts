@@ -10,7 +10,7 @@ export class DiseaseService {
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  readonly diseaseUrl: string="http://localhost:8081/diseases";
+  readonly diseaseUrl: string="http://localhost:8081/api/diseases";
 
   sharedData: Disease[];
 
