@@ -9,3 +9,10 @@ function Date monthsAgo(Integer months){
 	newCal.add(Calendar.MONTH, months);
 	return newCal.getTime();
 }
+
+function Date daysAgo(Integer days){
+	Calendar newCal = Calendar.getInstance();
+	newCal.setTime(new Date());
+	newCal.add(Calendar.DATE, days);
+	return newCal.getTime();
+}

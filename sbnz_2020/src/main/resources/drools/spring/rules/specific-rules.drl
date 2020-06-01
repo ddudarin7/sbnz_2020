@@ -11,21 +11,23 @@ import com.ftn.sbnz_2020.facts.*;
 
 rule "Special rule for canine distemper"
 	lock-on-active true
-	agenda-group "finding symptoms"
-	salience 20
+	agenda-group "diagnose"
+	salience 30
     when
+    	$d: Disease(name=="Canine distemper")
     	$dio: Diagnose($pat: patient)
         $vaccine:Vaccine(name=="DA2P")
-    	Number(intValue==0) from accumulate(
+    	Number(intValue!=0) from accumulate(
     		$v:Vaccination(
     			this memberOf $pat.vaccinations,
     			vaccine==$vaccine,
-    			date>(monthsAgo(-12))
+    			date>(monthsAgo(-12)),
+    			date<(daysAgo(-14))
     		),
     		count($v)
     	)
     then
-        System.out.println("prosao vakcine");
+    	delete($d)
 end
 
 
