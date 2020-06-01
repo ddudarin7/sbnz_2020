@@ -1,0 +1,18 @@
+package drools.spring.rules;
+
+import java.util.Date;
+import java.util.Calendar;
+
+function Date monthsAgo(Integer months){
+	Calendar newCal = Calendar.getInstance();
+	newCal.setTime(new Date());
+	newCal.add(Calendar.MONTH, months);
+	return newCal.getTime();
+}
+
+function Date daysAgo(Integer days){
+	Calendar newCal = Calendar.getInstance();
+	newCal.setTime(new Date());
+	newCal.add(Calendar.DATE, days);
+	return newCal.getTime();
+}

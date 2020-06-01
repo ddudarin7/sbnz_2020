@@ -28,11 +28,3 @@ rule "Patients with potential chronic diseases"
     	modify ($result){ put($patient.getRecordNumber(),$disease)};
 
 end
-
-
-function Date monthsAgo(Integer months){
-	Calendar newCal = Calendar.getInstance();
-	newCal.setTime(new Date());
-	newCal.add(Calendar.MONTH, months);
-	return newCal.getTime();
-}
