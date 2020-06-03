@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
@@ -114,8 +116,8 @@ public class DiagnoseService {
 		}
 		
 		// firing rules
-		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
-		kieSession.fireAllRules();
+		//kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
+		//kieSession.fireAllRules();
 		
 		kieSession.getAgenda().getAgendaGroup("diagnose").setFocus();
 		kieSession.fireAllRules();
