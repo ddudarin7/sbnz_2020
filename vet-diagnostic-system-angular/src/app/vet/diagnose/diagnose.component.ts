@@ -68,7 +68,6 @@ export class DiagnoseComponent implements OnInit {
   }
 
   confirmDiagnose(): void{
-    console.log(this.diagnose);
     this.diagnoseService.confirmDiagnose(this.diagnose).then(
       res => {
         this.diagnose = res;

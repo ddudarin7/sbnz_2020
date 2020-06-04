@@ -7,6 +7,7 @@ export class Owner {
   lastName: string;
   phoneNum: string;
   address: Address;
+  firstAndLastName: string;
   constructor(id: number, firstName: string, lastName: string, phoneNum: string, address: Address) {
     this.id = id;
     this.firstName = firstName;
