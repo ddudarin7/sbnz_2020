@@ -10,7 +10,10 @@ import {ToastrService} from 'ngx-toastr';
 import {DiagnoseService} from '../../core/services/diagnose.service';
 import {Diagnose} from '../../shared/model/diagnose';
 import {VaccinationService} from '../../core/services/vaccination.service';
-import {Vaccination} from "../../shared/model/vaccination";
+import {Vaccination} from '../../shared/model/vaccination';
+import {Owner} from '../../shared/model/owner';
+import {OwnerService} from '../../core/services/owner.service';
+import {Address} from '../../shared/model/address';
 
 @Component({
   selector: 'app-patient-info',
@@ -32,22 +35,27 @@ export class PatientInfoComponent implements OnInit {
   selectedIngredients: Ingredient[] = [];
 
   dropdownSettings = {};
-  breedSettings = {};
+  singleDropSettings = {};
+  ownerDropDownSettings = {};
 
   patientDiagnoses: Diagnose[];
   noDiagnoses = true;
   noVaccinations = true;
 
+  allOwners: Owner[] = [];
+  selectedOwner: Owner[];
+
   constructor(private patientService: PatientService, private activatedRoute: ActivatedRoute,
               private medicineService: MedicineService, private ingredientService: IngredientService,
               private router: Router, private toastr: ToastrService, private  diagnoseService: DiagnoseService,
-              private vaccinationService: VaccinationService) {
+              private vaccinationService: VaccinationService, private ownerService: OwnerService) {
   }
 
   ngOnInit(): void {
     this.loadPatient(this.activatedRoute.snapshot.params.recordNumber);
     this.loadMedicines();
     this.loadIngredients();
+    this.loadOwners();
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'id',
@@ -57,9 +65,17 @@ export class PatientInfoComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
-    this.breedSettings = {
+    this.singleDropSettings = {
       singleSelection: true,
       allowSearchFilter: true
+    };
+    this.ownerDropDownSettings = {
+      singleSelection: true,
+      allowSearchFilter: true,
+      idField: 'id',
+      textField: 'firstAndLastName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Select All'
     };
   }
 
@@ -77,6 +93,8 @@ export class PatientInfoComponent implements OnInit {
         if (this.patient.vaccinations.length > 0){
           this.noVaccinations = false;
         }
+        this.patient.owner.firstAndLastName = this.patient.owner.firstName + ' ' + this.patient.owner.lastName;
+        this.selectedOwner = Array.of(this.patient.owner);
         this.loadDiagnoses();
       }
     );
@@ -126,6 +144,19 @@ export class PatientInfoComponent implements OnInit {
       }
     }
     this.patient.ingredientAllergies = this.selectedIngredients;
+
+    if (this.selectedOwner.length === 0){
+      this.toastr.error('Owner not selected!');
+      return;
+    }
+
+    for (const o of this.allOwners){
+      if (o.id === this.selectedOwner[0].id){
+        this.patient.owner = o;
+        break;
+      }
+    }
+
     this.patientService.update(this.patient).then(
       res => {
         this.toastr.success('Patient successfully updated.');
@@ -184,6 +215,32 @@ export class PatientInfoComponent implements OnInit {
       }
     }
     this.patient.vaccinations = pv;
+  }
+
+  loadOwners(): void{
+    this.ownerService.getOwners().then(
+      res => {
+        res.unshift(new Owner(null, 'NEW', 'OWNER', null, new Address(null,
+          null, null)));
+        for (const o of res){
+          o.firstAndLastName = o.firstName + ' ' + o.lastName;
+        }
+        this.allOwners = res;
+      }
+    );
+  }
+
+  loadOwnerFields(): void{
+    if (this.selectedOwner.length === 0){
+      return;
+    }
+
+    for (const o of this.allOwners){
+      if (o.id === this.selectedOwner[0].id){
+        this.patient.owner = o;
+        break;
+      }
+    }
   }
 
 }
