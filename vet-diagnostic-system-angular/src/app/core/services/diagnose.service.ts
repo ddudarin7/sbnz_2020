@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Symptom} from '../../shared/model/symptom';
 import {Diagnose} from '../../shared/model/diagnose';
 import {BehaviorSubject} from 'rxjs';
@@ -28,8 +28,10 @@ export class DiagnoseService {
   }
 
   public confirmDiagnose(diagnose: Diagnose): Promise<Diagnose> {
-    return this.http.post<Diagnose>(this.url, diagnose, {headers: this.headers, withCredentials: true})
-      .toPromise().then(res => res as Diagnose);
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const params = new HttpParams().append('vetUsername', user.username);
+    return this.http.post<Diagnose>(this.url, diagnose, {headers: this.headers, withCredentials: true,
+    params}).toPromise().then(res => res as Diagnose);
   }
 
   public getDiagnoseById(diagnoseId: number): Promise<Diagnose> {

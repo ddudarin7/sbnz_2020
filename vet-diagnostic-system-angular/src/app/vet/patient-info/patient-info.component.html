@@ -30,7 +30,7 @@
                                [placeholder]="'Select breed'"
                                [data]="allBreeds"
                                [(ngModel)]="selectedBreed"
-                               [settings]="breedSettings"
+                               [settings]="singleDropSettings"
                                #breed="ngModel"
       >
       </ng-multiselect-dropdown>
@@ -113,6 +113,19 @@
     <h5 style="color: lightsteelblue">Owner info</h5>
 
     <br/>
+
+    <div>
+      <label for="owners"><b>Owners</b></label>
+      <ng-multiselect-dropdown id="owners" name="owners"
+                               [placeholder]="'Select owner'"
+                               [data]="allOwners"
+                               [(ngModel)]="selectedOwner"
+                               [settings]="ownerDropDownSettings"
+                               #owners="ngModel"
+                               (onSelect)="loadOwnerFields()"
+      >
+      </ng-multiselect-dropdown>
+    </div>
 
     <div class="form-group">
       <label for="firstName"><b>First name</b></label>
