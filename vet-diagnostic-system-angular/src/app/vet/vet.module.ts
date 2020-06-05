@@ -13,16 +13,18 @@ import {ToastrModule} from 'ngx-toastr';
 import { DiagnoseComponent } from './diagnose/diagnose.component';
 import { DiagnoseInfoComponent } from './diagnose-info/diagnose-info.component';
 import { AddVaccinationFormComponent } from './vaccinations/add-vaccination-form/add-vaccination-form.component';
+import { ReportsModule } from './reports/reports.module';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
     {path: '', component: ShowAllPatientsComponent},
     {path: 'add-patient', component: AddPatientFormComponent},
     {path: 'search', loadChildren: './search/search.module#SearchModule'},
-      {path: 'patient-info/:recordNumber', component: PatientInfoComponent},
-      {path: 'diagnose', component: DiagnoseComponent},
-      {path: 'diagnoses/:id', component: DiagnoseInfoComponent},
-      {path: 'add-vaccination', component: AddVaccinationFormComponent}]
+    {path: 'patient-info/:recordNumber', component: PatientInfoComponent},
+    {path: 'diagnose', component: DiagnoseComponent},
+    {path: 'diagnoses/:id', component: DiagnoseInfoComponent},
+    {path: 'add-vaccination', component: AddVaccinationFormComponent},
+    {path: 'reports', loadChildren:'./reports/reports.module#ReportsModule'}]
   }
   ];
 
@@ -40,6 +42,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     SearchModule,
+    ReportsModule,
     RouterModule.forChild(routes),
     NgMultiSelectDropDownModule.forRoot(),
     OwlDateTimeModule,

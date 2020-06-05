@@ -2,19 +2,26 @@
 package drools.spring.rules;
 
 import com.ftn.sbnz_2020.facts.*;
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 
 import java.util.Date;
 import java.util.Calendar;
-import java.util.HashMap;
 
 rule "Patients with potential chronic diseases"
 	lock-on-active true
 	agenda-group "chronic diseases"
+	salience 20
     when
-    	$result:HashMap()
-        $diagnose:Diagnose($disease:disease && $patient:patient)
+    	$result:List()
+        $diagnose:Diagnose(
+        	$disease:disease && 
+        	$patient:patient && 
+        	disease.diseaseCategory!=DiseaseCategory.POISONING &&
+        	disease.diseaseCategory!=DiseaseCategory.CANCER &&
+        	disease.diseaseCategory!=DiseaseCategory.SKELETAL_AND_MUSCULAR_DISORDER
+        	)
 
-        Number(intValue>=4) from accumulate(
+        Number(intValue>=4) from accumulate( 
         	$d1:Diagnose(
         		this!=$diagnose,
         		disease==$disease,
@@ -23,8 +30,44 @@ rule "Patients with potential chronic diseases"
         	),
         	count($d1)
         )
+        
+        Number(intValue==0) from accumulate(
+        	$r1:ReportChronicDiseasesDTO(
+        		p==$patient,
+        		d==$disease
+        	) from $result,
+        	count($r1)
+        )
 		
     then
-    	modify ($result){ put($patient.getRecordNumber(),$disease)};
+    	System.out.println($patient.getRecordNumber()+" "+$disease.getName());
+        System.out.println($patient.getRecordNumber()+" "+$disease.getDiseaseCategory());
+    	modify ($result){ add(new ReportChronicDiseasesDTO($patient,$disease))};
+
+end
+
+rule "Patients with cancers as chronic diseases"
+	lock-on-active true
+	agenda-group "chronic diseases"
+	salience 10
+    when
+    	$result:List()
+        $diagnose:Diagnose(
+        	$disease:disease &&
+        	$patient:patient && 
+        	disease.diseaseCategory==DiseaseCategory.CANCER 
+        	)
+        
+        Number(intValue==0) from accumulate(
+        	$r1:ReportChronicDiseasesDTO(
+        		p==$patient,
+        		d==$disease
+        	) from $result,
+        	count($r1)
+        )
+		
+    then
+    	System.out.println($patient.getRecordNumber()+" "+$disease.getDiseaseCategory());
+    	modify ($result){ add(new ReportChronicDiseasesDTO($patient,$disease))};
 
 end

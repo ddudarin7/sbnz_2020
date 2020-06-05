@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
@@ -174,17 +175,16 @@ public class PatientService {
 		patientRepository.deleteAll();
 	}
 	
-	public HashMap<String, Disease> chronicDiseaseReport(KieSession kieSession){
+	public List<ReportChronicDiseasesDTO> chronicDiseaseReport(KieSession kieSession){
 		for(Patient p:patientRepository.findAll()) {
 			kieSession.insert(p);
 		}
 		
 		for(Diagnose d:diagnoseService.findAll()) {
-			System.out.println(d);
 			kieSession.insert(d);
 		}
 		
-		HashMap<String, Disease> result=new HashMap<>();
+		ArrayList<ReportChronicDiseasesDTO> result=new ArrayList<>();
 		kieSession.insert(result);
 		
 		kieSession.getAgenda().getAgendaGroup("chronic diseases").setFocus();
