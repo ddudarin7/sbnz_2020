@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,10 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
+import com.ftn.sbnz_2020.facts.Vaccination;
+import com.ftn.sbnz_2020.facts.Vaccine;
 import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.repository.DiagnoseRepository;
 
@@ -24,6 +29,12 @@ public class DiagnoseService {
 	
 	@Autowired
 	DiseaseService diseaseService;
+	
+	@Autowired
+	VaccinationService vaccinationsService;
+	
+	@Autowired
+	VaccineService vaccineService;
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
@@ -76,13 +87,11 @@ public class DiagnoseService {
 	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
 		
 		// inserting symptoms
-		
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
 		}
 		
 		// inserting all diseases
-		
 		List<Disease> diseases = diseaseService.findAll();
 		for(Disease d:diseases){
 			d.initializeSupportFields();
@@ -90,14 +99,26 @@ public class DiagnoseService {
 		}
 		
 		// inserting diagnose
-		
 		Diagnose makingDiagnose = new Diagnose();
 		makingDiagnose.setPatient(patient);
-		
 		kieSession.insert(makingDiagnose);
 		
-		// firing rules
+		kieSession.insert(DiseaseCategory.INFECTIOUS);
 		
+		//inserting patient
+		kieSession.insert(patient);
+		
+		//inserting vaccination
+		for(Vaccination v: vaccinationsService.findAll()) {
+			kieSession.insert(v);
+		}
+		
+		//inserting vaccines
+		for(Vaccine v: vaccineService.findAll()) {
+			kieSession.insert(v);
+		}
+		
+		// firing rules
 		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kieSession.fireAllRules();
 		

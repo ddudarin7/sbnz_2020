@@ -91,13 +91,16 @@ DELETE FROM `sbnz_2020`.`vaccine`;
 INSERT INTO `sbnz_2020`.`vaccine` (`id`, `name`, `description`)
 VALUES 
 	('1', 'Rabies vaccine', 'Required vaccine for 12-24 weeks old dog against rabies'),
-	('2', 'DHPP', 'Important vaccine for 10-12 weeks old dog. Protects against Hepatitis, Parvovirus and Parainfluence');
+	('2', 'DHPP', 'Important vaccine for 10-12 weeks old dog. Protects against Hepatitis, Parvovirus and Parainfluence'),
+	('3', 'DA2P', 'Core combination shot protecting against Distemper, Adenovirus (Canine Infectious Hepatitis), and Parvo.');
 
 
 INSERT INTO `sbnz_2020`.`vaccination` (`id`, `vaccine_id`, `date`)
 VALUES 
 	('1', '1', '2018-08-15'),
-	('2', '2', '2018-07-25');
+	('2', '2', '2018-07-25'),
+	('3', '3', '2018-06-07'),
+	('4', '3', '2019-07-07');
 
 
 DELETE FROM `sbnz_2020`.`ingredient`;
@@ -372,12 +375,14 @@ DELETE FROM `sbnz_2020`.`patient`;
 DELETE FROM `sbnz_2020`.`owner`;
 INSERT INTO `sbnz_2020`.`owner` (`id`, `first_name`,`last_name`, `city`, `street`, `number`, `phone_num`)
 VALUES 
-	('1', 'Vasilije', 'Mihajlovic', 'Brcko', 'Vukosavacka', '312', '0038765723743');
+	('1', 'Vasilije', 'Mihajlovic', 'Brcko', 'Vukosavacka', '312', '0038765723743'),
+	('2', 'Petar', 'Petrovic', 'Novi Sad', 'Bulevar Oslobodjenja', '123', '00381641234567');
 
 
 INSERT INTO `sbnz_2020`.`patient` (`id`, `name`,`record_number`, `breed`, `date_of_birth`, `owner_id`)
 VALUES 
-	('1', 'Dzeki', 'REC1', 'MIXEDBREED', '2018-04-07', '1');
+	('1', 'Dzeki', 'REC1', 'MIXEDBREED', '2018-04-07', '1'),
+	('2', 'Bleki', 'REC2', 'ROTTWEILER', '2019-01-02', '2');
 	
 INSERT INTO `sbnz_2020`.`patient_ingredient_allergies` (`patient_id`, `ingredient_allergies_id`)
 VALUES 
@@ -386,5 +391,7 @@ VALUES
 INSERT INTO `sbnz_2020`.`patient_vaccinations` (`patient_id`, `vaccinations_id`)
 VALUES 
 	('1', '1'),
-	('1', '2');
+	('1', '2'),
+	('1', '3'),
+	('1', '4');
 	

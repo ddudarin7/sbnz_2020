@@ -1,0 +1,6 @@
+<div class="container">
+    <p-selectButton [options]="types" (onChange)="onChangeReport($event)"></p-selectButton>
+    <div style="margin-top: 25px;">
+        <router-outlet></router-outlet>
+    </div>
+</div>

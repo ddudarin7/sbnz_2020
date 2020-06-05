@@ -198,10 +198,9 @@ public class DiagnoseController {
     
     @PostMapping(value = "/diagnoses", consumes = "application/json")
     public ResponseEntity<DiagnoseDTO> add(@RequestBody DiagnoseDTO diagnoseDTO, 
-    		HttpServletRequest request) {
+    		HttpServletRequest request, @RequestParam String vetUsername) {
 
     	// collecting vet
-    	String vetUsername = "vet"; // needs to be given by token
     	Vet vet = vetService.findByUsername(vetUsername);
     	if (vet == null)
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
