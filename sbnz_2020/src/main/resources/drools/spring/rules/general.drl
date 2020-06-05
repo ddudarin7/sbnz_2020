@@ -67,7 +67,7 @@ rule "Only one disease survived"
 	agenda-group "diagnose"
 	salience 20
 	when
-		$dio: Diagnose(disease == null)
+		$dio: Diagnose(disease.id == null)
 		accumulate (
 			$d: Disease(),
 			$dNum: count($d)
@@ -88,7 +88,7 @@ rule "Disease with the highest percentage of specific symptoms survived"
 	agenda-group "diagnose"
 	salience 15
 	when
-		$dio : Diagnose(disease == null)
+		$dio : Diagnose(disease.id == null)
 		accumulate (
             Disease($ssmp: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0))),
             $most: max($ssmp)
@@ -103,7 +103,7 @@ rule "Disease with the highest percentage of non specific symptoms survived"
 	agenda-group "diagnose"
 	salience 12
 	when
-		$dio : Diagnose(disease == null)
+		$dio : Diagnose(disease.id == null)
 		accumulate (
             Disease($nssmp: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0))),
             $most: max($nssmp)
@@ -118,7 +118,7 @@ rule "Disease with more specific symptoms matched survives"
 	agenda-group "diagnose"
 	salience 10
 	when
-		$dio : Diagnose(disease == null)
+		$dio : Diagnose(disease.id == null)
 		accumulate (
             Disease($ssmn: specificSymptomsMatchedNum),
             $most: max($ssmn)
@@ -133,7 +133,7 @@ rule "Disease with more non specific symptoms matched survives"
 	agenda-group "diagnose"
 	salience 5
 	when
-		$dio : Diagnose(disease == null)
+		$dio : Diagnose(disease.id == null)
 		accumulate (
             Disease($nssmn: nonSpecificSymptomsMatchedNum),
             $most: max($nssmn)
@@ -153,7 +153,7 @@ rule "Zero or more diseases"
             $d: Disease(),
             $dNum: count($d)
         )
-        $dio: Diagnose(disease == null, $dNum != 1)
+        $dio: Diagnose(disease.id == null, $dNum != 1)
 	then
 		System.out.println("Dijagnoza nije uspjela. Pronadjeno je: " + $dNum + " bolesti.");
 end
@@ -163,7 +163,7 @@ rule "Medicine allergy therapies elimating"
 	agenda-group "allergy checking"
 	salience 7
 	when
-		$dio: Diagnose($pat: patient, disease != null)
+		$dio: Diagnose($pat: patient, disease.id != null)
 		$the: Therapy() from $dio.therapies
 		$med: Medicine(this memberOf $pat.medicineAllergies) from $the.medicines
 	then
@@ -175,7 +175,7 @@ rule "Ingredient allergy therapies elimating"
 	agenda-group "allergy checking"
 	salience 6
 	when
-		$dio: Diagnose($pat: patient, disease != null)
+		$dio: Diagnose($pat: patient, disease.id != null)
 		$the: Therapy() from $dio.therapies
 		$med: Medicine() from $the.medicines
 		$ing: Ingredient(this memberOf $pat.ingredientAllergies) from $med.ingredients

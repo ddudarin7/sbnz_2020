@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Vaccination;
@@ -102,6 +103,8 @@ public class DiagnoseService {
 		makingDiagnose.setPatient(patient);
 		kieSession.insert(makingDiagnose);
 		
+		kieSession.insert(DiseaseCategory.INFECTIOUS);
+		
 		//inserting patient
 		kieSession.insert(patient);
 		
@@ -116,8 +119,8 @@ public class DiagnoseService {
 		}
 		
 		// firing rules
-		//kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
-		//kieSession.fireAllRules();
+		kieSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
+		kieSession.fireAllRules();
 		
 		kieSession.getAgenda().getAgendaGroup("diagnose").setFocus();
 		kieSession.fireAllRules();

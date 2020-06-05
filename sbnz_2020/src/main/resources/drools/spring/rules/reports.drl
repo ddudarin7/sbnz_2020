@@ -10,14 +10,15 @@ import java.util.Calendar;
 rule "Patients with potential chronic diseases"
 	lock-on-active true
 	agenda-group "chronic diseases"
+	salience 20
     when
     	$result:List()
         $diagnose:Diagnose(
         	$disease:disease && 
-        	$patient:patient //&& 
-        	//disease.diseaseCategory!=DiseaseCategory.POISONING //&&
-        	//disease.diseaseCategory!=DiseaseCategory.CANCER &&
-        	//disease.diseaseCategory!=DiseaseCategory.SKELETAL_AND_MUSCULAR_DISORDER
+        	$patient:patient && 
+        	disease.diseaseCategory!=DiseaseCategory.POISONING &&
+        	disease.diseaseCategory!=DiseaseCategory.CANCER &&
+        	disease.diseaseCategory!=DiseaseCategory.SKELETAL_AND_MUSCULAR_DISORDER
         	)
 
         Number(intValue>=4) from accumulate( 
@@ -48,12 +49,13 @@ end
 rule "Patients with cancers as chronic diseases"
 	lock-on-active true
 	agenda-group "chronic diseases"
+	salience 10
     when
     	$result:List()
         $diagnose:Diagnose(
         	$disease:disease &&
-        	$patient:patient ///&& 
-        	//disease.diseaseCategory==DiseaseCategory.CANCER 
+        	$patient:patient && 
+        	disease.diseaseCategory==DiseaseCategory.CANCER 
         	)
         
         Number(intValue==0) from accumulate(
