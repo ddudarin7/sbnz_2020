@@ -5,7 +5,7 @@ import {Ingredient} from '../../shared/model/ingredient';
 @Injectable()
 export class IngredientService {
 
-  readonly url: string = 'http://localhost:8081/ingredients';
+  readonly url: string = 'http://localhost:8081/api/ingredients';
   constructor(private http: HttpClient) {}
 
   private headers = new HttpHeaders({ Accept: 'application/json' });
