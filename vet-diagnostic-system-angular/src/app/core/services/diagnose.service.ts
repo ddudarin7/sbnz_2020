@@ -9,7 +9,7 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class DiagnoseService {
 
-  readonly url: string = 'http://localhost:8081/diagnoses';
+  readonly url: string = 'http://localhost:8081/api/diagnoses';
 
   private source = new BehaviorSubject('');
   patientInFocus = this.source.asObservable();
@@ -23,7 +23,7 @@ export class DiagnoseService {
   }
 
   public diagnose(patientRecordNumber: string, symptoms: Symptom[]): Promise<Diagnose> {
-    return this.http.post<Diagnose>('http://localhost:8081/diagnose/' + patientRecordNumber, symptoms,
+    return this.http.post<Diagnose>('http://localhost:8081/api/diagnose/' + patientRecordNumber, symptoms,
       {headers: this.headers, withCredentials: true}).toPromise().then(res => res as Diagnose);
   }
 

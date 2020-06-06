@@ -14,8 +14,8 @@ export class LogInService {
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
-  readonly logInURL: string="http://localhost:8081/log-in";
-  readonly logOutURL: string="http://localhost:8081/log-out";
+  readonly logInURL: string="http://localhost:8081/api/log-in";
+  readonly logOutURL: string="http://localhost:8081/api/log-out";
   private username:string;
 
 

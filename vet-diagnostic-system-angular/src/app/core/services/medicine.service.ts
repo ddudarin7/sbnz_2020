@@ -5,7 +5,7 @@ import {Medicine} from '../../shared/model/medicine';
 @Injectable()
 export class MedicineService {
 
-  readonly url: string = 'http://localhost:8081/medicines';
+  readonly url: string = 'http://localhost:8081/api/medicines';
   constructor(private http: HttpClient) {}
 
   private headers = new HttpHeaders({ Accept: 'application/json' });
