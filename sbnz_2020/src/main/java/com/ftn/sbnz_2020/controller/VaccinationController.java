@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.VaccinationDTO;
+import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Vaccination;
+import com.ftn.sbnz_2020.service.PatientService;
 import com.ftn.sbnz_2020.service.VaccinationService;
 
 @RestController
@@ -31,6 +34,9 @@ public class VaccinationController {
 	
 	@Autowired
 	VaccinationService vaccinationService;
+	
+    @Autowired
+    PatientService patientService;
 	
 	@GetMapping(value = "/vaccinations/{id}", produces = "application/json")
     public ResponseEntity<VaccinationDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -104,4 +110,24 @@ public class VaccinationController {
         vaccinationService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
+	@GetMapping(value = "/event", produces = "application/json")
+    public ResponseEntity<Void> findById(HttpServletRequest request) {
+
+		KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+		//Patient p=patientService.findById(2L);
+		for(Patient p:patientService.findAll()) {
+			kieSession.insert(p);
+		}
+		
+		for(Vaccination v:vaccinationService.findAll()) {
+			kieSession.insert(v);
+		}
+
+		kieSession.getAgenda().getAgendaGroup("vaccination-event").setFocus();
+		kieSession.fireAllRules();
+        
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
 }

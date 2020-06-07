@@ -5,15 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddPatientFormComponent } from './add-patient-form/add-patient-form.component';
 import { ShowAllPatientsComponent } from './show-all-patients/show-all-patients.component';
 import { PatientInfoComponent } from './patient-info/patient-info.component';
-import {FormsModule} from '@angular/forms';
-import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
+import { FormsModule } from '@angular/forms';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { DialogModule } from 'primeng/dialog';
 import { SearchModule } from './search/search.module';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import {ToastrModule} from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { DiagnoseComponent } from './diagnose/diagnose.component';
 import { DiagnoseInfoComponent } from './diagnose-info/diagnose-info.component';
 import { AddVaccinationFormComponent } from './vaccinations/add-vaccination-form/add-vaccination-form.component';
 import { ReportsModule } from './reports/reports.module';
+import {ToastModule} from 'primeng/toast';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
@@ -40,6 +42,7 @@ const routes: Routes = [
     AddVaccinationFormComponent],
   imports: [
     CommonModule,
+    DialogModule,
     FormsModule,
     SearchModule,
     ReportsModule,
@@ -47,6 +50,7 @@ const routes: Routes = [
     NgMultiSelectDropDownModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    ToastModule,
     ToastrModule.forRoot()
   ],
   exports: [RouterModule]
