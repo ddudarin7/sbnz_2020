@@ -1,0 +1,42 @@
+
+<div id="vet-add-form" class="container">
+    <h5>Vet Info</h5>
+    <form name="vetForm" (ngSubmit)="submitChanges()" #vetForm="ngForm">
+
+        <div class="form-group">
+            <label for="username"><b>Username</b></label>
+            <input type="text"  class="form-control" id="username"
+                   required
+                   [(ngModel)]="vet.username" name="username"
+                   #username="ngModel"
+            />
+          </div>
+  
+      <div class="form-group">
+        <label for="firstName"><b>First name</b></label>
+        <input type="text"  class="form-control" id="firstName"
+               required
+               [(ngModel)]="vet.firstName" name="firstName"
+               #firstName="ngModel"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="lastName"><b>Last name</b></label>
+        <input type="text"  class="form-control" id="lastName"
+               required
+               [(ngModel)]="vet.lastName" name="lastName"
+               #lastName="ngModel"
+        />
+      </div>
+  
+      <br/><br/>
+  
+      <div class="form-group">
+        <button type="submit" class="btn btn-success">Confirm</button>
+      </div>
+    </form>
+  </div>
+  
+  
+  

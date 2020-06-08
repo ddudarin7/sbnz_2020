@@ -22,7 +22,7 @@ export class LogInComponent implements OnInit {
   }
 
   login() {
-    this.logInService.logIn(this.username,this.password).then(
+    this.logInService.logIn(this.password, this.username).then(
       data=>{
         localStorage.setItem('currentUser',JSON.stringify({
           username:data.username,
