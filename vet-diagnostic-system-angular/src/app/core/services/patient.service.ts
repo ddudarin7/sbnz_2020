@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Patient} from '../../shared/model/patient';
+import { Disease } from 'src/app/shared/model/disease';
+import { ReportChronicDiseaseDTO } from 'src/app/shared/model/report-chronic-disease-dto';
 
 @Injectable()
 export class PatientService{
@@ -35,6 +37,11 @@ export class PatientService{
     const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
     return this.http.post<Patient>(this.url, patient, {headers: h, withCredentials: true}).toPromise().then(
       res => res as Patient);
+  }
+
+  public chronicDiseases():Promise<ReportChronicDiseaseDTO[]>{
+    const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
+    return this.http.get<ReportChronicDiseaseDTO[]>(this.url+"/report/chronic-diseases",{headers: h, withCredentials: true}).toPromise().then(res=>res as ReportChronicDiseaseDTO[]);
   }
 
 }

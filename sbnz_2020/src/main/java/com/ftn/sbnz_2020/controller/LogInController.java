@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.CurrentUserDTO;
@@ -22,6 +23,7 @@ import com.ftn.sbnz_2020.facts.User;
 import com.ftn.sbnz_2020.service.UserService;
 
 @RestController
+@RequestMapping("/api")
 public class LogInController {
 
     @Autowired

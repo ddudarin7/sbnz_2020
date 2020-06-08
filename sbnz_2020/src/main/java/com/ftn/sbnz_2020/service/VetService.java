@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Role;
 import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.repository.VetRepository;
 
@@ -37,6 +38,8 @@ public class VetService {
 
     public Vet save(Vet vet) {
         vet.setId(null);
+        vet.setPassword("vet");
+        vet.setRole(Role.VET);
         return vetRepository.save(vet);
     }
 

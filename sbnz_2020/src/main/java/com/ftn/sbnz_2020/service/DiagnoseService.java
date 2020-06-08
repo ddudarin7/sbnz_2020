@@ -1,5 +1,6 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Vaccination;
@@ -99,6 +102,8 @@ public class DiagnoseService {
 		Diagnose makingDiagnose = new Diagnose();
 		makingDiagnose.setPatient(patient);
 		kieSession.insert(makingDiagnose);
+		
+		kieSession.insert(DiseaseCategory.INFECTIOUS);
 		
 		//inserting patient
 		kieSession.insert(patient);

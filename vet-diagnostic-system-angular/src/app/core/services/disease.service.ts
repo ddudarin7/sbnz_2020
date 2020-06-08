@@ -10,7 +10,7 @@ export class DiseaseService {
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  readonly diseaseUrl: string="http://localhost:8081/diseases";
+  readonly diseaseUrl: string="http://localhost:8081/api/diseases";
 
   sharedData: Disease[];
 
@@ -35,6 +35,10 @@ export class DiseaseService {
   getDiseaseByName(name: string): Promise<Disease> {
     return this.http.get<Disease>(`${this.diseaseUrl}/name/${name}`, {headers: this.headers}).toPromise().then(
       res => res as Disease);
+  }
+
+  public delete(diseaseId: number): Promise<void> {
+    return this.http.delete<void>(`${this.diseaseUrl}/${diseaseId}`, {withCredentials: true}).toPromise<void>();
   }
 
 }
