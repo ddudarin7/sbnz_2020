@@ -9,12 +9,12 @@ import {NgMultiSelectDropDownModule} from 'ng-multiselect-dropdown';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import {ToastrModule} from 'ngx-toastr';
 import { CreateNewVetComponent } from './create-new-vet/create-new-vet.component';
-import { ShowAllMedicationsComponent } from './show-all-medications/show-all-medications.component';
-import { CreateNewMedicationComponent } from './create-new-medication/create-new-medication.component';
 import { ShowAllDiseasesComponent } from './show-all-diseases/show-all-diseases.component';
 import { CreateNewDiseaseComponent } from './create-new-disease/create-new-disease.component';
 import { CreateNewAdminComponent } from './create-new-admin/create-new-admin.component';
 import { ShowAllAdminsComponent } from './show-all-admins/show-all-admins.component';
+import { ShowAllMedicinesComponent } from './show-all-medicines/show-all-medicines.component';
+import { CreateNewMedicineComponent } from './create-new-medicine/create-new-medicine.component';
 
 
 const routes: Routes = [
@@ -24,8 +24,8 @@ const routes: Routes = [
     {path: 'create-new-vet', component: CreateNewVetComponent},
     {path: 'show-all-admins', component: ShowAllAdminsComponent},
     {path: 'create-new-admin', component: CreateNewAdminComponent},
-    {path: 'show-all-medications', component: ShowAllMedicationsComponent},
-    {path: 'create-new-medication', component: CreateNewMedicationComponent},
+    {path: 'show-all-medicines', component: ShowAllMedicinesComponent},
+    {path: 'create-new-medicine', component: CreateNewMedicineComponent},
     {path: 'show-all-diseases', component: ShowAllDiseasesComponent},
     {path: 'create-new-disease', component: CreateNewDiseaseComponent},]
   }
@@ -36,12 +36,12 @@ const routes: Routes = [
     HomePageComponent, 
     ShowAllVetsComponent, 
     CreateNewVetComponent, 
-    ShowAllMedicationsComponent, 
-    CreateNewMedicationComponent, 
+    ShowAllMedicinesComponent, 
+    CreateNewMedicineComponent, 
     ShowAllDiseasesComponent, 
     CreateNewDiseaseComponent, 
     CreateNewAdminComponent, 
-    ShowAllAdminsComponent],
+    ShowAllAdminsComponent, ShowAllMedicinesComponent, CreateNewMedicineComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
+import com.ftn.sbnz_2020.repository.IngredientRepository;
 import com.ftn.sbnz_2020.repository.MedicineRepository;
 
 @Service
@@ -15,6 +17,9 @@ public class MedicineService {
 
 	@Autowired
 	MedicineRepository medicineRepository;
+	
+	@Autowired
+	IngredientRepository ingredientRepository;
 	
 	public Medicine findById(Long id){ return medicineRepository.getOne(id); }
 	
@@ -26,6 +31,13 @@ public class MedicineService {
 	
 	public Medicine add(Medicine medicine){
 		medicine.setId(null);
+		for(Ingredient ingr: medicine.getIngredients()) {
+			Ingredient ingredient = ingredientRepository.findByName(ingr.getName());
+			if(ingredient == null) {
+				ingr.setId(null);
+				ingredientRepository.save(ingr);
+			}
+		}
 		return medicineRepository.save(medicine); 
 	}
 	

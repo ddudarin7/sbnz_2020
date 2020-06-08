@@ -37,4 +37,8 @@ export class DiseaseService {
       res => res as Disease);
   }
 
+  public delete(diseaseId: number): Promise<void> {
+    return this.http.delete<void>(`${this.diseaseUrl}/${diseaseId}`, {withCredentials: true}).toPromise<void>();
+  }
+
 }

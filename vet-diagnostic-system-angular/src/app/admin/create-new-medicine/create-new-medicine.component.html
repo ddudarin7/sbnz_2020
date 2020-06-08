@@ -1,0 +1,45 @@
+
+<div id="medicine-add-form" class="container">
+    <h5>Medicine Info</h5>
+    <form name="medicineForm" (ngSubmit)="submitChanges()" #medicineForm="ngForm">
+  
+      <div class="form-group">
+        <label for="name"><b>Name</b></label>
+        <input type="text"  class="form-control" id="name"
+               required
+               [(ngModel)]="medicine.name" name="name"
+               #name="ngModel"
+        />
+      </div>
+
+      <div>
+        <label for="ingredients"><b>Select ingredients</b></label>
+        <ng-multiselect-dropdown id="ingredients" name="ingredients"
+                                 [placeholder]="'Select ingredients'"
+                                 [data]="allIngredients"
+                                 [(ngModel)]="selectedIngredients"
+                                 [settings]="dropdownSettings"
+                                 #ingredientAllergies="ngModel"
+        >
+        </ng-multiselect-dropdown>
+      </div>
+
+
+      <div class="form-group">
+        <label for="newIngredient"><b>Add new ingredients (split with comma)</b></label>
+        <input type="text"  class="form-control" id="newIngredient"
+               [(ngModel)]="newIngredient" name="newIngredient"
+        />
+      </div>
+  
+      <br/><br/>
+  
+      <div class="form-group">
+        <button type="submit" class="btn btn-success">Confirm</button>
+      </div>
+    </form>
+  </div>
+  
+  <br/>
+  
+  

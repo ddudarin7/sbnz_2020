@@ -15,4 +15,14 @@ export class MedicineService {
       res => res as Medicine[]);
   }
 
+  public add(medicine: Medicine): Promise<Medicine> {
+    const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
+    return this.http.post<Medicine>(this.url, medicine, {headers: h, withCredentials: true}).toPromise().then(
+      res => res as Medicine);
+  }
+
+  public delete(medicinetId: number): Promise<void> {
+    return this.http.delete<void>(`${this.url}/${medicinetId}`, {withCredentials: true}).toPromise<void>();
+  }
+
 }
