@@ -1,0 +1,25 @@
+
+<div id="vets" class="list">
+    <h5>Vets</h5>
+    <button class="btn badge-info" (click)="newVetClicked()">New vet</button>
+    <table id="vetsTable" class="table table-hover">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr id="tr1" *ngFor="let vet of vets">
+        <td>{{vet.username}}</td>
+        <td>{{vet.firstName}}</td>
+        <td>{{vet.lastName}}</td>
+        <td><button class="btn btn-danger" (click)="vetDeleteClicked(vet.id)">Delete</button></td>
+      </tr>
+      </tbody>
+    </table>
+  
+  </div>
+  
