@@ -32,6 +32,8 @@ export class CreateNewVetComponent implements OnInit {
       this.vetService.add(this.vet).then(
         res => {
           this.toastr.success('Vet successfully added.');
+          this.router.navigate(['admin/home/show-all-vets/']);
+
         }
       ).catch(
         err => {

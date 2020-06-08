@@ -44,4 +44,5 @@ export class VetService {
   public chronicDiseases():Promise<ReportChronicDiseaseDTO[]>{
     const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
     return this.http.get<ReportChronicDiseaseDTO[]>(this.url+"/report/chronic-diseases",{headers: h, withCredentials: true}).toPromise().then(res=>res as ReportChronicDiseaseDTO[]);
-  }}
+  }
+}

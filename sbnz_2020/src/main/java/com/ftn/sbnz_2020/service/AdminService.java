@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.facts.Admin;
+import com.ftn.sbnz_2020.facts.Role;
 import com.ftn.sbnz_2020.repository.AdminRepository;
 
 @Service
@@ -32,7 +33,9 @@ public class AdminService {
     }
 
     public Admin save(Admin admin) {
-        //admin.setId(null);
+        admin.setId(null);
+        admin.setPassword("admin");
+        admin.setRole(Role.ADMIN);
         return adminRepository.save(admin);
     }
 

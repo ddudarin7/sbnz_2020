@@ -72,6 +72,8 @@ export class CreateNewMedicineComponent implements OnInit {
     this.medicineService.add(this.medicine).then(
       res => {
         this.toastr.success('Medicine successfully added.');
+        this.router.navigate(['admin/home/show-all-medicines/']);
+
       }
     ).catch(
       err => {
