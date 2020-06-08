@@ -36,6 +36,7 @@ public class Medicine {
 
 	public Medicine() {
 		super();
+		ingredients = new ArrayList<Ingredient>();
 	}
 
 	public Medicine(Long id, String name, List<Ingredient> ingredients) {
@@ -51,10 +52,13 @@ public class Medicine {
 	}
 	
 	public Medicine(MedicineDTO medicineDTO){
-		this.id = medicineDTO.getId();
-		this.name = medicineDTO.getName();
+		if(medicineDTO.getId() != null)
+			this.id = medicineDTO.getId();
+		
+		if(medicineDTO.getName() != null)
+			this.name = medicineDTO.getName();
 		this.ingredients = new ArrayList<Ingredient>();
-		for (IngredientDTO ingredientDTO : medicineDTO.getIngredientDTOs())
+		for (IngredientDTO ingredientDTO : medicineDTO.getIngredients())
 			this.ingredients.add(new Ingredient(ingredientDTO));
 	}
 

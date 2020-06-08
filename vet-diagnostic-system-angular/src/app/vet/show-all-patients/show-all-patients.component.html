@@ -1,0 +1,27 @@
+
+<div id="patients" class="list">
+  <h5>Patients</h5>
+  <table id="patientsTable" class="table table-hover">
+    <thead>
+    <tr>
+      <th>Record Number</th>
+      <th>Name</th>
+      <th>Breed</th>
+      <th>Owner</th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr id="tr1" *ngFor="let patient of patients">
+      <td>{{patient.recordNumber}}</td>
+      <td>{{patient.name}}</td>
+      <td>{{patient.breed}}</td>
+      <td>{{patient.owner.firstName}} {{patient.owner.lastName}}</td>
+      <td><button class="btn badge-info" (click)="patientInfoClicked(patient.recordNumber)">Info</button></td>
+      <td><button class="btn btn-danger" (click)="patientDeleteClicked(patient.id)">Delete</button></td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

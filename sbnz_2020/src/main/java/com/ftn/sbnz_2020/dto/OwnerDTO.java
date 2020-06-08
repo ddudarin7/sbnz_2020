@@ -29,11 +29,16 @@ public class OwnerDTO {
 	}
 	
 	public OwnerDTO(Owner owner) {
-		this.id = owner.getId();
-		this.firstName = owner.getFirstName();
-		this.lastName = owner.getLastName();
-		this.phoneNum = owner.getPhoneNum();
-		this.address = owner.getAddress();
+		if (owner.getId() != null)
+			this.id = owner.getId();
+		if (owner.getFirstName() != null)
+			this.firstName = owner.getFirstName();
+		if (owner.getLastName() != null)
+			this.lastName = owner.getLastName();
+		if (owner.getPhoneNum() != null)
+			this.phoneNum = owner.getPhoneNum();
+		if (owner.getAddress() != null)
+			this.address = owner.getAddress();
 	}
 
 	public Long getId() {

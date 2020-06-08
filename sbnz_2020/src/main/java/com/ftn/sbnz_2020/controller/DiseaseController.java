@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,19 +18,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiseaseDTO;
+import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
+import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.service.DiseaseService;
+import com.ftn.sbnz_2020.service.SymptomService;
 
 @RestController
+@RequestMapping("/api")
 public class DiseaseController {
 
 	@Autowired
 	DiseaseService diseaseService;
+	
+	@Autowired
+	SymptomService symptomService;
 	
 	@GetMapping(value = "/diseases/{id}", produces = "application/json")
     public ResponseEntity<DiseaseDTO> findById(@PathVariable Long id, HttpServletRequest request) {
@@ -42,7 +51,8 @@ public class DiseaseController {
 
     @GetMapping(value = "/diseases/name/{name}", produces = "application/json")
     public ResponseEntity<DiseaseDTO> findByName(@PathVariable String name, HttpServletRequest request) {
-
+    	name.toLowerCase();
+    	name=name.substring(0,1).toUpperCase()+name.substring(1);
         Disease disease = diseaseService.findByName(name);
         if (disease == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -141,5 +151,20 @@ public class DiseaseController {
         diseaseService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-	
+    
+    
+    @PostMapping(value = "/diseases/with-one-or-more-symptoms", produces = "application/json")
+    public ResponseEntity<List<Disease>> findAllwithSymptoms(@RequestBody List<SymptomDTO> symptomDTOs, HttpServletRequest request) {
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+        
+    	ArrayList<Symptom> symptoms=new ArrayList<Symptom>();
+    	for(SymptomDTO s: symptomDTOs) {
+    		Symptom symptom=symptomService.findByName(s.getName());
+    		symptoms.add(symptom);
+    	}
+    	
+    	List<Disease> diseases=diseaseService.findAllWithSymptom(kieSession, symptoms);
+
+        return new ResponseEntity<>(diseases,HttpStatus.OK);
+    }
 }

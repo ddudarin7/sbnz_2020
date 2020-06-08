@@ -1,0 +1,196 @@
+
+
+<div id="patient-info-form" class="container">
+  <h5 style="color: lightsteelblue">Patient info</h5>
+  <br/>
+  <form name="patientForm" (ngSubmit)="submitChanges()" #patientForm="ngForm">
+
+    <div class="form-group">
+      <label for="recordNumber"><b>Record Number</b></label>
+      <input type="text" class="form-control"  id="recordNumber"
+             required
+             [(ngModel)]="patient.recordNumber" name="recordNumber"
+             #recordNumber="ngModel"
+             disabled = true
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="name"><b>Name</b></label>
+      <input type="text"  class="form-control" id="name"
+             required
+             [(ngModel)]="patient.name" name="name"
+             #name="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="breed"><b>Breed</b></label>
+      <ng-multiselect-dropdown id="breed" name="breed"
+                               [placeholder]="'Select breed'"
+                               [data]="allBreeds"
+                               [(ngModel)]="selectedBreed"
+                               [settings]="singleDropSettings"
+                               #breed="ngModel"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+
+    <div class="form-group">
+      <label for="dateOfBirth"><b>Date of birth</b></label>
+      <input id="dateOfBirth"
+             name="dateOfBirth"
+             class="form-control"
+             [owlDateTimeTrigger]="dateOfBirthPicker"
+             [owlDateTime]="dateOfBirthPicker"
+             [(ngModel)]="patient.dateOfBirth"
+             #dateOfBirth = "ngModel"
+             ngDefaultControl
+             readonly
+      />
+      <owl-date-time [pickerType]="'calendar'" #dateOfBirthPicker></owl-date-time>
+    </div>
+
+
+    <div class="form-group">
+      <label for="medicineAllergies"><b>Medicine Allergies</b></label>
+      <ng-multiselect-dropdown id="medicineAllergies" name="medicineAllergies"
+                               [placeholder]="'Select medicines'"
+                               [data]="allMedicines"
+                               [(ngModel)]="selectedMedicines"
+                               [settings]="dropdownSettings"
+                               #medicineAllergies="ngModel"
+                               ngDefaultControl
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <div>
+      <label for="ingredientAllergies"><b>Ingredient Allergies</b></label>
+      <ng-multiselect-dropdown id="ingredientAllergies" name="ingredientAllergies"
+                               [placeholder]="'Select ingredients'"
+                               [data]="allIngredients"
+                               [(ngModel)]="selectedIngredients"
+                               [settings]="dropdownSettings"
+                               #ingredientAllergies="ngModel"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <br/>
+
+    <div [hidden]="noVaccinations">
+      <label for="patientVaccinations"><b>Previous vaccinations</b></label>
+      <table class="table" id="patientVaccinations">
+        <tbody>
+        <tr *ngFor="let vac of patient.vaccinations">
+          <td>{{vac.date}}</td>
+          <td>{{vac.vaccine.name}}</td>
+          <td><button type="button" class="btn btn-danger" (click)="removeVaccination(vac.id)">Remove</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br/>
+
+    <div [hidden]="noDiagnoses">
+      <label for="patientDiagnoses"><b>Previous diagnoses</b></label>
+      <table class="table" id="patientDiagnoses">
+        <tbody>
+          <tr *ngFor="let dia of patientDiagnoses">
+            <td>{{dia.date}}</td>
+            <td>{{dia.disease.name}}</td>
+            <td><button class="btn btn-info" (click)="navigateToDiagnose(dia.id)">More details</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br/><br/>
+
+    <h5 style="color: lightsteelblue">Owner info</h5>
+
+    <br/>
+
+    <div>
+      <label for="owners"><b>Owners</b></label>
+      <ng-multiselect-dropdown id="owners" name="owners"
+                               [placeholder]="'Select owner'"
+                               [data]="allOwners"
+                               [(ngModel)]="selectedOwner"
+                               [settings]="ownerDropDownSettings"
+                               #owners="ngModel"
+                               (onSelect)="loadOwnerFields()"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="firstName"><b>First name</b></label>
+      <input type="text" class="form-control"  id="firstName"
+             required
+             [(ngModel)]="patient.owner.firstName" name="firstName"
+             #firstName="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="lastName"><b>Last name</b></label>
+      <input type="text"  class="form-control" id="lastName"
+             required
+             [(ngModel)]="patient.owner.lastName" name="lastName"
+             #lastName="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="city"><b>City</b></label>
+      <input type="text" class="form-control"  id="city"
+             required
+             [(ngModel)]="patient.owner.address.city" name="city"
+             #city="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="street"><b>Street</b></label>
+      <input type="text" class="form-control"  id="street"
+             required
+             [(ngModel)]="patient.owner.address.street" name="street"
+             #street="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="number"><b>Number</b></label>
+      <input type="text" class="form-control"  id="number"
+             required
+             [(ngModel)]="patient.owner.address.number" name="number"
+             #number="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNum"><b>Phone number</b></label>
+      <input type="text" class="form-control"  id="phoneNum"
+             required
+             [(ngModel)]="patient.owner.phoneNum" name="phoneNum"
+             #phoneNum="ngModel"
+      />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Submit Changes</button>
+    </div>
+  </form>
+  <button class="btn btn-success" (click)="diagnose()">Diagnose</button>
+  <br/><br/>
+  <button class="btn btn-success" (click)="addVaccination()">Add vaccination</button>
+  <br/><br/>
+  <button class="btn btn-danger" (click)="delete()">Delete patient</button>
+</div>
+
+
+<br/>

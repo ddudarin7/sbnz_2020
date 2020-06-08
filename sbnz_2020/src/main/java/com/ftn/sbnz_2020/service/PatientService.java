@@ -1,16 +1,24 @@
 package com.ftn.sbnz_2020.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import org.drools.core.ClassObjectFilter;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.facts.Diagnose;
+import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;
-import com.ftn.sbnz_2020.facts.Therapy;
+import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.repository.PatientRepository;
 
 @Service
@@ -29,6 +37,12 @@ public class PatientService {
 
 	@Autowired
 	DiseaseService diseaseService;
+	
+	@Autowired
+	VaccinationService vaccinationService;
+	
+	@Autowired
+	DiagnoseService diagnoseService;
 
 	public Patient findById(Long id) {
 		return patientRepository.findById(id).get();
@@ -68,6 +82,17 @@ public class PatientService {
 				patient.getIngredientAllergies().set(i, ingr);
 			}
 		}
+		for (int i = 0; i < patient.getVaccinations().size(); i++) {
+			Vaccination vaccination = patient.getVaccinations().get(i);
+			Vaccination vacc = vaccinationService.findById(vaccination.getId());
+			if (vacc == null) {
+				//patient.getIngredientAllergies().set(i, ingredientService.save(new Ingredient(ingredient.getName())));
+			} else {
+				patient.getVaccinations().set(i, vacc);
+			}
+		}
+		patient = patientRepository.save(patient);
+		patient.setRecordNumber("REC" + patient.getId());
 		return patientRepository.save(patient);
 	}
 
@@ -104,16 +129,77 @@ public class PatientService {
 		}
 		patient.setIngredientAllergies(patientUpdate.getIngredientAllergies());
 
-		return patientRepository.save(patient);
+		for (int i = 0; i < patientUpdate.getVaccinations().size(); i++) {
+			Vaccination vaccination = patientUpdate.getVaccinations().get(i);
+			Vaccination vacc = vaccinationService.findById(vaccination.getId());
+			if (vacc == null) {
+				//patientUpdate.getIngredientAllergies().set(i,
+				//		ingredientService.save(new Ingredient(ingredient.getName())));
+			} else {
+				patientUpdate.getVaccinations().set(i, vacc);
+			}
+		}
+		
+		// remove removed vaccinations
+		
+		
+		List<Vaccination> oldVaccinations = patient.getVaccinations();
+		
+		patient.setVaccinations(patientUpdate.getVaccinations());
+		patient = patientRepository.save(patient);
+		
+		boolean vaccinationFound;
+		for (Vaccination oldVaccination : oldVaccinations){
+			vaccinationFound = false;
+			for (Vaccination newVaccination : patientUpdate.getVaccinations()){
+				if (oldVaccination.getId() == newVaccination.getId()){
+					vaccinationFound = true;
+					break;
+				}
+			}
+			if (!vaccinationFound)
+				vaccinationService.delete(oldVaccination.getId());			
+		}
+		
+		return patient;
 	}
 
 	public void delete(Long id) {
+		for (Diagnose diagnose : this.diagnoseService.findByPatientId(id))
+			this.diagnoseService.delete(diagnose.getId());
 		patientRepository.delete(this.findById(id));
 	}
 
 	public void deleteAll() {
-		therapyService.deleteAll();
-
-		patientRepository.deleteAllInBatch();
+		this.diagnoseService.deleteAll();
+		patientRepository.deleteAll();
 	}
+	
+	public List<ReportChronicDiseasesDTO> chronicDiseaseReport(KieSession kieSession){
+		for(Patient p:patientRepository.findAll()) {
+			kieSession.insert(p);
+		}
+		
+		for(Diagnose d:diagnoseService.findAll()) {
+			kieSession.insert(d);
+		}
+		
+		ArrayList<ReportChronicDiseasesDTO> result=new ArrayList<>();
+		kieSession.insert(result);
+		
+		kieSession.getAgenda().getAgendaGroup("chronic diseases").setFocus();
+		kieSession.fireAllRules();
+		
+		releaseObjectsFromSession(kieSession);
+		
+		return result;
+	}
+	
+	 private void releaseObjectsFromSession(KieSession kieSession){
+	        kieSession.getObjects();
+
+	        for( Object object: kieSession.getObjects() ){
+	            kieSession.delete( kieSession.getFactHandle( object ) );
+	        }
+	 }
 }

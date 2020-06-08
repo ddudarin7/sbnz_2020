@@ -39,6 +39,7 @@ public class Therapy {
 
 	public Therapy() {
 		super();
+		this.medicines = new ArrayList<Medicine>();
 	}
 
 	public Therapy(Long id, String description, List<Medicine> medicines) {
@@ -57,7 +58,7 @@ public class Therapy {
 		this.id = therapyDTO.getId();
 		this.description = therapyDTO.getDescription();
 		this.medicines = new ArrayList<Medicine>();
-		for (MedicineDTO medicineDTO : therapyDTO.getMedicineDTOs())
+		for (MedicineDTO medicineDTO : therapyDTO.getMedicines())
 			this.medicines.add(new Medicine(medicineDTO));
 	}
 

@@ -7,12 +7,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +25,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import com.ftn.sbnz_2020.dto.IngredientDTO;
 import com.ftn.sbnz_2020.dto.MedicineDTO;
 import com.ftn.sbnz_2020.dto.PatientDTO;
+import com.ftn.sbnz_2020.dto.VaccinationDTO;
 
 @Entity
 @Table(name = "patient")
@@ -44,9 +47,10 @@ public class Patient {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     
+    @Enumerated(EnumType.STRING)
     private Breed breed;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Owner owner;
     
@@ -57,13 +61,20 @@ public class Patient {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
     private List<Ingredient> ingredientAllergies;
+    
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade={CascadeType.MERGE}) // unidirectional
+    private List<Vaccination> vaccinations;
 
 	public Patient() {
 		super();
+		this.medicineAllergies = new ArrayList<Medicine>();
+		this.ingredientAllergies = new ArrayList<Ingredient>();
+		this.vaccinations = new ArrayList<Vaccination>();
 	}
 
 	public Patient(Long id, String name, String recordNumber, Date dateOfBirth, Breed breed, Owner owner,
-			List<Medicine> medicineAllergies, List<Ingredient> ingredientAllergies) {
+			List<Medicine> medicineAllergies, List<Ingredient> ingredientAllergies, List<Vaccination> vaccinations) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -73,25 +84,35 @@ public class Patient {
 		this.owner = owner;
 		this.medicineAllergies = medicineAllergies;
 		this.ingredientAllergies = ingredientAllergies;
+		this.vaccinations = vaccinations;
 	}
 	
 	public Patient(PatientDTO patientDTO) {
-		this.id = patientDTO.getId();
-        this.name = patientDTO.getName();
-        this.recordNumber = patientDTO.getRecordNumber();
-        this.dateOfBirth = patientDTO.getDateOfBirth();
-        if (patientDTO.getMedicineAllergies() != null) {
-            this.medicineAllergies = new ArrayList<>();
-            for (MedicineDTO medicine: patientDTO.getMedicineAllergies()) {
-                this.medicineAllergies.add(new Medicine(medicine));
-            }
-        }
-        if (patientDTO.getIngredientAllergies() != null) {
-            this.ingredientAllergies = new ArrayList<>();
-            for (IngredientDTO ingredient: patientDTO.getIngredientAllergies()) {
+		if (patientDTO.getId() != null)
+			this.id = patientDTO.getId();
+		if (patientDTO.getName() != null)
+			this.name = patientDTO.getName();
+		if (patientDTO.getRecordNumber() != null)
+			this.recordNumber = patientDTO.getRecordNumber();
+		if (patientDTO.getDateOfBirth() != null)
+			this.dateOfBirth = patientDTO.getDateOfBirth();
+		if( patientDTO.getBreed() != null) {
+			this.breed = patientDTO.getBreed();
+		}
+		this.medicineAllergies = new ArrayList<Medicine>();
+		if (patientDTO.getMedicineAllergies() != null)
+	        for (MedicineDTO medicine: patientDTO.getMedicineAllergies())
+	            this.medicineAllergies.add(new Medicine(medicine));
+		this.ingredientAllergies = new ArrayList<Ingredient>();
+        if (patientDTO.getIngredientAllergies() != null)     
+            for (IngredientDTO ingredient: patientDTO.getIngredientAllergies())
                 this.ingredientAllergies.add(new Ingredient(ingredient));
-            }
-        }
+        this.vaccinations = new ArrayList<Vaccination>();
+        if (patientDTO.getVaccinations() != null)      
+            for (VaccinationDTO vaccination: patientDTO.getVaccinations())
+                this.vaccinations.add(new Vaccination(vaccination));
+        if (patientDTO.getOwner() != null)
+        	this.owner = new Owner(patientDTO.getOwner());
 	}
 
 	public Long getId() {
@@ -156,6 +177,14 @@ public class Patient {
 
 	public void setIngredientAllergies(List<Ingredient> ingredientAllergies) {
 		this.ingredientAllergies = ingredientAllergies;
+	}
+
+	public List<Vaccination> getVaccinations() {
+		return vaccinations;
+	}
+
+	public void setVaccinations(List<Vaccination> vaccinations) {
+		this.vaccinations = vaccinations;
 	}
     
 }
