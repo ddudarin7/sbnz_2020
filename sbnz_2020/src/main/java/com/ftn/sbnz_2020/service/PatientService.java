@@ -12,7 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ftn.sbnz_2020.dto.BreedDiseases;
+import com.ftn.sbnz_2020.dto.BreedDiseasesDTO;
+import com.ftn.sbnz_2020.dto.DiseaseDTO;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
@@ -206,4 +210,31 @@ public class PatientService {
 	 public List<Patient> findByOwnerId(Long ownerId){
 		 return patientRepository.findAllByOwnerId(ownerId);
 	 }
+	 
+	public BreedDiseasesDTO breedDiseasesReport(KieSession kieSession, Breed breed){
+		BreedDiseases bd = new BreedDiseases();
+		bd.setBreed(breed);
+		
+		kieSession.insert(bd);
+		
+		for(Diagnose diagnose : diagnoseService.findAll())
+			kieSession.insert(diagnose);
+		
+		kieSession.getAgenda().getAgendaGroup("breed diseases").setFocus();
+		kieSession.fireAllRules();
+		
+		releaseObjectsFromSession(kieSession);
+		
+		BreedDiseasesDTO bdDTO = new BreedDiseasesDTO();
+		bdDTO.setBreed(bd.getBreed().toString());
+		
+		for (Long key : bd.getDiseases().keySet()){
+			bdDTO.addToData(new DiseaseDTO(diseaseService.findById(key)), bd.getDiseases().get(key));
+		}
+		
+		bdDTO.sortData();
+		bdDTO.calculateDiagnoses();
+		
+		return bdDTO;
+	}
 }

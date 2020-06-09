@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ftn.sbnz_2020.dto.BreedDiseasesDTO;
 import com.ftn.sbnz_2020.dto.PatientDTO;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.service.PatientService;
@@ -105,7 +107,7 @@ public class PatientController {
 
     @DeleteMapping(value = "/patients/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, HttpServletRequest request) {
-
+    	
         Patient patient = patientService.findById(id);
         if (patient == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -133,6 +135,18 @@ public class PatientController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(patientService.findAll().size()));
         return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/patients/report/breed-diseases/{breed}", produces = "application/json")
+    public ResponseEntity<BreedDiseasesDTO> findBreedDiseases(HttpServletRequest request,
+    		@PathVariable String breed) {
+
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+        
+        BreedDiseasesDTO report = patientService.breedDiseasesReport(kieSession,
+        		Breed.valueOf(breed));
+        
+        return new ResponseEntity<>(report, HttpStatus.OK);
     }
 
 }
