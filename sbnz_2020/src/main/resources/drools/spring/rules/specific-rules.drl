@@ -30,4 +30,29 @@ rule "Special rule for canine distemper"
     	delete($d)
 end
 
+rule "Dog of same owner had bacterial or parasite infectious disease in last two weeks"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 14
+	when
+		$pat: Patient()
+		$dio: Diagnose(date != null, patient.owner.id == $pat.owner.id, date <= daysAgo(-14),
+		disease.diseaseCategory == DiseaseCategory.INFECTIOUS ||
+		disease.diseaseCategory == DiseaseCategory.BACTERIAL ||
+		disease.diseaseCategory == DiseaseCategory.PARASITES)
+		
+		Number(intValue > 0) from accumulate(
+    		$inf: Disease(diseaseCategory == DiseaseCategory.INFECTIOUS || 
+    		diseaseCategory == DiseaseCategory.BACTERIAL || 
+    		diseaseCategory == DiseaseCategory.PARASITES),
+    		count($inf)
+    	)
+		
+		$d: Disease(diseaseCategory != DiseaseCategory.INFECTIOUS &&
+		diseaseCategory != DiseaseCategory.BACTERIAL &&
+		diseaseCategory != DiseaseCategory.PARASITES)
+	then
+		delete($d)
+end
+
 

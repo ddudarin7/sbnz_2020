@@ -202,4 +202,8 @@ public class PatientService {
 	            kieSession.delete( kieSession.getFactHandle( object ) );
 	        }
 	 }
+	 
+	 public List<Patient> findByOwnerId(Long ownerId){
+		 return patientRepository.findAllByOwnerId(ownerId);
+	 }
 }
