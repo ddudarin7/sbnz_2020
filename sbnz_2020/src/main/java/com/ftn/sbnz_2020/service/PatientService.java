@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
@@ -188,6 +189,26 @@ public class PatientService {
 		kieSession.insert(result);
 		
 		kieSession.getAgenda().getAgendaGroup("chronic diseases").setFocus();
+		kieSession.fireAllRules();
+		
+		releaseObjectsFromSession(kieSession);
+		
+		return result;
+	}
+	
+	public List<ReportWeakenedImmuneSystemDTO> weakenedImmuneSystemReport(KieSession kieSession){
+		for(Patient p:patientRepository.findAll()) {
+			kieSession.insert(p);
+		}
+		
+		for(Diagnose d:diagnoseService.findAll()) {
+			kieSession.insert(d);
+		}
+		
+		ArrayList<ReportWeakenedImmuneSystemDTO> result=new ArrayList<>();
+		kieSession.insert(result);
+		
+		kieSession.getAgenda().getAgendaGroup("weakened immunity").setFocus();
 		kieSession.fireAllRules();
 		
 		releaseObjectsFromSession(kieSession);

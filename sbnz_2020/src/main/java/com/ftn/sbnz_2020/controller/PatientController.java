@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.PatientDTO;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.service.PatientService;
@@ -129,6 +130,19 @@ public class PatientController {
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
         
         List<ReportChronicDiseasesDTO> result=patientService.chronicDiseaseReport(kieSession);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(patientService.findAll().size()));
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/patients/report/weak-immunity", produces = "application/json")
+    public ResponseEntity<List<ReportWeakenedImmuneSystemDTO>> findAllWithWeakenedImmuneSystem(HttpServletRequest request) {
+        logger.debug("Accessing GET /patients");
+
+        KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
+        
+        List<ReportWeakenedImmuneSystemDTO> result=patientService.weakenedImmuneSystemReport(kieSession);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(patientService.findAll().size()));

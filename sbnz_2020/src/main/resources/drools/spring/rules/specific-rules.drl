@@ -30,4 +30,3 @@ rule "Special rule for canine distemper"
     	delete($d)
 end
 
-
