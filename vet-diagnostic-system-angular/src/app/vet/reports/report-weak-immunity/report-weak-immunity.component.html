@@ -1,0 +1,18 @@
+<div class="container">
+    <p-table [value]="result">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Record number</th>
+                <th>Diseases treated more than 10 times in the past 12 months</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-r>
+            <tr>
+                <td>{{r.p.recordNumber}}</td>
+                <td>{{r.d.name}}</td>
+                <td><!--button class="btn badge-info">Info</button--><!--Maybe buttons for show patient/disease?--></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

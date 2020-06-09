@@ -29,7 +29,7 @@ export class ReportsHomeComponent implements OnInit {
     if($event.value==="1"){
       this.router.navigate(['/vet/home/reports/chronic-diseases']);
     }else if($event.value==="2"){
-      console.log("slab imunitet");
+      this.router.navigate(['/vet/home/reports/weak-immunity']);
     }
     
   }

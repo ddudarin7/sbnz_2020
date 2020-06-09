@@ -55,4 +55,44 @@ rule "Dog of same owner had bacterial or parasite infectious disease in last two
 		delete($d)
 end
 
+rule "Special rule for breeds that are more succeptible to cancer"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(diseaseCategory == DiseaseCategory.CANCER)
+    	$p: Patient(breed == Breed.LABRADOR || breed == Breed.MIXEDBREED)
+    	$dis: Disease(diseaseCategory != DiseaseCategory.CANCER)
+    then
+    	delete($dis)
+end
+
+rule "Special rule for breeds that are more succeptible to tooth pathology"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(name == "Tooth pathology")
+    	$p: Patient(breed == Breed.BOXER || breed == Breed.BULLDOG)
+    	$dis: Disease(name != "Tooth pathology")
+    then
+    	delete($dis)
+end
+
+rule "Special rule for breeds that are more succeptible to rickets"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(name == "Rickets")
+    	$p: Patient(breed == Breed.DACHSHUND)
+    	$dis: Disease(name != "Rickets")
+    then
+    	delete($dis)
+end
+
+
 
