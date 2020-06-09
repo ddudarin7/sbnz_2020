@@ -382,7 +382,9 @@ VALUES
 INSERT INTO `sbnz_2020`.`patient` (`id`, `name`,`record_number`, `breed`, `date_of_birth`, `owner_id`)
 VALUES 
 	('1', 'Dzeki', 'REC1', 'MIXEDBREED', '2018-04-07', '1'),
-	('2', 'Bleki', 'REC2', 'ROTTWEILER', '2019-01-02', '2');
+	('2', 'Bleki', 'REC2', 'ROTTWEILER', '2019-01-02', '2'),
+	('3', 'Lusi', 'REC3', 'MIXEDBREED', '2016-07-12', '1'),
+	('4', 'Aja', 'REC4', 'LABRADOR', '2016-07-12', '1');
 	
 INSERT INTO `sbnz_2020`.`patient_ingredient_allergies` (`patient_id`, `ingredient_allergies_id`)
 VALUES 
@@ -394,4 +396,21 @@ VALUES
 	('1', '2'),
 	('1', '3'),
 	('1', '4');
+
+INSERT INTO `sbnz_2020`.`diagnose` (`id`, `date`,`non_specific_symptoms_matched_num`, `specific_symptoms_matched_num`, `disease_id`, `patient_id`, `vet_id`)
+VALUES 
+	('1', '2020-05-25', '0', '4', '14', '1', '2');
+
+INSERT INTO `sbnz_2020`.`diagnose_specific_symptoms_matched` (`diagnose_id`, `specific_symptoms_matched_id`)
+VALUES 
+	('1', '5'),
+	('1', '12'),
+	('1', '13'),
+	('1', '16');
 	
+INSERT INTO `sbnz_2020`.`diagnose_therapies` (`diagnose_id`, `therapies_id`)
+VALUES 
+	('1', '15'),
+	('1', '18'),
+	('1', '19'),
+	('1', '20');

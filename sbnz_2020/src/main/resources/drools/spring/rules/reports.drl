@@ -3,10 +3,13 @@ package drools.spring.rules;
 
 import com.ftn.sbnz_2020.facts.*;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.dto.BreedDiseases;
 import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
 
 import java.util.Date;
 import java.util.Calendar;
+
+
 
 rule "Patients with potential chronic diseases"
 	lock-on-active true
@@ -73,6 +76,16 @@ rule "Patients with cancers as chronic diseases"
 
 end
 
+rule "Most common diseases for breed"
+	lock-on-active true
+	agenda-group "breed diseases"
+	salience 10
+    when
+    	$ob: BreedDiseases($breed: breed)
+    	$dio: Diagnose(patient.breed == $breed, $dId: disease.id)
+    then
+    	modify($ob){ countOneMore($dId); };
+end
 
 rule "Patients who got treated at least 10 times in the past 12 months for 2 or more diseases"
 	lock-on-active true
@@ -114,5 +127,4 @@ rule "Patients who got treated at least 10 times in the past 12 months for 2 or 
     	System.out.println($patient.getRecordNumber()+" "+$disease.getName());
         System.out.println($patient.getRecordNumber()+" "+$disease.getDiseaseCategory());
     	modify ($result){ add(new ReportWeakenedImmuneSystemDTO($patient,$disease))};
-
 end
