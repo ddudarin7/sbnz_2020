@@ -14,6 +14,7 @@ import { DiseaseService } from './services/disease.service';
 import {DiagnoseService} from './services/diagnose.service';
 
 
+
 @NgModule({
   declarations: [],
   imports: [
