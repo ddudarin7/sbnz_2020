@@ -36,6 +36,9 @@ public class DiagnoseService {
 	@Autowired
 	VaccineService vaccineService;
 	
+	@Autowired
+	PatientService patientService;
+	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
 	public List<Diagnose> findByPatientId(Long patientId){
@@ -103,6 +106,11 @@ public class DiagnoseService {
 		makingDiagnose.setPatient(patient);
 		kieSession.insert(makingDiagnose);
 		
+		// inserting diagnoses of other owner's dogs
+		
+		for (Diagnose d : this.findByOwnerId(patient.getOwner().getId()))
+			kieSession.insert(d);
+		
 		kieSession.insert(DiseaseCategory.INFECTIOUS);
 		
 		//inserting patient
@@ -151,5 +159,17 @@ public class DiagnoseService {
     	
     	return this.diagnoseRepository.save(diagnose);
     }
-	
+    
+    private List<Diagnose> findByOwnerId(Long ownerId){
+    	List<Patient> ownerPatients = patientService.findByOwnerId(ownerId);
+    	
+    	List<Diagnose> diagnoses = new ArrayList<Diagnose>();
+    	
+    	for (Patient patient : ownerPatients){
+    		diagnoses.addAll(diagnoseRepository.findByPatientId(patient.getId()));
+    	}
+    	
+    	return diagnoses;
+    }
+    
 }

@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Patient} from '../../shared/model/patient';
 import { Disease } from 'src/app/shared/model/disease';
 import { ReportChronicDiseaseDTO } from 'src/app/shared/model/report-chronic-disease-dto';
+import { ReportWeakImmunityDTO } from 'src/app/shared/model/report-weak-immunity-dto';
 
 @Injectable()
 export class PatientService{
@@ -42,6 +43,11 @@ export class PatientService{
   public chronicDiseases():Promise<ReportChronicDiseaseDTO[]>{
     const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
     return this.http.get<ReportChronicDiseaseDTO[]>(this.url+"/report/chronic-diseases",{headers: h, withCredentials: true}).toPromise().then(res=>res as ReportChronicDiseaseDTO[]);
+  }
+
+  public weakImmunity():Promise<ReportWeakImmunityDTO[]>{
+    const h = new HttpHeaders( { Accept: 'application/json', 'Content-Type': 'application/json'})
+    return this.http.get<ReportWeakImmunityDTO[]>(this.url+"/report/weak-immunity",{headers: h, withCredentials: true}).toPromise().then(res=>res as ReportWeakImmunityDTO[]);
   }
 
 }

@@ -9,7 +9,7 @@ export class SymptomService {
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  readonly url: string="http://localhost:8081/symptoms";
+  readonly url: string="http://localhost:8081/api/symptoms";
 
   constructor(private http: HttpClient) { }
 

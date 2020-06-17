@@ -1,0 +1,25 @@
+
+<div id="medicines" class="list">
+    <h5>Medicines</h5>
+    <button class="btn badge-info" (click)="newMedicineClicked()">New medicine</button>
+    <table id="medicinesTable" class="table table-hover">
+      <thead>
+      <tr>
+        <th>Medicine name</th>
+        <th>Ingredients</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr id="tr1" *ngFor="let medicine of medicines">
+        <td>{{medicine.name}}</td>
+        <td>
+            <tr id="tr2" *ngFor="let ingredient of medicine.ingredients">{{ingredient.name}}</tr>
+        </td>
+        <td><button class="btn btn-danger" (click)="medicineDeleteClicked(medicine.id)">Delete</button></td>
+      </tr>
+      </tbody>
+    </table>
+  
+  </div>
+  
