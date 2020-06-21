@@ -1,0 +1,7 @@
+package drools.spring.rules;
+
+import com.ftn.sbnz_2020.facts.Disease;
+
+query "Get all diseases that satisfy one or more symptoms"
+	$d:Disease(specificSymptomsMatchedNum>0 || nonSpecificSymptomsMatchedNum>0)
+end
