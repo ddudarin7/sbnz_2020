@@ -3,6 +3,7 @@ package com.ftn.sbnz_2020;
 import java.util.Arrays;
 
 import org.kie.api.KieServices;
+import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +31,19 @@ public class Sbnz2020Application {
         log.info(sb.toString());
 	}
 	
-	@Bean
+	/*@Bean
     public KieContainer kieContainer() {
         return KieServices.Factory.get().getKieClasspathContainer();
-    }
+    }*/
+	
+	@Bean
+	public KieContainer kieContainer() {
+		KieServices ks = KieServices.Factory.get();
+		KieContainer kContainer = ks
+				.newKieContainer(ks.newReleaseId("sbnz.integracija", "drools-spring-kjar", "0.0.1-SNAPSHOT"));
+		KieScanner kScanner = ks.newKieScanner(kContainer);
+		kScanner.start(10_000);
+		return kContainer;
+	}
 
 }
