@@ -9,6 +9,7 @@ import {IngredientService} from '../../core/services/ingredient.service';
 import {ToastrService} from 'ngx-toastr';
 import {Owner} from '../../shared/model/owner';
 import {Address} from '../../shared/model/address';
+import {OwnerService} from '../../core/services/owner.service';
 
 @Component({
   selector: 'app-add-patient-form',
@@ -29,18 +30,24 @@ export class AddPatientFormComponent implements OnInit {
 
   allIngredients: Ingredient[];
   selectedIngredients: Ingredient[] = [];
+  ownerDropDownSettings = {};
 
   dropdownSettings = {};
   breedSettings = {};
 
+  allOwners: Owner[] = [];
+  selectedOwner: Owner[];
+
+
   constructor(private patientService: PatientService, private activatedRoute: ActivatedRoute,
               private medicineService: MedicineService, private ingredientService: IngredientService,
-              private router: Router, private toastr: ToastrService) {
+              private router: Router, private toastr: ToastrService, private ownerService: OwnerService) {
   }
 
   ngOnInit(): void {
     this.loadMedicines();
     this.loadIngredients();
+    this.loadOwners();
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'id',
@@ -53,6 +60,14 @@ export class AddPatientFormComponent implements OnInit {
     this.breedSettings = {
       singleSelection: true,
       allowSearchFilter: true
+    };
+    this.ownerDropDownSettings = {
+      singleSelection: true,
+      allowSearchFilter: true,
+      idField: 'id',
+      textField: 'firstAndLastName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Select All'
     };
   }
 
@@ -86,6 +101,19 @@ export class AddPatientFormComponent implements OnInit {
         }
       }
     }
+
+    if (this.selectedOwner.length === 0){
+      this.toastr.error('Owner not selected!');
+      return;
+    }
+
+    for (const o of this.allOwners){
+      if (o.id === this.selectedOwner[0].id){
+        this.patient.owner = o;
+        break;
+      }
+    }
+
     this.patient.ingredientAllergies = this.selectedIngredients;
     this.patientService.add(this.patient).then(
       res => {
@@ -97,6 +125,34 @@ export class AddPatientFormComponent implements OnInit {
         this.toastr.error('Patient addition failed');
       }
     );
+  }
+
+  loadOwners(): void{
+    this.ownerService.getOwners().then(
+      res => {
+        res.unshift(new Owner(null, 'NEW', 'OWNER', '', new Address('',
+          '', '')));
+        for (const o of res){
+          o.firstAndLastName = o.firstName + ' ' + o.lastName;
+        }
+        this.allOwners = res;
+        this.selectedOwner = Array.of(this.allOwners[0]);
+        this.loadOwnerFields();
+      }
+    );
+  }
+
+  loadOwnerFields(): void{
+    if (this.selectedOwner.length === 0){
+      return;
+    }
+
+    for (const o of this.allOwners){
+      if (o.id === this.selectedOwner[0].id){
+        this.patient.owner = o;
+        break;
+      }
+    }
   }
 
 }

@@ -220,10 +220,18 @@ export class PatientInfoComponent implements OnInit {
   loadOwners(): void{
     this.ownerService.getOwners().then(
       res => {
-        res.unshift(new Owner(null, 'NEW', 'OWNER', null, new Address(null,
-          null, null)));
+        res.unshift(new Owner(null, 'NEW', 'OWNER', '', new Address('',
+          '', '')));
+        console.log(res);
         for (const o of res){
           o.firstAndLastName = o.firstName + ' ' + o.lastName;
+
+          if (o.address == null){
+            o.address = new Address('', '', '');
+          }
+          if (o.address.city == null){
+            o.address.city = '';
+          }
         }
         this.allOwners = res;
       }
