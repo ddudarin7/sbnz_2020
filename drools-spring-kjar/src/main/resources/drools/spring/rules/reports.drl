@@ -8,9 +8,8 @@ import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
 
 import java.util.Date;
 import java.util.Calendar;
-
-
-
+	
+	
 rule "Patients with potential chronic diseases"
 	lock-on-active true
 	agenda-group "chronic diseases"
@@ -22,7 +21,8 @@ rule "Patients with potential chronic diseases"
         	$patient:patient && 
         	disease.diseaseCategory!=DiseaseCategory.POISONING &&
         	disease.diseaseCategory!=DiseaseCategory.CANCER &&
-        	disease.diseaseCategory!=DiseaseCategory.SKELETAL_AND_MUSCULAR_DISORDER
+        	disease.diseaseCategory!=DiseaseCategory.SKELETAL_AND_MUSCULAR_DISORDER &&
+        	date.after(monthsAgo(-24))==true
         	)
 
         Number(intValue>=4) from accumulate( 
@@ -30,7 +30,7 @@ rule "Patients with potential chronic diseases"
         		this!=$diagnose,
         		disease==$disease,
         		patient==$patient,
-        		date>(monthsAgo(-24))
+        		date.after(monthsAgo(-24))==true
         	),
         	count($d1)
         )
@@ -44,8 +44,6 @@ rule "Patients with potential chronic diseases"
         )
 		
     then
-    	System.out.println($patient.getRecordNumber()+" "+$disease.getName());
-        System.out.println($patient.getRecordNumber()+" "+$disease.getDiseaseCategory());
     	modify ($result){ add(new ReportChronicDiseasesDTO($patient,$disease))};
 
 end
@@ -128,3 +126,4 @@ rule "Patients who got treated at least 10 times in the past 12 months for 2 or 
         System.out.println($patient.getRecordNumber()+" "+$disease.getDiseaseCategory());
     	modify ($result){ add(new ReportWeakenedImmuneSystemDTO($patient,$disease))};
 end
+

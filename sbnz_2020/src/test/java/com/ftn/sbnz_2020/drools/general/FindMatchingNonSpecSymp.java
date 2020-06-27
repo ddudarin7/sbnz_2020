@@ -62,12 +62,6 @@ private KieSession kSession;
 	}
 	
 	@Test
-	void noResults() {
-		kSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
-		kSession.fireAllRules();
-	}
-	
-	@Test
 	void zeroSymptomsMatched() {
 		Symptom testSymptom=new Symptom(5L,"s5");
 		

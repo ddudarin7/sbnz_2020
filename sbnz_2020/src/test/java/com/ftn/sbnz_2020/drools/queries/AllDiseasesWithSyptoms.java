@@ -112,8 +112,7 @@ class AllDiseasesWithSyptoms {
 	
 	@AfterEach
 	void endTest() {
-		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);
-		
+		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);		
 	}
 		
 }
