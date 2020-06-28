@@ -1,7 +1,6 @@
 package com.ftn.sbnz_2020.drools.general;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
