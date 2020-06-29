@@ -8,7 +8,7 @@ import { LowerCasePipe } from './pipes/lower-case.pipe';
 @NgModule({
   declarations: [SymptomPipe, LowerCasePipe],
   imports: [
-    CommonModule,
+    CommonModule
   ],
   exports:[
     SymptomPipe,
