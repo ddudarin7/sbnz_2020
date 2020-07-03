@@ -4,17 +4,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Therapy;
 
-class FindMatchingNonSpecSymp {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class FindMatchingNonSpecSymp {
 
 private KieSession kSession;
 	
@@ -25,8 +28,8 @@ private KieSession kSession;
 	private Symptom s1;
 	private Symptom s2;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		//define data
@@ -62,7 +65,7 @@ private KieSession kSession;
 	}
 	
 	@Test
-	void zeroSymptomsMatched() {
+	public void zeroSymptomsMatched() {
 		Symptom testSymptom=new Symptom(5L,"s5");
 		
 		kSession.insert(testSymptom);
@@ -88,7 +91,7 @@ private KieSession kSession;
 	}
 	
 	@Test
-	void nonSpecSymptomsMatched() {
+	public void nonSpecSymptomsMatched() {
 		kSession.insert(this.s1);
 		kSession.insert(this.s2);
 		
@@ -117,8 +120,8 @@ private KieSession kSession;
 		assertTrue(this.testDisease2.getNonSpecificSymptomsMatched().contains(this.s2));
 	}
 	
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 

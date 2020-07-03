@@ -90,11 +90,16 @@ rule "Disease with the highest percentage of specific symptoms survived"
 	when
 		$dio : Diagnose(disease.id == null)
 		accumulate (
-            Disease($ssmp: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0))),
+            Disease(
+            	$ssmp: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0))
+            ),
             $most: max($ssmp)
         )
-       	$d : Disease($s1: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0)), $s1 != $most)
+       	$d : Disease(
+       		$s1: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0)), 
+       		$s1 != $most && specificSymptoms.size!=0)
 	then
+		System.out.println("spec");
 		delete($d)
 end
 
@@ -108,8 +113,10 @@ rule "Disease with the highest percentage of non specific symptoms survived"
             Disease($nssmp: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0))),
             $most: max($nssmp)
         )
-       	$d : Disease($s1: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0)), $s1 != $most)
+       	$d : Disease($s1: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0)), 
+       		$s1 != $most && nonSpecificSymptoms.size!=0)
 	then
+		System.out.println("non spec");
 		delete($d)
 end
 

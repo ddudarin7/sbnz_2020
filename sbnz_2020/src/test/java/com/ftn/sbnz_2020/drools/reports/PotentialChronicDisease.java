@@ -7,10 +7,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Breed;
@@ -26,7 +28,8 @@ import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.facts.Vet;
 
-class PotentialChronicDisease {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class PotentialChronicDisease {
 
 	private KieSession kSession;
 	
@@ -36,8 +39,8 @@ class PotentialChronicDisease {
 	private Patient testPatient1;
 	private Patient testPatient2;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 				
 		this.testDisease1=new Disease(0L,"d0",DiseaseCategory.BACTERIAL,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());
@@ -50,7 +53,7 @@ class PotentialChronicDisease {
 	}
 	
 	@Test
-	void noChronicDisease() {
+	public void noChronicDisease() {
 		//5 diagnoses, bad category=>no result
 		Diagnose d6=new Diagnose(5L, testDisease2, testPatient2, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
 				0L, 0L, new ArrayList<Therapy>(), new Date());
@@ -113,7 +116,7 @@ class PotentialChronicDisease {
 	}
 	
 	@Test
-	void chronicDiseaseFound() {
+	public void chronicDiseaseFound() {
 		//5 diagnoses=>should get good result
 		Diagnose d1=new Diagnose(0L, testDisease1, testPatient1, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
 				0L, 0L, new ArrayList<Therapy>(), new Date());
@@ -143,8 +146,8 @@ class PotentialChronicDisease {
 		assertTrue(result.get(0).getD().equals(testDisease1));
 	}
 
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 	

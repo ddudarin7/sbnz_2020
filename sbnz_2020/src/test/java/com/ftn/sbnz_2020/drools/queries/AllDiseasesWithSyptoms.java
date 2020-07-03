@@ -7,20 +7,22 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Therapy;
 
-
-class AllDiseasesWithSyptoms {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class AllDiseasesWithSyptoms {
 
 	private KieSession kSession;
 	
@@ -30,8 +32,8 @@ class AllDiseasesWithSyptoms {
 	private Disease testDisease4;
 	private Disease testDisease5;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		//define data
@@ -79,13 +81,13 @@ class AllDiseasesWithSyptoms {
 	}
 	
 	@Test
-	void noResultsTest() {
+	public void noResultsTest() {
 		QueryResults results=this.kSession.getQueryResults("Get all diseases that satisfy one or more symptoms");
 		assertTrue(results.size()==0);
 	}
 
 	@Test
-	void resultNumber(){		
+	public void resultNumber(){		
 		kSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kSession.fireAllRules();
 		QueryResults results=this.kSession.getQueryResults("Get all diseases that satisfy one or more symptoms");
@@ -93,7 +95,7 @@ class AllDiseasesWithSyptoms {
 	}
 	
 	@Test
-	void resultValues() {
+	public void resultValues() {
 		List<Disease> matching=new ArrayList<>();
 		kSession.getAgenda().getAgendaGroup("finding symptoms").setFocus();
 		kSession.fireAllRules();
@@ -110,8 +112,8 @@ class AllDiseasesWithSyptoms {
 		assertTrue(matching.contains(this.testDisease5));
 	}
 	
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);		
 	}
 		

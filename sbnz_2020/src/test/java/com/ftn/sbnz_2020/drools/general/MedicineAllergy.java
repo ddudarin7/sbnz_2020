@@ -6,10 +6,12 @@ import static org.junit.Assert.assertFalse;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Diagnose;
@@ -24,7 +26,8 @@ import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.facts.Vet;
 
-class MedicineAllergy {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class MedicineAllergy {
 	
 	private KieSession kSession;
 	
@@ -32,8 +35,8 @@ class MedicineAllergy {
 	private Diagnose testDiagnose;
 	private Medicine testMedicine1;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession = com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		this.testMedicine1=new Medicine(1L, "m1");
@@ -68,7 +71,7 @@ class MedicineAllergy {
 	}
 
 	@Test
-	void allergyMatched() {
+	public void allergyMatched() {
 		this.testPatient.getMedicineAllergies().add(testMedicine1);
 		kSession.insert(testDiagnose);
 		kSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
@@ -79,7 +82,7 @@ class MedicineAllergy {
 	}
 	
 	@Test
-	void noAllergyMatched() {
+	public void noAllergyMatched() {
 		kSession.insert(testDiagnose);
 		kSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
 		kSession.fireAllRules();
@@ -89,8 +92,8 @@ class MedicineAllergy {
 		assertTrue(testDiagnose.getTherapies().get(2).getMedicines().contains(testMedicine1));
 	}
 	
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);
 	}
 

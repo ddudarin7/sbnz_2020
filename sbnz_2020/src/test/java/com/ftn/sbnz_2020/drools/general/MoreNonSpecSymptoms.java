@@ -4,10 +4,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
@@ -15,7 +17,8 @@ import com.ftn.sbnz_2020.facts.DiseaseCategory;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Therapy;
 
-class MoreNonSpecSymptoms {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class MoreNonSpecSymptoms {
 
 	private KieSession kSession;
 
@@ -26,8 +29,8 @@ class MoreNonSpecSymptoms {
 	private Symptom s1;
 	private Symptom s2;
 
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession = com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 
 		// define data
@@ -66,7 +69,7 @@ class MoreNonSpecSymptoms {
 	}
 	
 	@Test
-	void moreNonSpecSymptoms() {
+	public void moreNonSpecSymptoms() {
 		
 		Diagnose makingDiagnose = new Diagnose();
 		kSession.insert(makingDiagnose);
@@ -86,8 +89,8 @@ class MoreNonSpecSymptoms {
 		
 	}
 
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);
 	}
 	

@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
 import com.ftn.sbnz_2020.facts.Breed;
@@ -25,8 +27,8 @@ import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.facts.Vet;
 
-
-class WeakenedImmunity {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class WeakenedImmunity {
 	
 	private KieSession kSession;
 	
@@ -34,8 +36,8 @@ class WeakenedImmunity {
 	
 	private Patient testPatient1;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		this.testDisease1=new Disease(0L,"d0",DiseaseCategory.BACTERIAL,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());
@@ -76,7 +78,7 @@ class WeakenedImmunity {
 	}
 
 	@Test
-	void noEnoughDiagnoses() {
+	public void noEnoughDiagnoses() {
 		ArrayList<ReportWeakenedImmuneSystemDTO> result=new ArrayList<>();
 		kSession.insert(result);
 		
@@ -87,7 +89,7 @@ class WeakenedImmunity {
 	}
 	
 	@Test
-	void badDate(){
+	public void badDate(){
 		Calendar cal=Calendar.getInstance();
 		cal.set(2010, 1, 1);
 		Diagnose d10=new Diagnose(14L, testDisease1, testPatient1, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
@@ -104,7 +106,7 @@ class WeakenedImmunity {
 	}
 	
 	@Test
-	void oneDisease() {
+	public void oneDisease() {
 		Diagnose d10=new Diagnose(1L, testDisease1, testPatient1, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
 				0L, 0L, new ArrayList<Therapy>(), new Date());
 		kSession.insert(d10);
@@ -119,7 +121,7 @@ class WeakenedImmunity {
 	}
 	
 	@Test
-	void goodResults() {
+	public void goodResults() {
 		Disease disease2=new Disease(1L,"d1",DiseaseCategory.BACTERIAL,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());
 		Diagnose d10=new Diagnose(1L, disease2, testPatient1, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
 				0L, 0L, new ArrayList<Therapy>(), new Date());
@@ -138,8 +140,8 @@ class WeakenedImmunity {
 		assertTrue(result.get(1).getD().equals(testDisease1)||result.get(1).getD().equals(disease2));
 	}
 
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 	

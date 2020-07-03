@@ -5,10 +5,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
 import com.ftn.sbnz_2020.facts.Breed;
@@ -24,7 +26,8 @@ import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.facts.Vet;
 
-class CancerAsChronicDisease {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class CancerAsChronicDisease {
 
 	private KieSession kSession;
 	
@@ -33,8 +36,8 @@ class CancerAsChronicDisease {
 	private Patient testPatient1;
 	private Patient testPatient2;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 				
 		this.testDisease1=new Disease(0L,"d0",DiseaseCategory.CANCER,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());		
@@ -46,7 +49,7 @@ class CancerAsChronicDisease {
 	}
 	
 	@Test
-	void noChronicDisease() {
+	public void noChronicDisease() {
 		//bad category=>no result
 		Disease d1=new Disease(2L,"d2",DiseaseCategory.BACTERIAL,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());
 		Disease d2=new Disease(3L,"d3",DiseaseCategory.BEHAVIORAL,new ArrayList<Symptom>(),new ArrayList<Symptom>(),new ArrayList<Therapy>());
@@ -112,7 +115,7 @@ class CancerAsChronicDisease {
 	}
 	
 	@Test
-	void chronicDiseaseFound() {
+	public void chronicDiseaseFound() {
 		Diagnose diagnose1=new Diagnose(1L, this.testDisease1, this.testPatient1, new Vet(), new ArrayList<Symptom>(), new ArrayList<Symptom>(), 
 				0L, 0L, new ArrayList<Therapy>(), new Date());
 		
@@ -130,8 +133,8 @@ class CancerAsChronicDisease {
 		assertTrue(result.get(0).getD().equals(testDisease1));
 	}
 	
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 	

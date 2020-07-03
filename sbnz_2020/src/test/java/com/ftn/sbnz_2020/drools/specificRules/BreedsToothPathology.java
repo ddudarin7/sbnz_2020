@@ -2,15 +2,16 @@ package com.ftn.sbnz_2020.drools.specificRules;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Diagnose;
@@ -24,7 +25,8 @@ import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 
-class BreedsToothPathology {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class BreedsToothPathology {
 
 	private KieSession kSession;
 	
@@ -37,8 +39,8 @@ class BreedsToothPathology {
 	
 	private Diagnose testDiagnose;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		Symptom s1=new Symptom(0L,"s0");
@@ -48,6 +50,7 @@ class BreedsToothPathology {
 		ArrayList<Symptom> sList1=new ArrayList<>();
 		sList1.add(s1);
 		sList1.add(s2);
+		sList1.add(s3);
 		
 		ArrayList<Symptom> sList2=new ArrayList<>();
 		sList2.add(s3);
@@ -59,8 +62,8 @@ class BreedsToothPathology {
 		this.testPatient3=new Patient(2L, "p2", "REC2", new Date(), Breed.PITBULL, new Owner(), new ArrayList<Medicine>(), 
 				new ArrayList<Ingredient>(), new ArrayList<Vaccination>());
 		
-		this.testDisease1=new Disease(0L,"Tooth pathology",DiseaseCategory.OTHER,sList1,sList2,new ArrayList<Therapy>());
-		this.testDisease2=new Disease(1L,"d1",DiseaseCategory.OTHER,sList1,sList2,new ArrayList<Therapy>());
+		this.testDisease1=new Disease(0L,"Tooth pathology",DiseaseCategory.OTHER,sList1,new ArrayList<Symptom>(),new ArrayList<Therapy>());
+		this.testDisease2=new Disease(1L,"d1",DiseaseCategory.OTHER,sList1,new ArrayList<Symptom>(),new ArrayList<Therapy>());
 		
 		kSession.insert(s1);
 		kSession.insert(s2);
@@ -70,7 +73,7 @@ class BreedsToothPathology {
 	}
 	
 	@Test
-	void boxerPositiveTest() {
+	public void boxerPositiveTest() {
 		testDiagnose = new Diagnose();
 		testDiagnose.setPatient(testPatient2);
 		kSession.insert(testDiagnose);	
@@ -87,7 +90,7 @@ class BreedsToothPathology {
 	}
 	
 	@Test
-	void bulldogPositiveTest() {
+	public void bulldogPositiveTest() {
 		testDiagnose = new Diagnose();
 		testDiagnose.setPatient(testPatient1);
 		kSession.insert(testDiagnose);	
@@ -104,7 +107,7 @@ class BreedsToothPathology {
 	}
 	
 	@Test
-	void otherBreedsNegativeTest() {
+	public void otherBreedsNegativeTest() {
 		testDiagnose = new Diagnose();
 		testDiagnose.setPatient(testPatient3);
 		kSession.insert(testDiagnose);	
@@ -121,8 +124,8 @@ class BreedsToothPathology {
 		assertFalse(testDiagnose.getDisease().equals(testDisease2));
 	}
 
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 	

@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Diagnose;
@@ -25,7 +27,8 @@ import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vaccination;
 import com.ftn.sbnz_2020.facts.Vaccine;
 
-class CanineDistemper {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class CanineDistemper {
 
 	private KieSession kSession;
 	
@@ -37,8 +40,8 @@ class CanineDistemper {
 	
 	private Diagnose testDiagnose;
 	
-	@BeforeEach
-	void setUpTest() {
+	@Before
+	public void setUpTest() {
 		this.kSession=com.ftn.sbnz_2020.drools.utils.Utils.configurateKieSession();
 		
 		this.testVaccine=new Vaccine(1L, "DA2P", "v1");
@@ -78,7 +81,7 @@ class CanineDistemper {
 	}
 	
 	@Test
-	void noVaccine() {
+	public void noVaccine() {
 		testDiagnose = new Diagnose();
 		testDiagnose.setPatient(testPatient);
 		kSession.insert(testDiagnose);	
@@ -93,7 +96,7 @@ class CanineDistemper {
 	}
 	
 	@Test
-	void vaccineMoreThanYearAgo() {
+	public void vaccineMoreThanYearAgo() {
 		Calendar cal=Calendar.getInstance();
 		cal.set(2010, 1, 1);
 		Vaccination v=new Vaccination(1L, testVaccine, cal.getTime());
@@ -116,7 +119,7 @@ class CanineDistemper {
 	}
 	
 	@Test
-	void vaccineTakenInLast14Days(){
+	public void vaccineTakenInLast14Days(){
 		Vaccination v=new Vaccination(1L, testVaccine, new Date());
 		
 		testPatient.getVaccinations().add(v);
@@ -138,7 +141,7 @@ class CanineDistemper {
 	}
 	
 	@Test
-	void vaccineTaken(){
+	public void vaccineTaken(){
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -16);
 		Vaccination v=new Vaccination(1L, testVaccine, cal.getTime());
@@ -161,8 +164,8 @@ class CanineDistemper {
 		assertFalse(testDiagnose.getDisease().equals(testDisease1));
 	}
 	
-	@AfterEach
-	void endTest() {
+	@After
+	public void endTest() {
 		com.ftn.sbnz_2020.drools.utils.Utils.destroyKieSession(this.kSession);	
 	}
 
