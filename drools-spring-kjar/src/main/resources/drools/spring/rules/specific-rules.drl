@@ -21,12 +21,13 @@ rule "Special rule for canine distemper"
     		$v:Vaccination(
     			this memberOf $pat.vaccinations,
     			vaccine==$vaccine,
-    			date>(monthsAgo(-12)),
-    			date<(daysAgo(-14))
+    			date.after(monthsAgo(-12))==true,
+    			date.before(daysAgo(-14))==true
     		),
     		count($v)
     	)
     then
+    	System.out.println("proba");
     	delete($d)
 end
 
