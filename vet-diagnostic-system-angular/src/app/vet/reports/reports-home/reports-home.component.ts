@@ -13,25 +13,27 @@ export class ReportsHomeComponent implements OnInit {
   selectedType: string;
 
   constructor(private route: ActivatedRoute,
-    private router: Router) { 
+    private router: Router){
     this.types = [
       {label: 'Chronic diseases', value: '1'},
-      {label: 'Weak immune system', value: '2'}
+      {label: 'Weak immune system', value: '2'},
+      {label: 'Breed diseases', value: '3'}
     ];
 
-    this.selectedType="";
+    this.selectedType = '';
   }
 
   ngOnInit(): void {
   }
 
   onChangeReport($event){
-    if($event.value==="1"){
+    if ($event.value === '1'){
       this.router.navigate(['/vet/home/reports/chronic-diseases']);
-    }else if($event.value==="2"){
+    } else if ($event.value === '2'){
       this.router.navigate(['/vet/home/reports/weak-immunity']);
+    } else if ($event.value === '3'){
+      this.router.navigate(['/vet/home/reports/breed-diseases']);
     }
-    
   }
 
 }
