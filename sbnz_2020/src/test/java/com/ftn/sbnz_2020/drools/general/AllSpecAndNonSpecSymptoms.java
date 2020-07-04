@@ -2,17 +2,16 @@ package com.ftn.sbnz_2020.drools.general;
 
 import static org.junit.Assert.assertTrue;
 
-import com.ftn.sbnz_2020.drools.utils.Utils;
-
 import java.util.ArrayList;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.Before;
 import org.kie.api.runtime.KieSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ftn.sbnz_2020.drools.utils.Utils;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;

@@ -27,11 +27,10 @@ rule "Special rule for canine distemper"
     		count($v)
     	)
     then
-    	System.out.println("proba");
     	delete($d)
 end
 
-rule "Dog of same owner had bacterial or parasite infectious disease in last two weeks"
+/*rule "Dog of same owner had bacterial or parasite infectious disease in last two weeks"
 	lock-on-active true
 	agenda-group "diagnose"
 	salience 14
@@ -53,8 +52,9 @@ rule "Dog of same owner had bacterial or parasite infectious disease in last two
 		diseaseCategory != DiseaseCategory.BACTERIAL &&
 		diseaseCategory != DiseaseCategory.PARASITES)
 	then
+	System.out.println("zarazne?");
 		delete($d)
-end
+end*/
 
 rule "Special rule for breeds that are more succeptible to cancer"
 	lock-on-active true

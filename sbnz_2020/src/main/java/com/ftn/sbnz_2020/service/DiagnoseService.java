@@ -1,16 +1,19 @@
 package com.ftn.sbnz_2020.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.drools.core.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
+import com.ftn.sbnz_2020.dto.DiagnoseResultDTO;
+import com.ftn.sbnz_2020.dto.DiseaseDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
@@ -87,8 +90,9 @@ public class DiagnoseService {
 	
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
-	public Diagnose diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {
-		
+	@SuppressWarnings("unchecked")
+	public ArrayList<Diagnose> diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {	
+		ArrayList<Diagnose> results=new ArrayList<>();
 		// inserting symptoms
 		for(Symptom s:symptoms) {
 			kieSession.insert(s);
@@ -136,12 +140,35 @@ public class DiagnoseService {
 		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
 		kieSession.fireAllRules();
 		
-		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
-		kieSession.fireAllRules();
+		Collection<Boolean> flags=(Collection<Boolean>) kieSession.getObjects(new ClassObjectFilter(Boolean.class));
 		
-		this.releaseObjectsFromSession(kieSession);
+		//collect error message informations
+		if(flags.contains(true)) {
+			Collection<Disease> diseasesLeft=(Collection<Disease>) kieSession.getObjects(new ClassObjectFilter(Disease.class));
+			
+			
+			
+			for(Disease d:diseasesLeft) {
+				Diagnose diagnose=new Diagnose(null, d, patient, makingDiagnose.getVet(), makingDiagnose.getSpecificSymptomsMatched(), 
+						makingDiagnose.getNonSpecificSymptomsMatched(), makingDiagnose.getSpecificSymptomsMatchedNum(), 
+						makingDiagnose.getNonSpecificSymptomsMatchedNum(), d.getTherapies(), makingDiagnose.getDate());
+				kieSession.insert(diagnose);
+				results.add(diagnose);
+			}
+			kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
+			kieSession.fireAllRules();
+			this.releaseObjectsFromSession(kieSession);
+			return results;
+		}
+		else {
+			kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
+			kieSession.fireAllRules();
+			this.releaseObjectsFromSession(kieSession);
+			
+			results.add(makingDiagnose);
+			return results;
+		}
 		
-		return makingDiagnose;
 	}
 	
     private void releaseObjectsFromSession(KieSession kieSession){

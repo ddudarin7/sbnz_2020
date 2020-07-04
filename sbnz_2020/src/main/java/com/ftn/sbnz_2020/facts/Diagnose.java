@@ -19,8 +19,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
 import com.ftn.sbnz_2020.dto.SymptomDTO;
@@ -107,19 +105,26 @@ public class Diagnose {
 			this.patient = new Patient(diagnoseDTO.getPatient());
 		if (diagnoseDTO.getVet() != null)
 			this.vet = new Vet(diagnoseDTO.getVet());
+		
 		this.specificSymptomsMatched = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomsMatched())
-			this.specificSymptomsMatched.add(new Symptom(symptomDTO));
+		if(diagnoseDTO.getSpecificSymptomsMatched()!=null) {
+			for (SymptomDTO symptomDTO : diagnoseDTO.getSpecificSymptomsMatched())
+				this.specificSymptomsMatched.add(new Symptom(symptomDTO));
+		}
 		this.nonSpecificSymptomsMatched = new ArrayList<Symptom>();
-		for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomsMatched())
-			this.nonSpecificSymptomsMatched.add(new Symptom(symptomDTO));
+		if(diagnoseDTO.getNonSpecificSymptomsMatched()!=null) {
+			for (SymptomDTO symptomDTO : diagnoseDTO.getNonSpecificSymptomsMatched())
+				this.nonSpecificSymptomsMatched.add(new Symptom(symptomDTO));
+		}
 		if (diagnoseDTO.getSpecificSymptomsMatched() != null)
 			this.specificSymptomsMatchedNum = diagnoseDTO.getSpecificSymptomsMatchedNum();
 		if (diagnoseDTO.getNonSpecificSymptomsMatched() != null)
 			this.nonSpecificSymptomsMatchedNum = diagnoseDTO.getNonSpecificSymptomsMatchedNum();
 		this.therapies = new ArrayList<Therapy>();
-		for (TherapyDTO therapyDTO : diagnoseDTO.getTherapies())
-			this.therapies.add(new Therapy(therapyDTO));
+		if(diagnoseDTO.getTherapies()!=null) {
+			for (TherapyDTO therapyDTO : diagnoseDTO.getTherapies())
+				this.therapies.add(new Therapy(therapyDTO));
+		}
 		if (diagnoseDTO.getDate() != null)
 			this.date = diagnoseDTO.getDate();
 	}
