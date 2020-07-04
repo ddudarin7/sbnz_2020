@@ -1,0 +1,99 @@
+package drools.spring.rules;
+
+//list any import classes here.
+import com.ftn.sbnz_2020.facts.*;
+
+
+//declare any global variables here
+
+
+
+
+rule "Special rule for canine distemper"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 30
+    when
+    	$d: Disease(name=="Canine distemper")
+    	$dio: Diagnose($pat: patient)
+        $vaccine:Vaccine(name=="DA2P")
+    	Number(intValue!=0) from accumulate(
+    		$v:Vaccination(
+    			this memberOf $pat.vaccinations,
+    			vaccine==$vaccine,
+    			date.after(monthsAgo(-12))==true,
+    			date.before(daysAgo(-14))==true
+    		),
+    		count($v)
+    	)
+    then
+    	System.out.println("proba");
+    	delete($d)
+end
+
+rule "Dog of same owner had bacterial or parasite infectious disease in last two weeks"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 14
+	when
+		$pat: Patient()
+		$dio: Diagnose(date != null, patient.owner.id == $pat.owner.id, date <= daysAgo(-14),
+		disease.diseaseCategory == DiseaseCategory.INFECTIOUS ||
+		disease.diseaseCategory == DiseaseCategory.BACTERIAL ||
+		disease.diseaseCategory == DiseaseCategory.PARASITES)
+		
+		Number(intValue > 0) from accumulate(
+    		$inf: Disease(diseaseCategory == DiseaseCategory.INFECTIOUS || 
+    		diseaseCategory == DiseaseCategory.BACTERIAL || 
+    		diseaseCategory == DiseaseCategory.PARASITES),
+    		count($inf)
+    	)
+		
+		$d: Disease(diseaseCategory != DiseaseCategory.INFECTIOUS &&
+		diseaseCategory != DiseaseCategory.BACTERIAL &&
+		diseaseCategory != DiseaseCategory.PARASITES)
+	then
+		delete($d)
+end
+
+rule "Special rule for breeds that are more succeptible to cancer"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(diseaseCategory == DiseaseCategory.CANCER)
+    	$p: Patient(breed == Breed.LABRADOR || breed == Breed.MIXEDBREED)
+    	$dis: Disease(diseaseCategory != DiseaseCategory.CANCER)
+    then
+    	delete($dis)
+end
+
+rule "Special rule for breeds that are more succeptible to tooth pathology"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(name == "Tooth pathology")
+    	$p: Patient(breed == Breed.BOXER || breed == Breed.BULLDOG)
+    	$dis: Disease(name != "Tooth pathology")
+    then
+    	delete($dis)
+end
+
+rule "Special rule for breeds that are more succeptible to rickets"
+	lock-on-active true
+	agenda-group "diagnose"
+	salience 3
+    when
+    	$dio : Diagnose(disease.id == null)
+    	$d: Disease(name == "Rickets")
+    	$p: Patient(breed == Breed.DACHSHUND)
+    	$dis: Disease(name != "Rickets")
+    then
+    	delete($dis)
+end
+
+
+
