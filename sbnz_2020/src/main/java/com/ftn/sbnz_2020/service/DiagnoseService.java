@@ -1,9 +1,11 @@
 package com.ftn.sbnz_2020.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.drools.core.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -135,6 +137,14 @@ public class DiagnoseService {
 		
 		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
 		kieSession.fireAllRules();
+		
+		Collection<Boolean> flags=(Collection<Boolean>) kieSession.getObjects(new ClassObjectFilter(Boolean.class));
+		
+		//collect error message informations
+		if(flags.contains(true)) {
+			
+			
+		}
 		
 		kieSession.getAgenda().getAgendaGroup("allergy checking").setFocus();
 		kieSession.fireAllRules();
