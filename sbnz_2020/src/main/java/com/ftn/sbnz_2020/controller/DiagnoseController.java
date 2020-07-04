@@ -23,12 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.DiagnoseDTO;
+import com.ftn.sbnz_2020.dto.DiagnoseResultDTO;
 import com.ftn.sbnz_2020.dto.SymptomDTO;
 import com.ftn.sbnz_2020.facts.Diagnose;
-import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.facts.Symptom;
-import com.ftn.sbnz_2020.facts.Therapy;
 import com.ftn.sbnz_2020.facts.Vet;
 import com.ftn.sbnz_2020.service.DiagnoseService;
 import com.ftn.sbnz_2020.service.DiseaseService;
@@ -175,7 +174,7 @@ public class DiagnoseController {
     }
 	
     @PostMapping(value="/diagnose/{patientRecordNumber}")
-    public ResponseEntity<DiagnoseDTO> diagnose(@RequestBody List<SymptomDTO> symptomDTOs,
+    public ResponseEntity<ArrayList<Diagnose>> diagnose(@RequestBody List<SymptomDTO> symptomDTOs,
     		@PathVariable String patientRecordNumber, HttpServletRequest request){
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
@@ -194,8 +193,8 @@ public class DiagnoseController {
     		
     	// diagnose
     	
-    	Diagnose diagnose = diagnoseService.diagnose(kieSession, symptoms, patient);
-    	return new ResponseEntity<DiagnoseDTO>(new DiagnoseDTO(diagnose), HttpStatus.OK);
+    	ArrayList<Diagnose> diagnoses = diagnoseService.diagnose(kieSession, symptoms, patient);
+    	return new ResponseEntity<ArrayList<Diagnose>>(diagnoses, HttpStatus.OK);
     }
     
     @PostMapping(value = "/diagnoses", consumes = "application/json")

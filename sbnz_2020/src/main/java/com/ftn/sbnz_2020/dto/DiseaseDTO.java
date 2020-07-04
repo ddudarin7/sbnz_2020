@@ -7,8 +7,6 @@ import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Symptom;
 import com.ftn.sbnz_2020.facts.Therapy;
 
-import com.ftn.sbnz_2020.dto.SymptomDTO;
-
 public class DiseaseDTO {
 
 	private Long id;

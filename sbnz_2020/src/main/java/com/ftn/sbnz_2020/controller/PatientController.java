@@ -1,7 +1,6 @@
 package com.ftn.sbnz_2020.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ftn.sbnz_2020.dto.BreedDiseasesDTO;
 import com.ftn.sbnz_2020.dto.PatientDTO;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
-
-import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
-import com.ftn.sbnz_2020.facts.Disease;
+import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Patient;
 import com.ftn.sbnz_2020.service.PatientService;
 
