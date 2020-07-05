@@ -1,11 +1,8 @@
 package com.ftn.sbnz_2020.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
-import org.drools.core.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +13,9 @@ import com.ftn.sbnz_2020.dto.BreedDiseases;
 import com.ftn.sbnz_2020.dto.BreedDiseasesDTO;
 import com.ftn.sbnz_2020.dto.DiseaseDTO;
 import com.ftn.sbnz_2020.dto.ReportChronicDiseasesDTO;
-import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.dto.ReportWeakenedImmuneSystemDTO;
+import com.ftn.sbnz_2020.facts.Breed;
 import com.ftn.sbnz_2020.facts.Diagnose;
-import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.Ingredient;
 import com.ftn.sbnz_2020.facts.Medicine;
 import com.ftn.sbnz_2020.facts.Patient;

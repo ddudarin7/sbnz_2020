@@ -64,8 +64,8 @@ public class BreedsCancer {
 		this.testDisease1=new Disease(0L,"d0",DiseaseCategory.CANCER,sList1,new ArrayList<Symptom>(),new ArrayList<Therapy>());
 		this.testDisease2=new Disease(1L,"d1",DiseaseCategory.POISONING,sList1,new ArrayList<Symptom>(),new ArrayList<Therapy>());
 		
-		kSession.insert(s1);
-		kSession.insert(s2);
+		//kSession.insert(s1);
+		//kSession.insert(s2);
 		
 		kSession.insert(testDisease1);
 		kSession.insert(testDisease2);

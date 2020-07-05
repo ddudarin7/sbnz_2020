@@ -1,9 +1,5 @@
-
-
 <div id="diagnose-form" class="container">
-
   <form name="diagnoseForm" (ngSubmit)="makeDiagnose()" #diagnoseForm="ngForm">
-
     <div class="form-group">
       <label for="recordNumber"><b>Record Number</b></label>
       <input type="text" class="form-control"  id="recordNumber"
@@ -32,7 +28,6 @@
       <button type="submit" class="btn btn-success">Diagnose</button>
     </div>
   </form>
-
 </div>
 
 <div class="container" id="diagnoseResultDiv" [hidden]="diagnoseNotMade">
@@ -78,6 +73,31 @@
   <button class="btn btn-success" (click)="confirmDiagnose()">Confirm diagnose</button>
 </div>
 
+<div class="container" id="diagnoseResultsDiv1" [hidden]="error==1">
+  <p>More than one diseases are found.</p>
+  <p-table [value]="diagnoses">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Disease name</th>
+            <th>Disease category</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-d>
+        <tr>
+            <td>{{d.disease.name}}</td>
+            <td>{{d.disease.diseaseCategory}}</td>
+            <td><button class="btn badge-info" (click)="diseaseInfo(d.name)">Info</button></td>
+            <td><button class="btn badge-info" (click)="confirmDiagnoseDiseaseSelect(d.disease.name)">Confirm diagnose</button></td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div class="container" id="diagnoseResultsDiv2" [hidden]="error!=0">
+  <p>Zero posible diseases found.</p>
+</div>
 
 <br/>
 

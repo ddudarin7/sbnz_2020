@@ -16,6 +16,7 @@ import { DiagnoseInfoComponent } from './diagnose-info/diagnose-info.component';
 import { AddVaccinationFormComponent } from './vaccinations/add-vaccination-form/add-vaccination-form.component';
 import { ReportsModule } from './reports/reports.module';
 import {ToastModule} from 'primeng/toast';
+import {TableModule} from 'primeng/table';
 
 const routes: Routes = [
   {path: 'home', component: HomePageComponent, children: [
@@ -50,6 +51,7 @@ const routes: Routes = [
     NgMultiSelectDropDownModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    TableModule,
     ToastModule,
     ToastrModule.forRoot()
   ],
