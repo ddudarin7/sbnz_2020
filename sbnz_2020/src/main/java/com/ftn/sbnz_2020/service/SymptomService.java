@@ -1,9 +1,7 @@
 package com.ftn.sbnz_2020.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -99,7 +99,6 @@ rule "Disease with the highest percentage of specific symptoms survived"
        		$s1: (specificSymptomsMatchedNum/(specificSymptoms.size + 0.0)), 
        		$s1 != $most && specificSymptoms.size!=0)
 	then
-		System.out.println("spec");
 		delete($d)
 end
 
@@ -116,7 +115,6 @@ rule "Disease with the highest percentage of non specific symptoms survived"
        	$d : Disease($s1: (nonSpecificSymptomsMatchedNum/(nonSpecificSymptoms.size + 0.0)), 
        		$s1 != $most && nonSpecificSymptoms.size!=0)
 	then
-		System.out.println("non spec");
 		delete($d)
 end
 
@@ -162,6 +160,8 @@ rule "Zero or more diseases"
         )
         $dio: Diagnose(disease.id == null, $dNum != 1)
 	then
+		Boolean flag=true;
+		insert(flag);
 		System.out.println("Dijagnoza nije uspjela. Pronadjeno je: " + $dNum + " bolesti.");
 end
 
