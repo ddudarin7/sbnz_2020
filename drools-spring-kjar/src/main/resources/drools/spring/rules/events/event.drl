@@ -1,0 +1,27 @@
+package drools.spring.rules.events;
+
+import com.ftn.sbnz_2020.facts.*;
+import com.ftn.sbnz_2020.event.*;
+
+rule "Pandemic"
+	agenda-group "event"
+	when
+		$de: DiagnoseEvent(diagnosedDisease.diseaseCategory == DiseaseCategory.INFECTIOUS ||
+		diagnosedDisease.diseaseCategory == DiseaseCategory.BACTERIAL ||
+		diagnosedDisease.diseaseCategory == DiseaseCategory.PARASITES)
+		over window:time(7d)
+    	$c: Long(intValue > 3) from accumulate(
+			$d: DiagnoseEvent(
+				diagnosedDisease.diseaseCategory == DiseaseCategory.INFECTIOUS ||
+				diagnosedDisease.diseaseCategory == DiseaseCategory.BACTERIAL ||
+				diagnosedDisease.diseaseCategory == DiseaseCategory.PARASITES,
+				diagnosedDisease.id == $de.diagnosedDisease.id
+			),
+			count($d)
+		)
+		not (
+			PandemicEvent(disease.id == $de.diagnosedDisease.id)
+		)
+	then
+		insert(new PandemicEvent($de.getDiagnosedDisease(), $c));
+end

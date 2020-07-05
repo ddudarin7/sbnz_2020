@@ -178,7 +178,7 @@ public class DiagnoseController {
     		@PathVariable String patientRecordNumber, HttpServletRequest request){
         
         KieSession kieSession = (KieSession)request.getSession().getAttribute("kieSession");
-        
+        KieSession eventSession = (KieSession)request.getSession().getAttribute("eventSession");
         // collecting symptoms
         
         List<Symptom> symptoms = new ArrayList<Symptom>();
@@ -193,7 +193,7 @@ public class DiagnoseController {
     		
     	// diagnose
     	
-    	ArrayList<Diagnose> diagnoses = diagnoseService.diagnose(kieSession, symptoms, patient);
+    	ArrayList<Diagnose> diagnoses = diagnoseService.diagnose(kieSession, symptoms, patient, eventSession);
     	return new ResponseEntity<ArrayList<Diagnose>>(diagnoses, HttpStatus.OK);
     }
     
@@ -201,12 +201,14 @@ public class DiagnoseController {
     public ResponseEntity<DiagnoseDTO> add(@RequestBody DiagnoseDTO diagnoseDTO, 
     		HttpServletRequest request, @RequestParam String vetUsername) {
 
+    	KieSession eventSession = (KieSession)request.getSession().getAttribute("eventSession");
+    	
     	// collecting vet
     	Vet vet = vetService.findByUsername(vetUsername);
     	if (vet == null)
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
-        Diagnose diagnose = diagnoseService.confirmDiagnose(new Diagnose(diagnoseDTO), vet);
+        Diagnose diagnose = diagnoseService.confirmDiagnose(new Diagnose(diagnoseDTO), vet, eventSession);
         return new ResponseEntity<>(new DiagnoseDTO(diagnose), HttpStatus.CREATED);
     }
    
