@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {LogInService} from './../../core/services/log-in.service';
 import {MessageService} from 'primeng/api';
+import {ToastrService} from 'ngx-toastr';
 declare var SockJS;
 declare var Stomp;
 
@@ -19,7 +20,8 @@ export class HomePageComponent implements OnInit {
   private stompClient;
 
   constructor(private route: ActivatedRoute,
-    private router: Router,private logInService: LogInService,private messageService: MessageService) { 
+    private router: Router,private logInService: LogInService,private messageService: MessageService,
+              private toastr: ToastrService) {
       this.initializeWebSocketConnection();
     }
 
@@ -43,8 +45,7 @@ export class HomePageComponent implements OnInit {
     this.stompClient.connect({}, (frame) => {
       this.stompClient.subscribe('/notifications', (message) => {
         if (message.body) {
-          console.log(message.body);
-          this.messageService.add({severity:'error', summary:'Error!', detail:message.body,life:5000});
+          this.toastr.warning(message.body);
         }
       });
     });

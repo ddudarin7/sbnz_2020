@@ -399,18 +399,33 @@ VALUES
 
 INSERT INTO `sbnz_2020`.`diagnose` (`id`, `date`,`non_specific_symptoms_matched_num`, `specific_symptoms_matched_num`, `disease_id`, `patient_id`, `vet_id`)
 VALUES 
-	('1', '2020-05-25', '0', '4', '14', '1', '2');
+	('1', '2020-05-25', '0', '4', '14', '1', '2'),
+	('2', '2020-07-01', '0', '2', '19', '2', '2'),
+	('3', '2020-07-02', '0', '2', '19', '3', '2'),
+	('4', '2020-07-03', '0', '2', '19', '4', '2');
 
 INSERT INTO `sbnz_2020`.`diagnose_specific_symptoms_matched` (`diagnose_id`, `specific_symptoms_matched_id`)
 VALUES 
 	('1', '5'),
 	('1', '12'),
 	('1', '13'),
-	('1', '16');
+	('1', '16'),
+	('2', '7'),
+	('2', '8'),
+	('3', '7'),
+	('3', '8'),
+	('4', '7'),
+	('4', '8');
 	
 INSERT INTO `sbnz_2020`.`diagnose_therapies` (`diagnose_id`, `therapies_id`)
 VALUES 
 	('1', '15'),
 	('1', '18'),
 	('1', '19'),
-	('1', '20');
+	('1', '20'),
+	('2', '23'),
+	('2', '24'),
+	('3', '23'),
+	('3', '24'),
+	('4', '23'),
+	('4', '24');

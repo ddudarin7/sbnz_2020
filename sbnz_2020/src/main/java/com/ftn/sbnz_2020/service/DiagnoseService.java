@@ -10,10 +10,13 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.ftn.sbnz_2020.dto.DiagnoseResultDTO;
 import com.ftn.sbnz_2020.dto.DiseaseDTO;
+import com.ftn.sbnz_2020.event.DiagnoseEvent;
+import com.ftn.sbnz_2020.event.PandemicEvent;
 import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Disease;
 import com.ftn.sbnz_2020.facts.DiseaseCategory;
@@ -41,6 +44,9 @@ public class DiagnoseService {
 	
 	@Autowired
 	PatientService patientService;
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	public Diagnose findById(Long id){ return diagnoseRepository.getOne(id); }
 	
@@ -91,7 +97,7 @@ public class DiagnoseService {
 	public void deleteAll() { diagnoseRepository.deleteAll(); }
 	
 	@SuppressWarnings("unchecked")
-	public ArrayList<Diagnose> diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient) {	
+	public ArrayList<Diagnose> diagnose(KieSession kieSession,List<Symptom> symptoms, Patient patient, KieSession eventSession) {	
 		ArrayList<Diagnose> results=new ArrayList<>();
 		// inserting symptoms
 		for(Symptom s:symptoms) {
@@ -140,6 +146,16 @@ public class DiagnoseService {
 		kieSession.getAgenda().getAgendaGroup("diagnose failed").setFocus();
 		kieSession.fireAllRules();
 		
+		eventSession.getAgenda().getAgendaGroup("event").setFocus();
+		eventSession.fireAllRules();
+		
+		Collection<PandemicEvent> pandemicEvents = (Collection<PandemicEvent>) eventSession.getObjects(new ClassObjectFilter(PandemicEvent.class));
+		
+		for (PandemicEvent pe : pandemicEvents){
+			sendWarning("Warning: Potential pandemic of " + pe.getDisease().getName()
+					+ ": \n" + pe.getCount().toString() + " cases in last 7 days");
+		}
+		
 		Collection<Boolean> flags=(Collection<Boolean>) kieSession.getObjects(new ClassObjectFilter(Boolean.class));
 		
 		//collect error message informations
@@ -179,12 +195,25 @@ public class DiagnoseService {
         }
     }
     
-    public Diagnose confirmDiagnose(Diagnose diagnose, Vet vet){
+    public Diagnose confirmDiagnose(Diagnose diagnose, Vet vet, KieSession eventSession){
     	diagnose.setId(null);
     	diagnose.setDate(new Date());
     	diagnose.setVet(vet);
+    
+    	diagnose = this.diagnoseRepository.save(diagnose);
+		
+		eventSession.getAgenda().getAgendaGroup("event").setFocus();
+
+		eventSession.insert(new DiagnoseEvent(diagnose.getDisease(), diagnose.getDate()));
+		eventSession.fireAllRules();
+		Collection<PandemicEvent> pandemicEvents = (Collection<PandemicEvent>) eventSession.getObjects(new ClassObjectFilter(PandemicEvent.class));
+		
+		for (PandemicEvent pe : pandemicEvents){
+			sendWarning("Warning: Potential pandemic of " + pe.getDisease().getName()
+					+ ": \n" + pe.getCount().toString() + " cases in last 7 days");
+		}
     	
-    	return this.diagnoseRepository.save(diagnose);
+    	return diagnose;
     }
     
     private List<Diagnose> findByOwnerId(Long ownerId){
@@ -197,6 +226,10 @@ public class DiagnoseService {
     	}
     	
     	return diagnoses;
+    }
+    
+    public void sendWarning(String message) {
+        this.messagingTemplate.convertAndSend("/notifications", message);
     }
     
 }

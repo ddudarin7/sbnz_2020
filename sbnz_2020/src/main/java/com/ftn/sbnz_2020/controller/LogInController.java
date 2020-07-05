@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ftn.sbnz_2020.dto.CurrentUserDTO;
 import com.ftn.sbnz_2020.dto.LogInDTO;
+import com.ftn.sbnz_2020.event.DiagnoseEvent;
+import com.ftn.sbnz_2020.facts.Diagnose;
 import com.ftn.sbnz_2020.facts.Role;
 import com.ftn.sbnz_2020.facts.User;
+import com.ftn.sbnz_2020.service.DiagnoseService;
 import com.ftn.sbnz_2020.service.UserService;
 
 @RestController
@@ -31,6 +34,9 @@ public class LogInController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private DiagnoseService diagnoseService;
     
     @PostMapping(value = "/log-in",produces = "application/json")
     public  ResponseEntity<CurrentUserDTO> logIn(@RequestBody LogInDTO logInDto, HttpServletRequest request){
@@ -48,6 +54,13 @@ public class LogInController {
                 KieSession kieSession = kbase.newKieSession();
                 request.getSession().setAttribute("kieSession", kieSession);
                 System.out.println("Sesija kreirana");
+                
+                KieSession eventSession = kbase.newKieSession();
+                
+                for (Diagnose d : diagnoseService.findAll())
+                	eventSession.insert(new DiagnoseEvent(d.getDisease(), d.getDate()));
+                
+                request.getSession().setAttribute("eventSession", eventSession);
     		}
         	return new ResponseEntity<>(new CurrentUserDTO(u.getUsername(), u.getPassword(), u.getRole().toString()),HttpStatus.OK);
     	}
