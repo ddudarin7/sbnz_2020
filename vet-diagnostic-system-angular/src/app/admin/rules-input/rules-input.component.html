@@ -1,0 +1,13 @@
+<div id="rule-add-form" class="container">
+    <form name="ruleForm" (ngSubmit)="submitChanges()" #vetForm="ngForm">
+        <textarea [rows]="50" [cols]="150" pInputTextarea autoResize="autoResize" id="droolsRuleCode"
+        required
+        [(ngModel)]="rule.droolsRuleCode" name="droolsRuleCode"
+        #droolsRuleCode="ngModel"></textarea>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Confirm</button>
+        </div>
+    </form>
+
+</div>

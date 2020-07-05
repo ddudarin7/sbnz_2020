@@ -15,6 +15,7 @@ import { CreateNewAdminComponent } from './create-new-admin/create-new-admin.com
 import { ShowAllAdminsComponent } from './show-all-admins/show-all-admins.component';
 import { ShowAllMedicinesComponent } from './show-all-medicines/show-all-medicines.component';
 import { CreateNewMedicineComponent } from './create-new-medicine/create-new-medicine.component';
+import { RulesInputComponent } from './rules-input/rules-input.component';
 
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
     {path: 'show-all-medicines', component: ShowAllMedicinesComponent},
     {path: 'create-new-medicine', component: CreateNewMedicineComponent},
     {path: 'show-all-diseases', component: ShowAllDiseasesComponent},
-    {path: 'create-new-disease', component: CreateNewDiseaseComponent},]
+    {path: 'create-new-disease', component: CreateNewDiseaseComponent},
+    {path: 'input-rules', component: RulesInputComponent},]
   }
 ];
 
@@ -41,7 +43,10 @@ const routes: Routes = [
     ShowAllDiseasesComponent, 
     CreateNewDiseaseComponent, 
     CreateNewAdminComponent, 
-    ShowAllAdminsComponent, ShowAllMedicinesComponent, CreateNewMedicineComponent],
+    ShowAllAdminsComponent, 
+    ShowAllMedicinesComponent, 
+    CreateNewMedicineComponent, 
+    RulesInputComponent],
   imports: [
     CommonModule,
     FormsModule,
